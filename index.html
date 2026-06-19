@@ -48,14 +48,14 @@
     📋 <b>内置字段定期更新频率：</b>
     &nbsp;① <b>realDebt</b>有息负债-(次/半年） &nbsp;
     &nbsp;② <b>realCash</b>现金总库—(次/半年） &nbsp;
-    &nbsp;③ <b>realShares</b>（股本结构）—变化慢（次/年）&nbsp;
+    &nbsp;③ <b>realShares</b>股本结构,变化慢（次/年）&nbsp;
     &nbsp;④ <b>offlinePrice</b>（离线参考股价，API完全失效时用）— 偏差50%以上才改（次/半年）。
     <br>
-    💡<b>FCF Yield</b>=当前FCF/市值,不考虑增长；<b>DCF</b>=未来N年增速折现。
+    💡<b>FCF Yield</b>=当前FCF/市值,不算增长;<b>DCF</b>=未来N年增速折现.
   </div>
   <div class="api-bar">
     <div class="api-bar-left">
-      <span>📊请求：</span>
+      <span>📊 请求：</span>
       <span class="api-num" id="api-num">0</span>
       <span> 25 次</span>
       <span id="api-hint" style="color:#888;font-size:11px;"></span>
@@ -253,7 +253,7 @@ function renderCounter(){
   const hint=document.getElementById("api-hint");
   if(hint){
     if(used>=DAY_LIMIT){
-      hint.textContent=`（已超参考值，Premium无强制限制，可继续查询）`;
+      hint.textContent=`（已超参考值，Premium无强制限制）`;
       hint.style.color="#888";
     }else{
       hint.textContent=`（剩余${DAY_LIMIT-used}次参考额度）`;
