@@ -1018,7 +1018,7 @@ function renderResult(ticker,d,vCons,vBase,vOpt,fcf,g,r,tg,years,isCustomFCF,gC,
                <span style="color:#888;font-size:11px">（FCF/市值 = P/FCF ${fmt(1/d.fcfYield,1)}x）
                ${d.fcfYield>=0.05?' · 高收益':d.fcfYield>=0.02?' · 正常':' · 偏低'}</span>`}
       </div>
-      <div>• <b>WACC（加权平均资本成本/等同真实市场给出的折现率r:可将该值去掉%带入“折现率r”框里进行二次计算DCF）：</b>
+      <div>• <b>WACC（加权平均资本成本/等同真实市场给的折现率r:可将该值去掉%填入“折现率r”框中进行二次计算DCF）：</b>
            ${!d.waccData?'<span style="color:#aaa">—</span>'
              :(() => {
                const w=d.waccData;
