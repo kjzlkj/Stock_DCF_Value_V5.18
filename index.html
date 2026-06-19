@@ -1059,7 +1059,7 @@ function renderResult(ticker,d,vCons,vBase,vOpt,fcf,g,r,tg,years,isCustomFCF,gC,
       </div>
       ${(!isNaN(d.pe)||!isNaN(d.forwardPE)||!isNaN(d.histPE))?`
       <div style="margin-top:6px;padding:8px 12px;background:#fafafa;border-radius:6px;border:1px solid #e8e8e8">
-        <div style="font-size:14px;font-weight:bold;color:#444;margin-bottom:5px">📐 三种PE对比</div>
+        <div style="font-size:14px;font-weight:bold;color:#444;margin-bottom:5px">📐 三种PE估值&对比：</div>
         <div style="display:flex;gap:18px;flex-wrap:wrap">
           <div>
             <div style="font-size:11px;color:#aaa">PE(TTM，过去12个月实际盈利)</div>
@@ -1152,7 +1152,7 @@ function renderResult(ticker,d,vCons,vBase,vOpt,fcf,g,r,tg,years,isCustomFCF,gC,
       const gImplColor = gImplPct>g*100*1.5?'#dc3545':gImplPct>g*100?'#ffa940':'#28a745';
 
       return `<div class="data-matrix" style="margin-top:8px">
-        <b>📈 远期估值指标</b>
+        <b>📈 远期指标</b>
 
         <!-- 市场隐含增速 -->
         <div style="margin-top:6px;padding:8px 12px;background:#f0f5ff;border-radius:6px;border:1px solid #d0e4ff">
