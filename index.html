@@ -1034,7 +1034,7 @@ function renderResult(ticker,d,vCons,vBase,vOpt,fcf,g,r,tg,years,isCustomFCF,gC,
                  · ${diffTip}</span>`;
              })()}
       </div>
-      <div>• <b>ROE（净资产收益率）：</b>
+      <div>• <b>ROE（表示公司每1元钱能赚回几%的利润。）：</b>
            ${isNaN(d.roe)
              ?'<span style="color:#aaa">—（数据不足）</span>'
              :`<span style="color:${d.roe>=0.20?'#28a745':d.roe>=0.10?'#ffa940':'#dc3545'};font-weight:bold">${fmt(d.roe*100)}%</span>
