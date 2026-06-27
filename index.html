@@ -28,22 +28,18 @@
   .api-num{font-weight:bold;font-size:14px;color:#0078ff}
   .api-num.warn{color:#d46b08}
   .api-num.danger{color:#dc3545}
-  .api-track{display:flex;gap:2px}
-  .api-dot{width:9px;height:9px;border-radius:50%;background:#ddd}
-  .api-dot.used{background:#0078ff}
-  .api-dot.warn{background:#ffa940}
-  .api-dot.danger{background:#dc3545}
   .btn-orange{background:#ff7a00!important}
   .footer-copyright{text-align:center;margin-top:32px;padding:16px 0;font-size:12px;color:#8c8c8c;line-height:1.6;border-top:1px solid #e8e8e8;max-width:1100px;margin-left:auto;margin-right:auto}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </head>
 <body>
 <div class="container">
-  <h2>美股AI智能DCF估值系统-V5.18版</h2>
+  <h2>美股/A股/港股 AI智能DCF估值系统-V5.18版</h2>
   <div class="warning-tip">
-    ✅ <b>每日25次仅为参考显示，实际无强制上限</b>，每次估值消耗6次。
-    30天内同一股票直接读缓存(消耗0次）&nbsp;&nbsp;  &nbsp;&nbsp; 
+    ✅ <b>每日25次仅为参考显示，实际无强制上限</b>，美股估值消耗6次，A股/港股使用东方财富免费接口消耗0次。
+    30天内同一股票直接读缓存(消耗0次）&nbsp;&nbsp;  &nbsp;&nbsp;
     <br>
     📋 <b>内置字段定期更新频率：</b>
     &nbsp;① <b>realDebt</b>有息负债-(次/半年） &nbsp;
@@ -66,8 +62,8 @@
   <div class="section-title">① 单只股票智能估值</div>
   <div class="row">
     <div>
-      <label>股票代码（Ticker）— 如苹果=AAPL</label>
-      <input id="ticker" placeholder="如：AAPL  NVDA  GOOGL  MSFT  TSLA">
+      <label>股票代码（Ticker）— 美股如AAPL · A股如600519 · 港股如00700</label>
+      <input id="ticker" placeholder="美股:AAPL  A股:600519  港股:00700">
     </div>
     <div>
       <label>自由现金流FCF（如留空自动取财报）</label>
@@ -99,7 +95,7 @@
       🔄 强制刷新（消耗6次）
     </button>
   </div>
-  <div id="loading-single">⏳ 串行调用中：OVERVIEW → GLOBAL_QUOTE → CASH_FLOW → BALANCE_SHEET → EARNINGS → TIME_SERIES_MONTHLY（每步间隔≥1.2s）…</div>
+  <div id="loading-single">⏳ 正在获取数据…</div>
   <div id="single-output" class="result" style="display:none"></div>
   <canvas id="single-chart" style="margin-top:12px;max-height:260px"></canvas>
   <div id="fcf-history-wrap" style="display:none;margin-top:16px">
@@ -148,9 +144,83 @@
   </p>
 </div>
 
+<!-- 技术策略回测模块 -->
+<div class="container" style="margin-top:16px">
+  <div class="section-title" style="margin-top:0">④ 技术策略回测（K线图 + 买卖点）</div>
+  <p style="font-size:12px;color:#888;margin:4px 0 10px">
+    支持双均线(MA5/20、MA50/200)、RSI、MACD、动量、布林带策略回测。显示K线图与买卖信号，统计收益率、最大回撤、胜率。
+  </p>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end;margin-bottom:10px">
+    <div style="flex:1;min-width:120px">
+      <label style="font-size:12px;color:#666">股票代码</label>
+      <input id="bt-ticker" placeholder="美股:AAPL  A股:600519  港股:00700" style="width:100%;margin-top:2px">
+    </div>
+    <div style="flex:1;min-width:140px">
+      <label style="font-size:12px;color:#666">数据量</label>
+      <select id="bt-outputsize" style="width:100%;margin-top:2px;padding:8px;border-radius:6px;border:1px solid #ccc;font-size:14px">
+        <option value="compact">近100个交易日（约5个月）</option>
+        <option value="medium" selected>近3年（约750个交易日）</option>
+        <option value="full">全部历史（最多20年）</option>
+      </select>
+    </div>
+    <div style="flex:2;min-width:200px">
+      <label style="font-size:12px;color:#666">选择策略（可多选）</label>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px">
+        <label style="font-size:13px"><input type="checkbox" id="bt-mom" checked> 动量</label>
+        <label style="font-size:13px"><input type="checkbox" id="bt-ma"> 双均线MA5/20</label>
+        <label style="font-size:13px"><input type="checkbox" id="bt-ma200"> 双均线MA50/200</label>
+        <label style="font-size:13px"><input type="checkbox" id="bt-rsi"> RSI(14)</label>
+        <label style="font-size:13px"><input type="checkbox" id="bt-macd"> MACD</label>
+        <label style="font-size:13px"><input type="checkbox" id="bt-boll"> 布林带</label>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex;gap:10px;align-items:center;margin-bottom:8px;flex-wrap:wrap;padding:7px 12px;background:#fafafa;border:1px solid #e8e8e8;border-radius:6px">
+    <span style="font-size:12px;color:#555;white-space:nowrap">💰 单边手续费率：</span>
+    <input id="bt-commission" type="number" step="0.01" min="0" max="2" value="0.10"
+      style="width:68px;padding:4px 6px;border:1px solid #ccc;border-radius:4px;font-size:13px;margin-top:0">
+    <span style="font-size:12px;color:#555">%</span>
+    <span style="font-size:11px;color:#aaa">（A股≈0.15%&nbsp;港股≈0.10%&nbsp;美股≈0.05%&nbsp;填0=不计费用）</span>
+    <span style="font-size:11px;color:#722ed1;white-space:nowrap">· T+1执行（消除前视偏差）</span>
+  </div>
+  <div style="display:flex;gap:8px;margin-bottom:12px">
+    <button id="bt-run-btn" onclick="runBacktest()" style="flex:1;margin-top:0;background:#722ed1">📈 运行回测（美股1次·A/HK免费）</button>
+    <button onclick="runBacktestCache()" style="flex:1;margin-top:0;background:#08979c">🔄 读缓存回测（0次消耗）</button>
+  </div>
+  <div id="bt-loading" style="display:none;color:#722ed1;font-size:12px;font-weight:bold;margin-bottom:8px">
+    ⏳ 正在拉取日线数据并回测…
+  </div>
+  <!-- K线图 -->
+  <div id="bt-chart-wrap" style="display:none">
+    <div style="font-size:13px;font-weight:bold;color:#444;margin-bottom:6px" id="bt-chart-title"></div>
+    <div id="bt-kline-chart"></div>
+    <div id="bt-signal-legend" style="font-size:11px;color:#888;margin-top:4px"></div>
+  </div>
+  <!-- 回测结果表 -->
+  <div id="bt-results" style="display:none;margin-top:16px">
+    <div style="font-size:13px;font-weight:bold;color:#444;margin-bottom:8px">📊 策略回测结果</div>
+    <div style="overflow-x:auto">
+    <table id="bt-result-table" style="width:100%;border-collapse:collapse;font-size:12px;min-width:600px">
+      <thead>
+        <tr style="background:#f0f0ff;text-align:center">
+          <th style="padding:7px 10px;border:1px solid #d9d9d9;text-align:left">策略</th>
+          <th style="padding:7px 10px;border:1px solid #d9d9d9">总收益率</th>
+          <th style="padding:7px 10px;border:1px solid #d9d9d9">最大回撤</th>
+          <th style="padding:7px 10px;border:1px solid #d9d9d9">胜率</th>
+          <th style="padding:7px 10px;border:1px solid #d9d9d9">交易次数</th>
+          <th style="padding:7px 10px;border:1px solid #d9d9d9">买入&卖出点</th>
+        </tr>
+      </thead>
+      <tbody id="bt-result-tbody"></tbody>
+    </table>
+    </div>
+    <div style="margin-top:8px;padding:8px;background:#f9f0ff;border-left:3px solid #722ed1;border-radius:4px;font-size:12px;color:#531dab" id="bt-bnh-row"></div>
+  </div>
+</div>
+
 <!-- 交易记录表 -->
 <div class="container" style="margin-top:16px">
-  <div class="section-title" style="margin-top:0">④ 股票交易记录</div>
+  <div class="section-title" style="margin-top:0">⑤ 股票交易记录</div>
 
   <!-- 输入表单 -->
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-bottom:10px">
@@ -219,6 +289,7 @@
     数据存储于浏览器本地（localStorage），刷新不丢失 · 持仓中标的显示当前DCF估值（需先查询）
   </p>
 </div>
+
 <footer class="footer-copyright">
   <p>© 2026 Peter. All Rights Reserved. 股票智能DCF估值系统-V5.18 开发者：Peter 版权所有, wechat:Takelifewithasmile</p>
   <p style="margin-top:4px;font-size:11px;color:#bfbfbf">声明：本系统所得出之估值数据及图表仅供学术研究与量化模型探讨，不构成任何实质性投资建议。股市有风险，投资需谨慎。</p>
@@ -242,7 +313,6 @@ function getUsed(){ return parseInt(localStorage.getItem(TODAY_KEY)||"0")||0; }
 function addUsed(n){ localStorage.setItem(TODAY_KEY, getUsed()+n); renderCounter(); }
 
 // 点阵只创建一次，后续只改 className（避免每次重建25个DOM节点）
-let _dotsReady = false;
 function renderCounter(){
   const used=getUsed();
   const numEl=document.getElementById("api-num");
@@ -464,6 +534,10 @@ document.getElementById("ticker").addEventListener("input",function(e){
   ["custom-fcf","growth","discount","terminal","years"].forEach(id=>{
     document.getElementById(id).value="";
   });
+  // 动态更新强制刷新按钮文字（A/HK东方财富免费，美股消耗6次）
+  const mkt = detectMarket(t);
+  document.getElementById("refresh-btn").textContent =
+    (mkt === 'A' || mkt === 'HK') ? '🔄 强制刷新（消耗0次·免费）' : '🔄 强制刷新（消耗6次）';
   if(p){
     document.getElementById("growth").placeholder   =`内置: ${(p.g*100).toFixed(2)}%`;
     document.getElementById("discount").placeholder =`内置: ${(p.r*100).toFixed(2)}%`;
@@ -901,9 +975,39 @@ async function runSingle(forceRefresh){
   const outDiv =document.getElementById("single-output");
 
   btnMain.disabled=btnRef.disabled=true;
-  loadDiv.style.display="block";
   outDiv.style.display="none";
 
+  // A股/港股走东方财富接口
+  if(detectMarket(ticker) !== 'US'){
+    const ts = normalizeTushare(ticker);
+    const tsDcfKey = CACHE_VER + 'ts_dcf_' + ticker;
+    let cachedQuote = null;
+    if (!forceRefresh) {
+      try {
+        const raw = localStorage.getItem(tsDcfKey);
+        if (raw) {
+          const c = JSON.parse(raw);
+          if (Date.now() - c.ts < CACHE_TTL) cachedQuote = c.data;
+        }
+      } catch(_) {}
+    }
+    loadDiv.textContent = cachedQuote
+      ? '⏳ 读取A/HK本地缓存（0次消耗）…'
+      : '⏳ 正在调用东方财富获取A/HK数据（免费接口，0次消耗）…';
+    loadDiv.style.display = 'block';
+    try {
+      await runSingleTS(ts, cachedQuote, tsDcfKey);
+    } catch(e) {
+      alert("❌ 估值失败\n\n"+e.message);
+    } finally {
+      btnMain.disabled=btnRef.disabled=false;
+      loadDiv.style.display="none";
+    }
+    return;
+  }
+
+  loadDiv.textContent="⏳ 串行调用中：OVERVIEW → GLOBAL_QUOTE → CASH_FLOW → BALANCE_SHEET → EARNINGS → TIME_SERIES_MONTHLY（每步间隔≥1.2s）…";
+  loadDiv.style.display="block";
   try{
     const d=await fetchData(ticker,forceRefresh);
 
@@ -979,8 +1083,8 @@ function renderResult(ticker,d,vCons,vBase,vOpt,fcf,g,r,tg,years,isCustomFCF,gC,
 
   const pos=positionLabel(d.price,vCons,vBase,vOpt);
   const updown=d.price<vBase
-    ?`<span style="color:#28a745">▲ 低估约 ${fmt((vBase/d.price-1)*100)}%</span>`
-    :`<span style="color:#dc3545">▼ 高估约 ${fmt((d.price/vBase-1)*100)}%</span>`;
+    ?`<span style="color:#28a745">▲ 较基准DCF低 ${fmt((vBase/d.price-1)*100)}%</span>`
+    :`<span style="color:#dc3545">▼ 较基准DCF高 ${fmt((d.price/vBase-1)*100)}%</span>`;
 
   const fcfTag=isCustomFCF
     ?`<span style="color:#ff4d4f;font-weight:bold">[用户强制输入]</span>`
@@ -1443,7 +1547,7 @@ function renderSummaryTable(){
       <td style="padding:6px 10px;border:1px solid #e8e8e8">
         ${isNaN(r.g)||r.g===undefined
           ?'<span style="color:#aaa">—</span>'
-          :`<span style="color:${r.g>=0.05?'#28a745':r.g>=0?'#ffa940':'#dc3545'};font-weight:bold">+${fmt(r.g*100,1)}%/年</span>
+          :`<span style="color:${r.g>=0.05?'#28a745':r.g>=0?'#ffa940':'#dc3545'};font-weight:bold">${r.g>=0?'+':''}${fmt(r.g*100,1)}%/年</span>
             <span style="color:#aaa;font-size:10px">（≈g，P/FCF不变）</span>`}
       </td>
     </tr>`).join('');
@@ -1503,7 +1607,7 @@ function renderTrades(){
   if(!tbody) return;
   const trades = getTrades();
   if(!trades.length){
-    tbody.innerHTML=`<tr><td colspan="14" style="text-align:center;padding:16px;color:#aaa;border:1px solid #d9d9d9">
+    tbody.innerHTML=`<tr><td colspan="18" style="text-align:center;padding:16px;color:#aaa;border:1px solid #d9d9d9">
       暂无交易记录 · 请在上方填写并点击"添加记录"</td></tr>`;
     document.getElementById("trade-stats").style.display="none";
     return;
@@ -1616,6 +1720,631 @@ function exportTrades(){
   a.download=`交易记录_${new Date().toISOString().slice(0,10)}.csv`;
   a.click();
 }
+
+// ═══════════════════════════════════════════════════════
+//  技术策略回测模块
+// ═══════════════════════════════════════════════════════
+
+const BT_CACHE_TTL = 24*60*60*1000; // 日线缓存1天
+let btKlineChart = null;
+
+// ── 拉取日线数据 ──
+async function fetchDailyData(ticker, outputsize) {
+  // medium 档用 full 拉取后截取750条；AV 只支持 compact/full 两档
+  const avSize = outputsize === 'compact' ? 'compact' : 'full';
+  const cacheKey = CACHE_VER + 'daily_' + ticker + '_' + outputsize;
+  const raw = localStorage.getItem(cacheKey);
+  if (raw) {
+    try {
+      const c = JSON.parse(raw);
+      if (Date.now() - c.ts < BT_CACHE_TTL) return { data: c.data, fromCache: true };
+    } catch(_) {}
+  }
+  const json = await avFetch('TIME_SERIES_DAILY', ticker + `&outputsize=${avSize}`);
+  addUsed(1);
+  const series = json['Time Series (Daily)'];
+  if (!series) throw new Error(`无法获取 [${ticker}] 日线数据，请检查代码是否正确`);
+  const data = Object.entries(series)
+    .map(([date, v]) => ({
+      date,
+      open:  parseFloat(v['1. open']),
+      high:  parseFloat(v['2. high']),
+      low:   parseFloat(v['3. low']),
+      close: parseFloat(v['4. close']),
+      volume:parseFloat(v['5. volume'])
+    }))
+    .sort((a, b) => a.date.localeCompare(b.date)); // 时间升序
+  const sliced = outputsize === 'medium' ? data.slice(-750) : data;
+  try { localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), data: sliced })); } catch(_) {}
+  return { data: sliced, fromCache: false };
+}
+
+// ── 技术指标计算 ──
+function calcMA(closes, n) {
+  return closes.map((_, i) => i < n - 1 ? NaN : closes.slice(i - n + 1, i + 1).reduce((s, v) => s + v, 0) / n);
+}
+
+function calcRSI(closes, n = 14) {
+  const rsi = new Array(closes.length).fill(NaN);
+  if (closes.length < n + 1) return rsi;
+  let gains = 0, losses = 0;
+  for (let i = 1; i <= n; i++) {
+    const d = closes[i] - closes[i - 1];
+    if (d > 0) gains += d; else losses -= d;
+  }
+  let avgG = gains / n, avgL = losses / n;
+  rsi[n] = avgL === 0 ? 100 : 100 - 100 / (1 + avgG / avgL);
+  for (let i = n + 1; i < closes.length; i++) {
+    const d = closes[i] - closes[i - 1];
+    avgG = (avgG * (n - 1) + Math.max(d, 0)) / n;
+    avgL = (avgL * (n - 1) + Math.max(-d, 0)) / n;
+    rsi[i] = avgL === 0 ? 100 : 100 - 100 / (1 + avgG / avgL);
+  }
+  return rsi;
+}
+
+function calcEMA(closes, n) {
+  const k = 2 / (n + 1);
+  let e = NaN;
+  const res = new Array(closes.length).fill(NaN);
+  let count = 0;
+  for (let i = 0; i < closes.length; i++) {
+    if (isNaN(closes[i])) continue;
+    if (count === 0) e = closes[i];
+    else e = closes[i] * k + e * (1 - k);
+    count++;
+    if (count >= n) res[i] = e;
+  }
+  return res;
+}
+
+function calcMACD(closes, fast = 12, slow = 26, signal = 9) {
+  const emaFast = calcEMA(closes, fast);
+  const emaSlow = calcEMA(closes, slow);
+  const macdLine = closes.map((_, i) => isNaN(emaFast[i]) || isNaN(emaSlow[i]) ? NaN : emaFast[i] - emaSlow[i]);
+  // 只取有效MACD段计算信号线，避免预热期NaN→0污染EMA
+  const validOnly = macdLine.filter(v => !isNaN(v));
+  const signalOnly = calcEMA(validOnly, signal);
+  const signalLine = new Array(macdLine.length).fill(NaN);
+  let j = 0;
+  for (let i = 0; i < macdLine.length; i++) {
+    if (!isNaN(macdLine[i])) { signalLine[i] = signalOnly[j++]; }
+  }
+  const hist = macdLine.map((v, i) => isNaN(v) || isNaN(signalLine[i]) ? NaN : v - signalLine[i]);
+  return { macdLine, signalLine, hist };
+}
+
+// ── 信号生成 ──
+function signalMA(closes) {
+  const ma5 = calcMA(closes, 5), ma20 = calcMA(closes, 20);
+  return closes.map((_, i) => {
+    if (i < 1 || isNaN(ma5[i]) || isNaN(ma20[i]) || isNaN(ma5[i-1]) || isNaN(ma20[i-1])) return 0;
+    if (ma5[i-1] <= ma20[i-1] && ma5[i] > ma20[i]) return 1;  // 金叉买入
+    if (ma5[i-1] >= ma20[i-1] && ma5[i] < ma20[i]) return -1; // 死叉卖出
+    return 0;
+  });
+}
+
+
+function signalMA200(closes) {
+  const ma50 = calcMA(closes, 50), ma200 = calcMA(closes, 200);
+  const sig = new Array(closes.length).fill(0);
+  for (let i = 1; i < closes.length; i++) {
+    if (isNaN(ma50[i]) || isNaN(ma200[i]) || isNaN(ma50[i-1]) || isNaN(ma200[i-1])) continue;
+    if (ma50[i-1] <= ma200[i-1] && ma50[i] > ma200[i]) sig[i] = 1;   // 金叉买入
+    else if (ma50[i-1] >= ma200[i-1] && ma50[i] < ma200[i]) sig[i] = -1; // 死叉卖出
+  }
+  return sig;
+}
+
+function calcBoll(closes, n = 20, k = 2) {
+  const mid = calcMA(closes, n);
+  const upper = new Array(closes.length).fill(NaN);
+  const lower = new Array(closes.length).fill(NaN);
+  for (let i = n - 1; i < closes.length; i++) {
+    const slice = closes.slice(i - n + 1, i + 1);
+    const mean = mid[i];
+    const std = Math.sqrt(slice.reduce((s, v) => s + (v - mean) ** 2, 0) / n);
+    upper[i] = mean + k * std;
+    lower[i] = mean - k * std;
+  }
+  return { upper, mid, lower };
+}
+
+function signalBoll(closes) {
+  const { upper, lower } = calcBoll(closes);
+  const sig = new Array(closes.length).fill(0);
+  let inBuy = false;
+  for (let i = 1; i < closes.length; i++) {
+    if (isNaN(upper[i]) || isNaN(lower[i])) continue;
+    if (!inBuy && closes[i] < lower[i]) { sig[i] = 1; inBuy = true; }
+    else if (inBuy && closes[i] > upper[i]) { sig[i] = -1; inBuy = false; }
+  }
+  return sig;
+}
+
+function signalRSIClean(closes) {
+  const rsi = calcRSI(closes);
+  const sig = new Array(closes.length).fill(0);
+  let inBuy = false;
+  for (let i = 1; i < closes.length; i++) {
+    if (isNaN(rsi[i])) continue;
+    if (!inBuy && rsi[i] < 30) { sig[i] = 1; inBuy = true; }
+    else if (inBuy && rsi[i] > 70) { sig[i] = -1; inBuy = false; }
+  }
+  return sig;
+}
+
+function signalMACD(closes) {
+  const { macdLine, signalLine } = calcMACD(closes);
+  const sig = new Array(closes.length).fill(0);
+  for (let i = 1; i < closes.length; i++) {
+    if (isNaN(macdLine[i]) || isNaN(signalLine[i]) || isNaN(macdLine[i-1]) || isNaN(signalLine[i-1])) continue;
+    if (macdLine[i-1] <= signalLine[i-1] && macdLine[i] > signalLine[i]) sig[i] = 1;
+    else if (macdLine[i-1] >= signalLine[i-1] && macdLine[i] < signalLine[i]) sig[i] = -1;
+  }
+  return sig;
+}
+
+function signalMomentum(closes, n = 20, threshold = 0.05) {
+  const sig = new Array(closes.length).fill(0);
+  let inBuy = false;
+  for (let i = n; i < closes.length; i++) {
+    const mom = (closes[i] - closes[i - n]) / closes[i - n];
+    if (!inBuy && mom > threshold) { sig[i] = 1; inBuy = true; }
+    else if (inBuy && mom < -threshold) { sig[i] = -1; inBuy = false; }
+  }
+  return sig;
+}
+
+// ── 回测引擎 ──
+// commission: 单边手续费率（如0.001=0.1%）
+// T+1执行：信号在第i根K线收盘触发，于第i+1根K线收盘成交，消除前视偏差
+function backtest(data, signals, commission = 0) {
+  const closes = data.map(d => d.close);
+  let cash = 1, shares = 0, position = 0;
+  const equity = [];
+  const trades = [];
+  let buyPrice = 0, buyDate = '';
+
+  for (let i = 0; i < data.length; i++) {
+    const price = closes[i];
+
+    // 执行前一根K线产生的信号（T+1：signal[i-1] → execute at close[i]）
+    if (i > 0) {
+      if (signals[i - 1] === 1 && position === 0) {
+        // 买入：扣除手续费后换股
+        shares = cash * (1 - commission) / price;
+        cash = 0;
+        position = 1;
+        buyPrice = price;
+        buyDate = data[i].date;
+      } else if (signals[i - 1] === -1 && position === 1) {
+        // 卖出：扣除手续费后回现金
+        cash = shares * price * (1 - commission);
+        const ret = (price - buyPrice) / buyPrice;
+        const netRet = Math.pow(1 - commission, 2) * price / buyPrice - 1; // 双边手续费后净收益
+        trades.push({ buyDate, sellDate: data[i].date, buyPrice, sellPrice: price, ret, netRet });
+        shares = 0;
+        position = 0;
+      }
+    }
+
+    const val = position === 1 ? shares * price : cash;
+    equity.push(val);
+  }
+
+  // 未平仓：按最后收盘价强制平仓
+  if (position === 1) {
+    const lastPrice = closes[closes.length - 1];
+    const finalCash = shares * lastPrice * (1 - commission);
+    const ret = (lastPrice - buyPrice) / buyPrice;
+    const netRet = Math.pow(1 - commission, 2) * lastPrice / buyPrice - 1;
+    trades.push({ buyDate, sellDate: data[data.length - 1].date, buyPrice, sellPrice: lastPrice, ret, netRet, open: true });
+    equity[equity.length - 1] = finalCash;
+  }
+
+  const totalReturn = equity.length ? equity[equity.length - 1] - 1 : 0;
+
+  // 最大回撤
+  let maxDD = 0, peak = equity[0] || 1;
+  for (const v of equity) {
+    if (v > peak) peak = v;
+    const dd = (peak - v) / peak;
+    if (dd > maxDD) maxDD = dd;
+  }
+
+  // winRate 用净收益判断（双边手续费后实际盈亏）
+  const winRate = trades.length ? trades.filter(t => t.netRet > 0).length / trades.length : NaN;
+
+  return { totalReturn, maxDD, winRate, trades, equity };
+}
+
+// ── K线图渲染 ──
+function renderKlineChart(data, allSignals) {
+  const wrap = document.getElementById('bt-chart-wrap');
+  const chartEl = document.getElementById('bt-kline-chart');
+  wrap.style.display = 'block';
+  const ticker = document.getElementById('bt-ticker').value.trim().toUpperCase();
+  const mkt = detectMarket(ticker);
+  const currencySymbol = mkt === 'A' ? '¥' : mkt === 'HK' ? 'HK$' : '$';
+
+  const candleSeries = data.map(d => ({
+    x: new Date(d.date).getTime(),
+    y: [d.open, d.high, d.low, d.close]
+  }));
+
+  // 买卖点标注
+  const colors = { ma: '#1677ff', ma200: '#096dd9', rsi: '#52c41a', macd: '#fa8c16', mom: '#722ed1', boll: '#c41d7f' };
+  const names  = { ma: 'MA5/20', ma200: 'MA50/200', rsi: 'RSI', macd: 'MACD', mom: '动量', boll: '布林带' };
+  const annotations = { points: [] };
+
+  Object.entries(allSignals).forEach(([key, signals]) => {
+    signals.forEach((sig, i) => {
+      if (sig === 1) {
+        annotations.points.push({
+          x: new Date(data[i].date).getTime(),
+          y: data[i].low * 0.995,
+          marker: { size: 6, fillColor: colors[key], strokeColor: '#fff', radius: 2 },
+          label: { borderColor: colors[key], text: '买', style: { color: '#fff', background: colors[key], fontSize: '9px' } }
+        });
+      } else if (sig === -1) {
+        annotations.points.push({
+          x: new Date(data[i].date).getTime(),
+          y: data[i].high * 1.005,
+          marker: { size: 6, fillColor: '#ff4d4f', strokeColor: '#fff', radius: 2 },
+          label: { borderColor: '#ff4d4f', text: '卖', style: { color: '#fff', background: '#ff4d4f', fontSize: '9px' } }
+        });
+      }
+    });
+  });
+
+  const options = {
+    chart: { type: 'candlestick', height: 360, toolbar: { show: true }, animations: { enabled: false } },
+    series: [{ data: candleSeries }],
+    xaxis: { type: 'datetime', labels: { datetimeUTC: false } },
+    yaxis: { tooltip: { enabled: true }, labels: { formatter: v => currencySymbol + v.toFixed(2) } },
+    plotOptions: { candlestick: { colors: { upward: '#26a69a', downward: '#ef5350' } } },
+    annotations,
+    tooltip: { x: { format: 'yyyy-MM-dd' } }
+  };
+
+  if (btKlineChart) { btKlineChart.destroy(); btKlineChart = null; }
+  btKlineChart = new ApexCharts(chartEl, options);
+  btKlineChart.render();
+
+  // 图例
+  const legend = Object.entries(allSignals).map(([k]) =>
+    `<span style="color:${colors[k]};margin-right:12px">● ${names[k]}买入</span>`
+  ).join('') + '<span style="color:#ff4d4f">● 卖出</span>';
+  document.getElementById('bt-signal-legend').innerHTML = legend;
+}
+
+// ── 回测结果表渲染 ──
+function renderBtResults(results, bnhReturn, commission) {
+  const tbody = document.getElementById('bt-result-tbody');
+  const names  = { ma: '双均线 MA5/20', ma200: '双均线 MA50/200', rsi: 'RSI(14) 超买超卖', macd: 'MACD 金叉死叉', mom: '动量策略(20日)', boll: '布林带(20,2σ)' };
+  const colors = { ma: '#1677ff', ma200: '#096dd9', rsi: '#52c41a', macd: '#fa8c16', mom: '#722ed1', boll: '#c41d7f' };
+  const ticker = document.getElementById('bt-ticker').value.trim().toUpperCase();
+  const mkt = detectMarket(ticker);
+  const cur = mkt === 'A' ? '¥' : mkt === 'HK' ? 'HK$' : '$';
+
+  tbody.innerHTML = Object.entries(results).map(([key, r]) => {
+    const retColor = r.totalReturn >= 0 ? '#28a745' : '#dc3545';
+    const ddColor = r.maxDD > 0.2 ? '#dc3545' : r.maxDD > 0.1 ? '#ffa940' : '#28a745';
+    const wrColor = isNaN(r.winRate) ? '#aaa' : r.winRate >= 0.5 ? '#28a745' : '#dc3545';
+    const buyCnt = r.trades.length;
+    return `<tr style="text-align:center">
+      <td style="padding:7px 10px;border:1px solid #e8e8e8;text-align:left;font-weight:bold;color:${colors[key]}">${names[key]}</td>
+      <td style="padding:7px 10px;border:1px solid #e8e8e8;font-weight:bold;color:${retColor}">
+        ${r.totalReturn >= 0 ? '+' : ''}${(r.totalReturn*100).toFixed(2)}%</td>
+      <td style="padding:7px 10px;border:1px solid #e8e8e8;font-weight:bold;color:${ddColor}">
+        -${(r.maxDD*100).toFixed(2)}%</td>
+      <td style="padding:7px 10px;border:1px solid #e8e8e8;font-weight:bold;color:${wrColor}">
+        ${isNaN(r.winRate) ? '—' : (r.winRate*100).toFixed(1)+'%'}</td>
+      <td style="padding:7px 10px;border:1px solid #e8e8e8">${buyCnt} 次</td>
+      <td style="padding:7px 10px;border:1px solid #e8e8e8;font-size:11px;color:#888">
+        ${r.trades.slice(-3).map(t => `${t.buyDate.slice(5)}买@${cur}${t.buyPrice.toFixed(2)} → ${t.sellDate.slice(5)}卖@${cur}${t.sellPrice.toFixed(2)} (${t.netRet>=0?'+':''}${(t.netRet*100).toFixed(1)}%净)`).join('<br>')}
+        ${r.trades.length > 3 ? `<br>…共${r.trades.length}笔` : ''}
+      </td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('bt-results').style.display = 'block';
+  const bnhColor = bnhReturn >= 0 ? '#28a745' : '#dc3545';
+  const commPct = (commission * 100).toFixed(2);
+  document.getElementById('bt-bnh-row').innerHTML =
+    `📌 <b>买入持有对照（Buy & Hold）：</b>
+    <span style="color:${bnhColor};font-weight:bold">${bnhReturn >= 0 ? '+' : ''}${(bnhReturn*100).toFixed(2)}%</span>
+    &nbsp;（直接持有全程，首尾各一次手续费${commPct}%，用于对比策略效果）
+    &nbsp;<span style="color:#888;font-size:11px">· 所有策略均采用T+1收盘执行 · 单边手续费${commPct}%</span>`;
+}
+
+// ── 主入口 ──
+async function runBacktest(forceRefresh = true) {
+  const ticker = document.getElementById('bt-ticker').value.trim().toUpperCase();
+  if (!ticker) return alert('请输入股票代码');
+  const outputsize = document.getElementById('bt-outputsize').value;
+  const lmt = outputsize === 'full' ? 2000 : outputsize === 'medium' ? 750 : 100;
+
+  const btLoad = document.getElementById('bt-loading');
+  btLoad.style.display = 'block';
+  document.getElementById('bt-results').style.display = 'none';
+  document.getElementById('bt-chart-wrap').style.display = 'none';
+
+  try {
+    let data, fromCache = false;
+    const market = detectMarket(ticker);
+
+    if (market !== 'US') {
+      // A股/港股：东方财富历史K线
+      const ts = normalizeTushare(ticker);
+      const cacheKey = CACHE_VER + 'ts_kline_' + ticker + '_' + lmt;
+      const raw = localStorage.getItem(cacheKey);
+      if (!forceRefresh && raw) {
+        try {
+          const c = JSON.parse(raw);
+          if (Date.now() - c.ts < BT_CACHE_TTL) { data = c.data; fromCache = true; }
+        } catch(_) {}
+      }
+      if (!data) {
+        data = await fetchEastmoneyKline(ts, lmt);
+        try { localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), data })); } catch(_) {}
+      }
+    } else {
+      // 美股：Alpha Vantage
+      ({ data, fromCache } = await fetchDailyData(ticker, outputsize));
+    }
+    if (data.length < 30) throw new Error('数据不足（<30条），无法回测');
+
+    const closes = data.map(d => d.close);
+    const commission = Math.max(0, parseFloat(document.getElementById('bt-commission').value) || 0) / 100;
+
+    const selectedStrategies = {};
+    if (document.getElementById('bt-ma').checked)    selectedStrategies.ma    = signalMA(closes);
+    if (document.getElementById('bt-ma200').checked) selectedStrategies.ma200 = signalMA200(closes);
+    if (document.getElementById('bt-rsi').checked)   selectedStrategies.rsi   = signalRSIClean(closes);
+    if (document.getElementById('bt-macd').checked)  selectedStrategies.macd  = signalMACD(closes);
+    if (document.getElementById('bt-mom').checked)   selectedStrategies.mom   = signalMomentum(closes);
+    if (document.getElementById('bt-boll').checked)  selectedStrategies.boll  = signalBoll(closes);
+
+    if (!Object.keys(selectedStrategies).length) return alert('请至少选择一种策略');
+
+    const results = {};
+    Object.entries(selectedStrategies).forEach(([key, signals]) => {
+      results[key] = backtest(data, signals, commission);
+    });
+
+    // BnH：买入持有全程，首尾各承担一次手续费
+    const bnhReturn = closes[closes.length - 1] / closes[0] * Math.pow(1 - commission, 2) - 1;
+
+    document.getElementById('bt-chart-title').textContent =
+      `${ticker} K线图（${data[0].date} → ${data[data.length-1].date}，${data.length}个交易日）` +
+      (fromCache ? ' 📦缓存' : ' 🌐实时');
+
+    renderKlineChart(data, selectedStrategies);
+    renderBtResults(results, bnhReturn, commission);
+  } catch(e) {
+    alert('❌ 回测失败\n\n' + e.message);
+  } finally {
+    btLoad.style.display = 'none';
+  }
+}
+
+async function runBacktestCache() {
+  const ticker = document.getElementById('bt-ticker').value.trim().toUpperCase();
+  if (!ticker) return alert('请输入股票代码');
+  const outputsize = document.getElementById('bt-outputsize').value;
+  const lmt = outputsize === 'full' ? 2000 : outputsize === 'medium' ? 750 : 100;
+  const market = detectMarket(ticker);
+  // A/HK和美股使用不同的缓存key格式
+  const cacheKey = market !== 'US'
+    ? CACHE_VER + 'ts_kline_' + ticker + '_' + lmt
+    : CACHE_VER + 'daily_' + ticker + '_' + outputsize;
+  const raw = localStorage.getItem(cacheKey);
+  if (!raw) return alert('本地无缓存，请先点击"运行回测"拉取数据');
+  try {
+    JSON.parse(raw); // 验证缓存格式有效
+    await runBacktest(false);
+  } catch(_) {
+    alert('缓存损坏，请重新拉取');
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  A股 / 港股 支持（东方财富免费接口，无需Token）
+// ═══════════════════════════════════════════════════════
+
+function detectMarket(ticker) {
+  const t = ticker.replace(/\s/g,'').toUpperCase();
+  if (/^(SH|SZ)?\d{6}$/.test(t)) return 'A';
+  if (/^(HK)?\d{4,5}(\.HK)?$/i.test(t)) return 'HK';
+  return 'US';
+}
+
+function normalizeTushare(ticker) {
+  const t = ticker.replace(/\s/g,'').toUpperCase();
+  const market = detectMarket(t);
+  if (market === 'HK') {
+    const code = t.replace(/^HK/,'').replace(/\.HK$/i,'').padStart(5,'0');
+    return { code, currency:'HK$', marketName:'港股', market, secid:'116.'+code };
+  }
+  if (market === 'A') {
+    const c = t.replace(/^(SH|SZ)/,'');
+    const isShanghai = /^(6|9|5[0-8])/.test(c);
+    return {
+      code: c,
+      currency: '¥',
+      marketName: isShanghai ? '上交所(SH)' : '深交所(SZ)',
+      market,
+      secid: (isShanghai ? '1.' : '0.') + c
+    };
+  }
+  return null;
+}
+
+// 获取最新行情及基本面（东方财富免费接口）
+// 字段：f43=最新价(分)  f58=名称  f84=总股本(万股)  f116=总市值(元)
+//       f162=PE(TTM,×100)  f167=PB(×100)
+async function fetchEastmoneyQuote(ts) {
+  const url = `https://push2.eastmoney.com/api/qt/stock/get?secid=${ts.secid}&fields=f43,f57,f58,f84,f116,f162,f167,f9`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`东方财富 HTTP ${res.status}`);
+  const json = await res.json();
+  const d = json.data;
+  if (!d || d.f43 === undefined || d.f43 === '-' || d.f43 === null) {
+    throw new Error(`无法获取[${ts.code}]行情，请确认代码正确（A股6位数字·港股4-5位数字）`);
+  }
+  const price      = d.f43 / 100;
+  // f162=PE(TTM)，f9=动态PE；TTM优先，动态PE兜底（港股TTM有时返回'-'）
+  const peTTM  = (d.f162 === '-' || d.f162 === null || d.f162 <= 0) ? NaN : d.f162 / 100;
+  const peDyn  = (d.f9   === '-' || d.f9   === null || d.f9   <= 0) ? NaN : d.f9   / 100;
+  const pe         = !isNaN(peTTM) ? peTTM : peDyn;
+  const pb         = (d.f167 === '-' || d.f167 <= 0) ? NaN : d.f167 / 100;
+  const totalMv    = (d.f116 === '-' || !d.f116)     ? NaN : d.f116;
+  const totalShare = (d.f84  === '-' || !d.f84)      ? NaN : d.f84 * 1e4; // 万股→股
+  const tradeDate  = new Date().toISOString().slice(0,10).replace(/-/g,'');
+  return { name: d.f58 || ts.code, price, pe, pb, totalMv, totalShare, tradeDate };
+}
+
+// 获取历史K线（东方财富，日线前复权）
+// klt=101: 日K  fqt=1: 前复权  lmt: 条数
+// 返回字段顺序：日期,开盘,收盘,最高,最低,成交量(手),...
+async function fetchEastmoneyKline(ts, lmt) {
+  const url = `https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=${ts.secid}&fields1=f1,f2,f3,f4,f5,f6&fields2=f51,f52,f53,f54,f55,f56&klt=101&fqt=1&lmt=${lmt}&end=20500101`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`东方财富K线 HTTP ${res.status}`);
+  const json = await res.json();
+  const klines = json.data && json.data.klines;
+  if (!klines || !klines.length) throw new Error(`无[${ts.code}]历史K线，代码可能有误或该股已退市`);
+  return klines.map(s => {
+    const p = s.split(',');
+    return {
+      date:   p[0],
+      open:   parseFloat(p[1]),
+      close:  parseFloat(p[2]),
+      high:   parseFloat(p[3]),
+      low:    parseFloat(p[4]),
+      volume: parseFloat(p[5]) * 100  // 手→股
+    };
+  });
+}
+
+// A/HK DCF估值主流程（东方财富版）
+// preloadedQuote: 若已有缓存数据则跳过API调用；cacheKey: 成功拉取后写入缓存
+async function runSingleTS(ts, preloadedQuote = null, cacheKey = null) {
+  let q;
+  if (preloadedQuote) {
+    q = preloadedQuote;
+  } else {
+    q = await fetchEastmoneyQuote(ts);
+    if (cacheKey) {
+      try { localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), data: q })); } catch(_) {}
+    }
+  }
+
+  const { name, price, pe, pb, totalMv, totalShare, tradeDate } = q;
+
+  // EPS = 价格 / PE(TTM)
+  const eps = (pe > 0 && price > 0) ? price / pe : NaN;
+
+  // FCF估算：EPS×总股本×75% → 市值/PE×75%
+  let fcf = NaN, fcfSource = '';
+  if (!isNaN(eps) && eps > 0 && totalShare > 0) {
+    fcf = eps * totalShare * 0.75;
+    fcfSource = `EPS(${ts.currency}${fmt(eps)}) × 股本 × 75% 估算`;
+  } else if (pe > 0 && totalMv > 0) {
+    fcf = (totalMv / pe) * 0.75;
+    fcfSource = `市值÷PE(${fmt(pe)}) × 75% 估算`;
+  }
+
+  // 用户覆盖参数
+  const uFCF = document.getElementById('custom-fcf').value.trim();
+  const uG   = document.getElementById('growth').value.trim();
+  const uR   = document.getElementById('discount').value.trim();
+  const uTG  = document.getElementById('terminal').value.trim();
+  const uYrs = document.getElementById('years').value.trim();
+
+  const finalFCF = uFCF ? parseFloat(uFCF) : fcf;
+  const g   = uG  ? parseFloat(uG)/100  : 0.08;
+  const r   = uR  ? parseFloat(uR)/100  : 0.09;
+  const tg  = uTG ? parseFloat(uTG)/100 : 0.02;
+  const yrs = uYrs ? parseInt(uYrs)     : 10;
+
+  if (isNaN(finalFCF) || finalFCF <= 0) {
+    throw new Error(
+      `[${ts.code}] 无法自动估算FCF。\n\n请在"自由现金流FCF"框手动输入年度FCF（${ts.currency}总量）：\n` +
+      `• 可在同花顺/东方财富→财务报表→现金流量表查询\n• 经营活动现金流量净额 − 资本支出`
+    );
+  }
+  if (r <= tg) throw new Error(`折现率 r(${(r*100).toFixed(1)}%) 必须大于永续增长率 l(${(tg*100).toFixed(1)}%)`);
+  if (!totalShare || totalShare <= 0) throw new Error('无法获取股本数据，请确认股票代码正确');
+
+  const gC = g-0.02, rC = r+0.005, tgC = Math.max(0,tg-0.005);
+  const gO = g+0.02, rO = Math.max(tg+0.01,r-0.005), tgO = tg+0.005;
+  const vBase = dcfPerShare(finalFCF, totalShare, g,  r,  tg,  0, yrs);
+  const vCons = dcfPerShare(finalFCF, totalShare, gC, rC, tgC, 0, yrs);
+  const vOpt  = dcfPerShare(finalFCF, totalShare, gO, rO, tgO, 0, yrs);
+
+  if (isNaN(vBase)) throw new Error('DCF结果无效，请检查参数（折现率是否大于永续增长率？）');
+
+  const pos = positionLabel(price, vCons, vBase, vOpt);
+  const updown = price < vBase
+    ? `<span style="color:#28a745">▲ 较基准DCF低 ${fmt((vBase/price-1)*100)}%</span>`
+    : `<span style="color:#dc3545">▼ 较基准DCF高 ${fmt((price/vBase-1)*100)}%</span>`;
+
+  const outDiv = document.getElementById('single-output');
+  outDiv.style.display = 'block';
+  outDiv.innerHTML = `
+    <h3 style="margin:0 0 8px">[${ts.code}] ${name} · DCF估值报告（${ts.marketName}）</h3>
+    <div class="cache-status" style="background:${preloadedQuote?'#fff2e8':'#f6ffed'};color:${preloadedQuote?'#d4380d':'#237804'};">
+      ${preloadedQuote
+        ? '🚀 缓存命中（30天内数据）· 本次消耗 <b>0</b> 次调用 · <span style="font-weight:normal;color:#888">如需最新数据请点击"🔄 强制刷新"</span>'
+        : `🌐 东方财富实时数据 · 行情日期：${tradeDate} · 消耗 <b>0</b> 次调用（免费接口）`}
+      · <span style="font-weight:normal;color:#888;font-size:11px">注：A/HK为简化DCF，FCF由净利润估算，未扣减净负债</span>
+    </div>
+    <p>
+      <b>市场：</b><span style="color:#389e0d;font-weight:bold">${ts.marketName}</span>
+      &nbsp;|&nbsp;<b>最新收盘：</b>${ts.currency}${fmt(price)}
+      &nbsp;|&nbsp;<b>PE(TTM)：</b>${(isNaN(pe)||pe<=0)?'—':fmt(pe)}
+      &nbsp;|&nbsp;<b>PB：</b>${(isNaN(pb)||pb<=0)?'—':fmt(pb)}
+      &nbsp;|&nbsp;${updown}
+    </p>
+    <div class="data-matrix">
+      <b>📊 基本面数据（${ts.currency}）</b>
+      <div>• <b>估算FCF：</b>${ts.currency}${fmt(finalFCF)}
+           <span style="color:${uFCF?'#ff4d4f':'#ffa940'}">[${uFCF?'用户手动输入':fcfSource}]</span></div>
+      <div>• <b>总市值：</b>${ts.currency}${fmt(totalMv)}</div>
+      <div>• <b>总股本：</b>${fmt(totalShare/1e8,2)} 亿股</div>
+      <div style="margin-top:6px;padding:6px 10px;background:#fff7e6;border-radius:4px;font-size:11px;color:#874d00">
+        ⚠️ 简化说明：未获取资产负债表，净现金项为0；如需精确估值请在"自由现金流FCF"框手动填入真实FCF（${ts.currency}总量）
+      </div>
+    </div>
+    <div class="data-matrix">
+      <b>⚙️ DCF精算参数</b>
+      <div>增长率 g = ${(g*100).toFixed(1)}% &nbsp;|&nbsp; 折现率 r = ${(r*100).toFixed(1)}% &nbsp;|&nbsp; 永续增长 l = ${(tg*100).toFixed(1)}% &nbsp;|&nbsp; 年限 = ${yrs} 年
+           <span style="color:#aaa;font-size:11px">（A/HK默认：g=8% r=9% l=2%，可在上方覆盖）</span>
+      </div>
+    </div>
+    <p><b>每股内在价值DCF值（基准）：</b>
+       <span style="color:#389e0d;font-weight:bold;font-size:16px">${ts.currency}${fmt(vBase)}</span></p>
+    <p><b>安全边际区间：</b>
+       ${ts.currency}${fmt(vCons)} <span style="color:#888">（保守）</span>
+       ~ ${ts.currency}${fmt(vOpt)} <span style="color:#888">（乐观）</span></p>
+    <p><b>估值状态：</b>
+       <span style="font-weight:bold;color:${pos.color}">${pos.text}</span></p>
+  `;
+
+  renderChart(price, vCons, vBase, vOpt);
+  document.getElementById('fcf-history-wrap').style.display = 'none';
+}
+
+// bt-ticker 切换时自动填充对应市场的默认手续费
+document.getElementById('bt-ticker').addEventListener('input', function(e) {
+  const mkt = detectMarket(e.target.value.trim().toUpperCase());
+  const defaultComm = mkt === 'A' ? '0.15' : mkt === 'HK' ? '0.10' : '0.05';
+  document.getElementById('bt-commission').value = defaultComm;
+});
 
 // 页面初始化
 renderCounter();
