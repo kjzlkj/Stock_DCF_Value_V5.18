@@ -1722,7 +1722,7 @@ function exportTrades(){
 }
 
 // ═══════════════════════════════════════════════════════
-//  技术策略回测模块
+//  量化策略回测模块
 // ═══════════════════════════════════════════════════════
 
 const BT_CACHE_TTL = 24*60*60*1000; // 日线缓存1天
@@ -1759,7 +1759,7 @@ async function fetchDailyData(ticker, outputsize) {
   return { data: sliced, fromCache: false };
 }
 
-// ── 技术指标计算 ──
+// ── 量化指标计算 ──
 function calcMA(closes, n) {
   return closes.map((_, i) => i < n - 1 ? NaN : closes.slice(i - n + 1, i + 1).reduce((s, v) => s + v, 0) / n);
 }
