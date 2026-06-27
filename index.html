@@ -38,14 +38,14 @@
 <div class="container">
   <h2>美股/A股/港股AI智能DCF估值系统-V5.18</h2>
   <div class="warning-tip">
-    ✅ <b>每日25次仅为参考显示，实际无强制上限</b>，美股估值消耗6次，A股/港股使用东方财富免费接口。
-    30天内读取缓存(消耗0次）&nbsp;&nbsp;  &nbsp;&nbsp;
+    ✅ <b>每日25次仅为参考显示，实际无强制上限</b>，美股消耗6次，A股/港股使用东方财富免费接口。
+    30天内直读缓存(消耗0次）&nbsp;&nbsp;  &nbsp;&nbsp;
     <br>
     📋 <b>内置字段定期更新频率：</b>
     &nbsp;① <b>realDebt</b>有息负债-(次/半年） &nbsp;
-    &nbsp;② <b>realCash</b>现金总库—(次/半年） &nbsp;
-    &nbsp;③ <b>realShares</b>股本结构,变化慢(次/年)&nbsp;
-    &nbsp;④ <b>offlinePrice</b>(离线参考股价，API完全失效时用,偏差50%以上才改(次/半年)
+    &nbsp;② <b>realCash</b>现金总库(次/半年） &nbsp;
+    &nbsp;③ <b>realShares</b>股本结构变化慢(次/年)&nbsp;
+    &nbsp;④ <b>offlinePrice</b>(离线参考股价，在API偏差50%以上才改
     <br>
     💡<b>FCF Yield</b>=当前FCF/市值,不算增长;<b>DCF</b>=未来N年增速折现。
   </div>
@@ -62,15 +62,15 @@
   <div class="section-title">① 单只股票智能估值</div>
   <div class="row">
     <div>
-      <label>股票代码（Ticker）—美股如AAPL·A股.</label>
+      <label>股票代码（Ticker）—美股AAPL·A股.</label>
       <input id="ticker" placeholder="美股:AAPL A股:600519 港股:00700">
     </div>
     <div>
-      <label>自由现金流FCF（港股需手动输入）</label>
+      <label>自由现金流FCF（注：港股需手动输入）</label>
       <input id="custom-fcf" type="number" placeholder="手动覆盖，如：73270000000">
     </div>
     <div>
-      <label>增长率 g（留空内置/自适应）</label>
+      <label>增长率 g（留空/内置自适应）</label>
       <input id="growth" type="number" step="0.01" placeholder="如：15 表示15%">
     </div>
     <div>
@@ -167,8 +167,8 @@
       <label style="font-size:12px;color:#666">选择策略（可多选）</label>
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px">
         <label style="font-size:13px"><input type="checkbox" id="bt-mom" checked> 动量</label>
-        <label style="font-size:13px"><input type="checkbox" id="bt-ma"> 双均线MA5/20</label>
-        <label style="font-size:13px"><input type="checkbox" id="bt-ma200"> 双均线MA50/200</label>
+        <label style="font-size:13px"><input type="checkbox" id="bt-ma"> MA5/20</label>
+        <label style="font-size:13px"><input type="checkbox" id="bt-ma200"> MA50/200</label>
         <label style="font-size:13px"><input type="checkbox" id="bt-rsi"> RSI(14)</label>
         <label style="font-size:13px"><input type="checkbox" id="bt-macd"> MACD</label>
         <label style="font-size:13px"><input type="checkbox" id="bt-boll"> 布林带</label>
@@ -184,8 +184,8 @@
     <span style="font-size:11px;color:#722ed1;white-space:nowrap">· T+1执行（消除前视偏差）</span>
   </div>
   <div style="display:flex;gap:8px;margin-bottom:12px">
-    <button id="bt-run-btn" onclick="runBacktest()" style="flex:1;margin-top:0;background:#722ed1">📈 运行回测（美股1次·A/HK免费）</button>
-    <button onclick="runBacktestCache()" style="flex:1;margin-top:0;background:#08979c">🔄 读缓存回测（0次消耗）</button>
+    <button id="bt-run-btn" onclick="runBacktest()" style="flex:1;margin-top:0;background:#722ed1">📈 运行回测（美股1次·A股/HK股免费）</button>
+    <button onclick="runBacktestCache()" style="flex:1;margin-top:0;background:#08979c">🔄 直读缓存回测（0次消耗）</button>
   </div>
   <div id="bt-loading" style="display:none;color:#722ed1;font-size:12px;font-weight:bold;margin-bottom:8px">
     ⏳ 正在拉取日线数据并回测…
