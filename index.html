@@ -229,15 +229,15 @@
     <span style="font-size:11px;color:#aaa">（美股≈0.05%&nbsp;A股≈0.15%&nbsp;填0=不计费用）</span>
     <span style="font-size:11px;color:#722ed1;white-space:nowrap">· T+1执行（消除前视偏差）</span>
   </div>
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+    <label style="font-size:12px;color:#555;white-space:nowrap">VIX手动:</label>
+    <input id="vix-manual" type="number" min="0" max="100" step="0.1" placeholder="自动"
+      style="width:70px;padding:6px 8px;border-radius:6px;border:1px solid #ccc;font-size:13px;margin-top:0">
+  </div>
   <div style="display:flex;gap:8px;margin-bottom:12px">
     <button id="bt-run-btn" onclick="runBacktest()" style="flex:2;margin-top:0;background:#722ed1">📈 运行回测（美股用1次 A股/HK股免费）</button>
     <button onclick="runBacktestCache()" style="flex:1;margin-top:0;background:#08979c">🔄 直读缓存回测（0次消耗）</button>
     <button id="ts-btn" onclick="runTimingScore()" style="flex:2;margin-top:0;background:#389e0d">🎯 择时综合评分（需先运行回测·消耗3次API）</button>
-    <div style="flex:1;display:flex;align-items:center;gap:4px;margin-top:0">
-      <label style="font-size:12px;color:#555;white-space:nowrap">VIX手动:</label>
-      <input id="vix-manual" type="number" min="0" max="100" step="0.1" placeholder="自动"
-        style="width:70px;padding:6px 8px;border-radius:6px;border:1px solid #ccc;font-size:13px;margin-top:0">
-    </div>
   </div>
   <div id="bt-loading" style="display:none;color:#722ed1;font-size:12px;font-weight:bold;margin-bottom:8px">
     ⏳ 正在拉取日线数据并回测…
