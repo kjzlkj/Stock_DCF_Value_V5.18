@@ -62,11 +62,11 @@
   <div class="section-title">① 单只股票智能估值</div>
   <div class="row">
     <div>
-      <label>股票代码（Ticker）—美股AAPL·A股.</label>
+      <label>股票代码（Ticker）~美股AAPL·A股.</label>
       <input id="ticker" placeholder="美股:AAPL A股:600519 港股:00700">
     </div>
     <div>
-      <label>自由现金流FCF（注：港股需手动输入）</label>
+      <label>自由现金流FCF（注:港股需手动输入）</label>
       <input id="custom-fcf" type="number" placeholder="手动覆盖，如：73270000000">
     </div>
     <div>
@@ -88,7 +88,7 @@
   </div>
   <div style="display:flex;gap:8px;margin-top:8px">
     <button id="single-btn" onclick="runSingle(false)" style="flex:3;margin-top:0">
-      🔍 智能估值（优先读缓存·0次消耗）
+      🔍 智能估值（优先直读缓存·0次消耗）
     </button>
     <button id="refresh-btn" onclick="runSingle(true)"
             style="flex:1;margin-top:0;background:#ff7a00;border:none;color:#fff;border-radius:6px;cursor:pointer;font-weight:bold;font-size:14px">
@@ -148,7 +148,7 @@
 <div class="container" style="margin-top:16px">
   <div class="section-title" style="margin-top:0">④ 量化策略回测（K线图 + 买卖点）</div>
   <p style="font-size:12px;color:#888;margin:4px 0 10px">
-    支持双均线(MA5/20、MA50/200)、RSI、MACD、动量、布林带策略回测。显示K线图与买卖信号，统计收益率、最大回撤、胜率。
+    注：所有回测仅供参考，美股相对有效策略：1：价格>200均线，长期趋势，VIX<21分批买入 2:趋势+动量 3:价值+动量。
   </p>
   <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end;margin-bottom:10px">
     <div style="flex:1;min-width:120px">
@@ -166,11 +166,11 @@
     <div style="flex:2;min-width:200px">
       <label style="font-size:12px;color:#666">选择策略（可多选）</label>
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px">
-        <label style="font-size:13px"><input type="checkbox" id="bt-mom" checked> 动量</label>
-        <label style="font-size:13px"><input type="checkbox" id="bt-ma"> MA5/20</label>
         <label style="font-size:13px"><input type="checkbox" id="bt-ma200"> MA50/200</label>
         <label style="font-size:13px"><input type="checkbox" id="bt-rsi"> RSI(14)</label>
-        <label style="font-size:13px"><input type="checkbox" id="bt-macd"> MACD</label>
+        <label style="font-size:13px"><input type="checkbox" id="bt-macd"> MACD</label>        
+        <label style="font-size:13px"><input type="checkbox" id="bt-ma"> MA5/20</label>
+        <label style="font-size:13px"><input type="checkbox" id="bt-mom" checked> 动量</label>
         <label style="font-size:13px"><input type="checkbox" id="bt-boll"> 布林带</label>
       </div>
     </div>
@@ -180,11 +180,11 @@
     <input id="bt-commission" type="number" step="0.01" min="0" max="2" value="0.10"
       style="width:68px;padding:4px 6px;border:1px solid #ccc;border-radius:4px;font-size:13px;margin-top:0">
     <span style="font-size:12px;color:#555">%</span>
-    <span style="font-size:11px;color:#aaa">（A股≈0.15%&nbsp;港股≈0.10%&nbsp;美股≈0.05%&nbsp;填0=不计费用）</span>
+    <span style="font-size:11px;color:#aaa">（美股≈0.05%&nbsp;A股≈0.15%&nbsp;填0=不计费用）</span>
     <span style="font-size:11px;color:#722ed1;white-space:nowrap">· T+1执行（消除前视偏差）</span>
   </div>
   <div style="display:flex;gap:8px;margin-bottom:12px">
-    <button id="bt-run-btn" onclick="runBacktest()" style="flex:1;margin-top:0;background:#722ed1">📈 运行回测（美股1次·A股/HK股免费）</button>
+    <button id="bt-run-btn" onclick="runBacktest()" style="flex:1;margin-top:0;background:#722ed1">📈 运行回测（美股用1次·A股/HK股免费）</button>
     <button onclick="runBacktestCache()" style="flex:1;margin-top:0;background:#08979c">🔄 直读缓存回测（0次消耗）</button>
   </div>
   <div id="bt-loading" style="display:none;color:#722ed1;font-size:12px;font-weight:bold;margin-bottom:8px">
