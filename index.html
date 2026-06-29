@@ -84,16 +84,18 @@
 <div class="container">
   <h2>美股/A股/港股AI智能DCF系统-V5.18版</h2>
   <div class="warning-tip">
-    ✅ <b>每日25次仅为参考显示，实际无强制上限</b>，美股消耗6次，A股/港股使用东方财富免费接口。
-    30天内直读缓存(消耗0次）&nbsp;&nbsp;  &nbsp;&nbsp;
+    ✅ <b>每日25次仅为参考显示，实际无强制上限</b>，美股消耗6次，A股/港股使用东方财富免费接口，
+    30天内直读缓存(消耗0次）。&nbsp;&nbsp;  &nbsp;&nbsp;
     <br>
     📋 <b>内置字段定期更新频率：</b>
     &nbsp;① <b>realDebt</b>有息负债-(次/半年） &nbsp;
     &nbsp;② <b>realCash</b>现金总库(次/半年） &nbsp;
     &nbsp;③ <b>realShares</b>股本结构变化慢(次/年)&nbsp;
-    &nbsp;④ <b>offlinePrice</b>(离线参考股价，在API偏差50%以上才改
+    &nbsp;④ <b>offlinePrice</b>(离线参考股价，API偏差50%以上才改。
     <br>
     💡<b>FCF Yield</b>=当前FCF/市值,不算增长;<b>DCF</b>=未来N年增速折现。
+    <br>
+    ✅ <b>美股SPY>200日均线判断牛市，20日上穿50日为中期趋势</b>
   </div>
   <div class="api-bar">
     <div class="api-bar-left">
@@ -105,7 +107,7 @@
     <button style="width:auto;padding:4px 10px;font-size:11px;margin-top:0;background:#888;border:none;color:#fff;border-radius:6px;cursor:pointer"
             onclick="clearAllCache()">🗑️ 清空全部缓存</button>
   </div>
-  <div class="section-title">① 单只股票智能估值</div>
+  <div class="section-title">① 单只股票智能估值(美股首先SPY>200日均线)</div>
   <div class="row">
     <div>
       <label>股票代码(Ticker) -美股AAPL·A股...</label>
@@ -194,7 +196,7 @@
 <div class="container" style="margin-top:16px">
   <div class="section-title" style="margin-top:0">④ 量化策略回测（K线图 + 买卖点）</div>
   <p style="font-size:12px;color:#888;margin:4px 0 10px">
-    注：所有回测仅供参考，美股相对有效的策略：1：价格>200均线，长期跟随趋势，VIX<20,分批买入 2.可进一步运行深度择时评分参考。
+    注：所有回测仅供参考，美股相对有效策略：1：价格>200均线，长期跟随趋势，当VIX>30时,可分批买入。 2.20日上穿50日均线，中短期入场。3.进一步运行深度择时评分参考。
   </p>
   <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end;margin-bottom:10px">
     <div style="flex:1;min-width:120px">
@@ -403,7 +405,7 @@ function renderCounter(){
   const hint=document.getElementById("api-hint");
   if(hint){
     if(used>=DAY_LIMIT){
-      hint.textContent=`（已超参考值，Premium无强制限制）`;
+      hint.textContent=`（Premium无强制限制）`;
       hint.style.color="#888";
     }else{
       hint.textContent=`（剩余${DAY_LIMIT-used}次参考额度）`;
