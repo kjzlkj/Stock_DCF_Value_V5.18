@@ -8,8 +8,8 @@
   body{font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;background:#f5f5f5;margin:0;padding:16px}
   .container{max-width:1100px;margin:auto;background:#fff;padding:16px;border-radius:12px;box-shadow:0 0 10px rgba(0,0,0,.06)}
   h2{margin-top:0;font-size:20px}
-  input,button{width:100%;padding:8px;margin-top:6px;border-radius:6px;border:1px solid #ccc;font-size:14px;box-sizing:border-box}
-  button{background:#0078ff;color:#fff;cursor:pointer;font-weight:bold;border:none}
+  input,button{width:100%;padding:8px;margin-top:6px;border-radius:6px;border:1px solid #ccc;font-size:16px;box-sizing:border-box}
+  button{background:#0078ff;color:#fff;cursor:pointer;font-weight:bold;border:none;min-height:44px}
   button:active{background:#005fcc}
   button:disabled{background:#aaa;cursor:not-allowed}
   .row{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
@@ -41,7 +41,7 @@
   position:fixed;inset:0;z-index:9999;
   background:linear-gradient(135deg,#0d1b2a 0%,#1a3a5c 100%);
   display:flex;align-items:center;justify-content:center">
-  <div style="background:#fff;border-radius:16px;padding:40px 36px;width:320px;box-shadow:0 8px 40px rgba(0,0,0,.4);text-align:center">
+  <div style="background:#fff;border-radius:16px;padding:40px 36px;width:min(320px,92vw);box-shadow:0 8px 40px rgba(0,0,0,.4);text-align:center;box-sizing:border-box">
     <div style="font-size:36px;margin-bottom:8px">🔐</div>
     <div style="font-size:18px;font-weight:bold;color:#1a3a5c;margin-bottom:4px">股票智能DCF估值系统</div>
     <div style="font-size:12px;color:#888;margin-bottom:24px">请输入用户名和密码</div>
@@ -103,6 +103,7 @@
       <span class="api-num" id="api-num">0</span>
       <span>/ 25 次</span>
       <span id="api-hint" style="color:#888;font-size:11px;"></span>
+      <span id="rf-badge" style="color:#096dd9;font-size:11px;margin-left:6px;padding:2px 6px;background:#e6f7ff;border-radius:3px;cursor:pointer" title="10年期美债无风险利率（点击刷新）" onclick="initRF(true)"></span>
     </div>
     <button style="width:auto;padding:4px 10px;font-size:11px;margin-top:0;background:#888;border:none;color:#fff;border-radius:6px;cursor:pointer"
             onclick="clearAllCache()">🗑️ 清空全部缓存</button>
@@ -201,7 +202,7 @@
   <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end;margin-bottom:10px">
     <div style="flex:1;min-width:120px">
       <label style="font-size:12px;color:#666">股票代码</label>
-      <input id="bt-ticker" placeholder="美股:AAPL  A股:600519  港股:00700" style="width:100%;margin-top:2px">
+      <input id="bt-ticker" placeholder="美股:AAPL  A股:600519  港股:00700" maxlength="20" style="width:100%;margin-top:2px">
     </div>
     <div style="flex:1;min-width:140px">
       <label style="font-size:12px;color:#666">数据量</label>
@@ -214,12 +215,17 @@
     <div style="flex:2;min-width:200px">
       <label style="font-size:12px;color:#666">选择策略（可多选）</label>
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px">
-        <label style="font-size:13px"><input type="checkbox" id="bt-ma200" checked> MA50/200</label>
+        <label style="font-size:13px"><input type="checkbox" id="bt-ma2050" checked> MA20/50</label>
         <label style="font-size:13px"><input type="checkbox" id="bt-rsi"> RSI(14)</label>
-        <label style="font-size:13px"><input type="checkbox" id="bt-macd"> MACD</label>        
-        <label style="font-size:13px"><input type="checkbox" id="bt-ma"> MA5/20</label>
+        <label style="font-size:13px"><input type="checkbox" id="bt-macd"> MACD</label>
         <label style="font-size:13px"><input type="checkbox" id="bt-mom"> 动量</label>
         <label style="font-size:13px"><input type="checkbox" id="bt-boll"> 布林带</label>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:7px;padding:5px 9px;background:#f9f0ff;border-radius:5px;font-size:12px;color:#531dab">
+        <b>增强：</b>
+        <label><input type="checkbox" id="bt-vol-confirm"> 量价确认(买入须≥1.2x均量)</label>
+        <label><input type="checkbox" id="bt-kelly" checked> 凯利仓控(半凯利动态仓位)</label>
+        <label><input type="checkbox" id="bt-vix-pos" checked> VIX仓控(高波动降仓)</label>
       </div>
     </div>
   </div>
@@ -232,14 +238,15 @@
     <span style="font-size:11px;color:#722ed1;white-space:nowrap">· T+1执行（消除前视偏差）</span>
   </div>
     <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
-    <label style="font-size:12px;color:#555;white-space:nowrap"> VIX手动输入:</label>
-    <input id="vix-manual" type="number" min="0" max="100" step="0.1" placeholder="自动"
-      style="width:70px;padding:6px 8px;border-radius:6px;border:1px solid #ccc;font-size:13px;margin-top:0">
+    <label style="font-size:12px;color:#555;white-space:nowrap">VIX手动输入（API不支持，需手动填入）:</label>
+    <input id="vix-manual" type="number" min="0" max="100" step="0.1" placeholder="留空默认20"
+      style="width:90px;padding:6px 8px;border-radius:6px;border:1px solid #ccc;font-size:13px;margin-top:0">
+    <span style="font-size:11px;color:#aaa;white-space:nowrap">可查 <b>finance.yahoo.com</b> 搜 ^VIX</span>
   </div>
   <div style="display:flex;gap:8px;margin-bottom:12px">
     <button id="bt-run-btn" onclick="runBacktest()" style="flex:2;margin-top:0;background:#722ed1">📈 运行回测（美股1次 A/HK股免费）</button>
     <button onclick="runBacktestCache()" style="flex:1;margin-top:0;background:#08979c">🔄 读缓存回测</button>
-    <button id="ts-btn" onclick="runTimingScore()" style="flex:2;margin-top:0;background:#389e0d">🎯 深度择时分析评估（先运行回测·消耗3次API）</button>
+    <button id="ts-btn" onclick="runTimingScore()" style="flex:2;margin-top:0;background:#389e0d">🎯 深度择时分析评估（消耗3-4次API）</button>
   </div>
   <div id="bt-loading" style="display:none;color:#722ed1;font-size:12px;font-weight:bold;margin-bottom:8px">
     ⏳ 正在拉取日线数据并回测…
@@ -259,7 +266,10 @@
         <tr style="background:#f0f0ff;text-align:center">
           <th style="padding:7px 10px;border:1px solid #d9d9d9;text-align:left">策略</th>
           <th style="padding:7px 10px;border:1px solid #d9d9d9">总收益率</th>
+          <th style="padding:7px 10px;border:1px solid #d9d9d9">年化收益</th>
           <th style="padding:7px 10px;border:1px solid #d9d9d9">最大回撤</th>
+          <th style="padding:7px 10px;border:1px solid #d9d9d9">夏普比率</th>
+          <th style="padding:7px 10px;border:1px solid #d9d9d9">卡玛比率</th>
           <th style="padding:7px 10px;border:1px solid #d9d9d9">胜率</th>
           <th style="padding:7px 10px;border:1px solid #d9d9d9">交易次数</th>
           <th style="padding:7px 10px;border:1px solid #d9d9d9">买入&卖出点</th>
@@ -276,6 +286,16 @@
     <div style="font-size:14px;font-weight:bold;color:#389e0d;margin-bottom:4px">🎯 择时综合评分（三层过滤：宏观→个股→触发）</div>
     <p style="font-size:12px;color:#888;margin:0 0 10px">判断"现在买这只胜率高不高"，不预测涨多少。三层全部通过才执行买入。</p>
     <div id="timing-score-output"></div>
+    <!-- 评分阈值回测验证 -->
+    <div style="margin-top:14px;border-top:1px solid #f0f0f0;padding-top:12px">
+      <div style="font-size:13px;font-weight:bold;color:#444;margin-bottom:4px">📊 评分阈值历史回测验证</div>
+      <p style="font-size:12px;color:#888;margin:0 0 4px">用内置标的历史月线数据验证7.0/5.5分界线是否具有预测力（仅处理①区已查询的标的，优先缓存，无缓存则消耗1次API/标的）</p>
+      <p style="font-size:11px;color:#faad14;margin:0 0 8px">⚠️ 注：此回测使用简化评分公式（动量+相对强度分箱），与实时择时评分的Z-score因子模型不完全一致，结论仅供参考，不代表实时评分阈值的严格历史验证。</p>
+      <button id="score-bt-btn" onclick="runScoreBacktest()" style="background:#722ed1;color:#fff;border:none;border-radius:4px;padding:6px 16px;font-size:13px;cursor:pointer">
+        🔬 运行评分阈值回测
+      </button>
+      <div id="score-bt-output" style="margin-top:10px"></div>
+    </div>
   </div>
 </div>
 
@@ -383,16 +403,19 @@
 const API_KEY  = "IBDLZBLOZY9ABQAV";
 const AV_BASE  = "https://www.alphavantage.co/query";
 const CACHE_TTL= 30*24*60*60*1000;  // 30天
-const CACHE_VER= "dcf_v72_";        // 版本升级自动淘汰旧缓存
+const CACHE_VER= "dcf_v73_";        // 版本升级自动淘汰旧缓存
 const DAY_LIMIT= 25;                // 仅用于UI提示参考值；Premium实际无强制上限，超过后仍可继续查询
 const REQ_GAP  = 1200;              // 请求间隔（保留充分节流避免触发分钟级限速）
+
+// HTML转义（防止API返回字段含<script>等注入innerHTML时触发XSS）
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
 // ═══════════════════════════════════════════════════════
 //  每日计数器
 // ═══════════════════════════════════════════════════════
 function todayKey(){ return "dcf_apicount_" + new Date().toISOString().slice(0,10); }
 function getUsed(){ return parseInt(localStorage.getItem(todayKey())||"0")||0; }
-function addUsed(n){ localStorage.setItem(todayKey(), getUsed()+n); renderCounter(); }
+function addUsed(n){ try{ localStorage.setItem(todayKey(), getUsed()+n); }catch(_){} renderCounter(); }
 
 // 点阵只创建一次，后续只改 className（避免每次重建25个DOM节点）
 function renderCounter(){
@@ -415,24 +438,82 @@ function renderCounter(){
 }
 
 function clearAllCache(){
-  const keys=Object.keys(localStorage).filter(k=>k.startsWith("dcf_v")||k.startsWith("dcf_apicount_"));
+  const keys=Object.keys(localStorage).filter(k=>k.startsWith("dcf_v")||k.startsWith("dcf_apicount_")||k==='dcf_rf_10y'||k===SUMMARY_KEY);
   if(!keys.length){alert("缓存为空，无需清除。");return;}
   if(!confirm(`确认清空全部${keys.length}条本地缓存（含今日API计数）？\n清空后下次估值将重新调用API。`))return;
   keys.forEach(k=>localStorage.removeItem(k));
   renderCounter();
   alert(`✅ 已清空${keys.length}条缓存，API计数已归零。`);
 }
+
+// ── 无风险利率自动更新（10年期美债，30天缓存）──
+let RF_CURRENT = 0.0445;
+
+async function initRF(forceRefresh = false) {
+  const key = 'dcf_rf_10y';
+  if (!forceRefresh) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (raw) {
+        const c = JSON.parse(raw);
+        if (Date.now() - c.ts < CACHE_TTL && c.rf > 0) {
+          RF_CURRENT = c.rf;
+          renderRFBadge(true);
+          return;
+        }
+      }
+    } catch(_) {}
+  }
+  try {
+    const now=Date.now(), wait=Math.max(0,_nextSlotTime-now);
+    _nextSlotTime=Math.max(_nextSlotTime,now)+REQ_GAP;
+    if(wait>0) await new Promise(r=>setTimeout(r,wait));
+    const res = await fetchWithTimeout(`${AV_BASE}?function=TREASURY_YIELD&interval=daily&maturity=10year&apikey=${API_KEY}`);
+    if (!res.ok) { renderRFBadge(false); return; }
+    const json = await res.json();
+    if (json['Note'] || json['Information']) { renderRFBadge(false); return; }
+    const d0 = (json.data || [])[0];
+    if (d0 && d0.value !== '.') {
+      const rf = parseFloat(d0.value) / 100;
+      if (rf > 0.005 && rf < 0.15) {
+        RF_CURRENT = rf;
+        try { localStorage.setItem(key, JSON.stringify({ ts: Date.now(), rf })); } catch(_) {}
+      }
+    }
+  } catch(_) {}
+  renderRFBadge(false);
+}
+
+function renderRFBadge(fromCache) {
+  const el = document.getElementById('rf-badge');
+  if (el) el.textContent = `rf=${(RF_CURRENT*100).toFixed(2)}%${fromCache===false?' 🔴':''}`;
+}
 // ═══════════════════════════════════════════════════════
 //  串行节流请求
 // ═══════════════════════════════════════════════════════
+// 统一 fetch 超时封装（30秒，断网时不永久挂起）
+async function fetchWithTimeout(url, timeoutMs=30000){
+  const ctrl=new AbortController();
+  const tid=setTimeout(()=>ctrl.abort(),timeoutMs);
+  try{
+    const res=await fetch(url,{signal:ctrl.signal});
+    clearTimeout(tid);
+    return res;
+  }catch(e){
+    clearTimeout(tid);
+    if(e.name==='AbortError') throw new Error('网络超时（30秒），请检查网络连接后重试');
+    throw e;
+  }
+}
+
 let _nextSlotTime=0;
-async function avFetch(fn,symbol){
+async function avFetch(fn, symbol, extra=''){
   // 乐观占位：立即推进时间槽，并发调用者会拿到不同槽位，避免同时穿透
   const now=Date.now();
   const wait=Math.max(0,_nextSlotTime-now);
   _nextSlotTime=Math.max(_nextSlotTime,now)+REQ_GAP;
   if(wait>0) await new Promise(r=>setTimeout(r,wait));
-  const res=await fetch(`${AV_BASE}?function=${fn}&symbol=${symbol}&apikey=${API_KEY}`);
+  const res=await fetchWithTimeout(`${AV_BASE}?function=${fn}&symbol=${symbol}${extra}&apikey=${API_KEY}`);
   if(!res.ok) throw new Error(`HTTP ${res.status} @ ${fn}`);
   const json=await res.json();
   if(json["Note"]||json["Information"]){
@@ -454,7 +535,7 @@ const pFloat=(obj,key)=>{
   if(v===undefined||v===null||v==="None"||v==="-"||v==="") return NaN;
   const n=parseFloat(v); return isNaN(n)?NaN:n;
 };
-const fmt=(n,d=2)=>n===undefined||n===null||isNaN(n)?"—":Number(n).toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d});
+const fmt=(n,d=2)=>n===undefined||n===null||isNaN(n)||!isFinite(n)?"—":Number(n).toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d});
 const pct=n=>isNaN(n)?"—":fmt(n*100)+"%";
 
 function positionLabel(price,low,mid,high){
@@ -479,9 +560,11 @@ function positionLabel(price,low,mid,high){
 // ═══════════════════════════════════════════════════════
 const PARAMS={
   // NVDA FY2026(截至2026-01-25)：FCF $96.68B，现金$32.9B(短期$11B+长期$22B)，债$8.5B
-  //   g从15%升至25%：FY2027 Q1营收指引$78B(+77% QoQ)，市场隐含g≈21%，25%为折中
-  "NVDA": {g:0.25,r:0.10, gt:0.025,years:10,name:"英伟达",
-           realDebt:8500000000,allowLTI:true,realCash:43200000000,offlinePrice:135},
+  //   g=20%：FY2027 Q1指引$78B，市场隐含g≈20%（r=13%时），20%为均衡假设
+  //   r=13%（原10%）：WACC=15.85%（β=2.20），r=13%折中定价，避免低r虚高DCF
+  //   realCash修正为$32.9B（API已正确含短期$11B+长期有价证券$22B，原$43.2B偏高）
+  "NVDA": {g:0.20,r:0.13, gt:0.025,years:10,name:"英伟达",
+           realDebt:8500000000,allowLTI:true,realCash:32856000000,offlinePrice:135},
   // TSLA FY2024(截至2024-12-31)：
   //   FCF $6.22B ✅（API直取正确）
   //   现金+投资约$36B（API取到Q1 2024的$16.5B为过时数据）
@@ -504,7 +587,9 @@ const PARAMS={
            realDebt:43151000000,allowLTI:true,realCash:38000000000,offlinePrice:420},
   // GOOGL FY2024(截至2024-12-31)：A+B+C三类股12,041M；API现金$99.4B（短期$31B+长期$69B）
   //   realCash更新为$99.4B（原$95.7B，现金有所增加）
-  "GOOGL":{g:0.08,r:0.065,gt:0.025,years:10,name:"谷歌(A+B+C)",
+  //   ⚠️ longTermInvestments $69B中约$26B为非上市股权投资（不可随时变现），
+  //      allowLTI=true会将其全部计入现金，实际流动现金约$72B，DCF每股现金高估约$2
+  "GOOGL":{g:0.08,r:0.085,gt:0.025,years:10,name:"谷歌(A+B+C)",
            realDebt:10000000000,allowLTI:true,realCash:99395000000,
            realShares:12041000000,offlinePrice:175},
   // AVGO FY2024(截至2024-11-03)：有息债$67.6B，g升至20%（AI芯片+220%）
@@ -541,36 +626,63 @@ const PARAMS={
   //   g=8%反映2025年困境+2026-2030年逐步恢复，r=9%含DOJ风险溢价
   "UNH":  {g:0.08,r:0.09, gt:0.02, years:10,name:"联合健康",
            realDebt:63000000000,offlinePrice:410},
+  // BRK.B：Alpha Vantage OVERVIEW/CF/BS/EARNINGS对BRK.B覆盖不稳定，全部用内置数据
+  //   skipFundamentals=true → 跳过5次无效API，只取TIME_SERIES_MONTHLY+GLOBAL_QUOTE（2次）
+  //   FCF：2024年运营收益$47.4B，扣CapEx~$12B，所有者收益保守$35B
+  //   现金：2024Q4现金+短期国债$334B（创历史新高，巴菲特大量囤积现金）
+  //   负债：$120B为公司层面有息债务（不含保险浮存金约$170B，浮存金是经营负债非有息债）
+  //   净现金 = $334B - $120B = +$214B → 每B股加成约+$99
   "BRK.B":{g:0.05,r:0.08, gt:0.02, years:5, name:"伯克希尔B",
-           realDebt:120000000000,offlinePrice:460},
+           skipFundamentals:true,
+           sector:"Financial Services",
+           realDebt:120000000000,debtFromPreset:true,
+           realCash:334000000000,
+           realShares:2160000000,
+           realSharesNote:"内置B类股股本修正（API OVERVIEW对BRK.B覆盖有限，实际约21.6亿股）",
+           customFCF:35000000000,
+           offlinePrice:460},
   // AXP FY2024：有息借款$53.2B（原$48B偏低），稀释股本721M（API取基本股682M）
   "AXP":  {g:0.06,r:0.085,gt:0.02, years:5, name:"美国运通",
-           realDebt:53160000000,realShares:721000000,
+           realDebt:53160000000,debtFromPreset:true,realShares:721000000,
            realSharesNote:"内置稀释股本修正（API返回基本股本682M，实际稀释股本约721M）",
            offlinePrice:270},
   // ORCL FY2025(截至2025-05-31)：FCF为负因CapEx暴增，用经营CF×70%=$14.6B替代
   //   有息债务已更新至$106.1B（FY2026 Q2末，2025-09新发$180亿票据后）
   //   现金实际$10.9B（API取到$31.3B偏高，用realCash修正）
   "ORCL": {g:0.15,r:0.085,gt:0.02, years:10,name:"甲骨文",
-           realDebt:106100000000,realCash:10941000000,
+           realDebt:106100000000,debtFromPreset:true,realCash:10941000000,
            customFCF:14574700000,offlinePrice:165},
   // AAPL FY2025(截至2025-09-27)：allowLTI=短期+长期有价证券合并；realCash=API失效时兜底
   "AAPL": {g:0.08,r:0.075,gt:0.025,years:10,name:"苹果",
-           realDebt:98300000000,allowLTI:true,realCash:113657000000,offlinePrice:220},
-  // NFLX FY2024：股价$78-82（从2025高点$133大幅回调），股本约4,295M股
-  //   FCF $9.46B（FY2024），有息债务$16B（Q3 2024，原内置$14B偏低）
-  //   年限从5年改为10年
+           realDebt:98300000000,allowLTI:true,realCash:113657000000,
+           realShares:15100000000,
+           realSharesNote:"内置稀释股本修正（FY2025 10-K查证约151亿股，API DilutedEPS字段时常缺失）",
+           offlinePrice:220},
+  // NFLX FY2024：FCF $9.46B，有息债务$16B，股本约4,295M股
+  //   注：offlinePrice仅作API失效时兜底参考，实际价格请以API为准
   "NFLX": {g:0.12,r:0.09, gt:0.025,years:10,name:"网飞",
-           realDebt:16000000000,offlinePrice:80},
+           realDebt:16000000000,offlinePrice:1100},
   // SOFI：持牌银行，客户存款$25B+是经营负债不计入有息债务
   //   企业有息借款（corporate borrowings）约$4B，原内置$21B严重高估
   //   注：DCF对银行类公司局限性大，P/B估值更准确（合理P/B=3-5x → $14.7-$24.6）
   "SOFI": {g:0.20,r:0.115,gt:0.02, years:10,name:"SoFi金融科技",
            realDebt:4000000000,offlinePrice:14},
   "QQQ":  {g:0.08,r:0.09, gt:0.025,years:10,name:"纳指100ETF",
-           realDebt:0,isETF:true,offlinePrice:480},
+           realDebt:0,isETF:true,offlinePrice:480,
+           realShares:550000000, etfPE:28, realCash:0,
+           realSharesNote:"ETF份额修正（API OVERVIEW不覆盖ETF，实际约5.5亿份额）"},
   "SPY":  {g:0.06,r:0.085,gt:0.02, years:10,name:"标普500ETF",
-           realDebt:0,isETF:true,offlinePrice:540},
+           realDebt:0,isETF:true,offlinePrice:540,
+           realShares:930000000, etfPE:22, realCash:0,
+           realSharesNote:"ETF份额修正（API OVERVIEW不覆盖ETF，实际约9.3亿份额）"},
+  "VOO":  {g:0.06,r:0.085,gt:0.02, years:10,name:"标普500ETF(VOO)",
+           realDebt:0,isETF:true,offlinePrice:500,
+           realShares:1800000000, etfPE:22, realCash:0,
+           realSharesNote:"ETF份额修正（API OVERVIEW不覆盖ETF，实际约18亿份额）"},
+  "IVV":  {g:0.06,r:0.085,gt:0.02, years:10,name:"标普500ETF(IVV)",
+           realDebt:0,isETF:true,offlinePrice:570,
+           realShares:900000000, etfPE:22, realCash:0,
+           realSharesNote:"ETF份额修正（API OVERVIEW不覆盖ETF，实际约9亿份额）"},
   // NEE：重资产公用事业，CapEx $200+亿/年远超经营CF，FCF长期为负，DCF局限性大
   //   customFCF = 净利润$8.18B × 80% = $6.54B（可分配现金近似，比API FCF $3.2B更合理）
   //   realDebt = $104.4B（原内置$66B严重低估，差$38.4B）
@@ -579,12 +691,53 @@ const PARAMS={
            realDebt:104400000000,customFCF:6544000000,offlinePrice:68,
            ddmNote:"股息折现（DDM）更适合：年股息$2.49÷(r8.5%-g5.5%)=$83，与市价$86更吻合"},
   "SGOV": {g:0.00,r:0.045,gt:0.00, years:1, name:"超短债ETF",
-           realDebt:0,isETF:true,offlinePrice:100},
+           realDebt:0,isETF:true,offlinePrice:100,
+           realShares:2500000000, etfPE:21, realCash:0},
   "ADBE": {g:0.10,r:0.09, gt:0.025,years:10,name:"Adobe",
            realDebt:3800000000,offlinePrice:380},
   // GLD：持有实物黄金，无FCF，DCF不适用，isGold触发特殊警告
   "GLD":  {g:0.04,r:0.06, gt:0.02, years:10,name:"黄金ETF(GLD)",
-           realDebt:0,isETF:true,isGold:true,offlinePrice:280},
+           realDebt:0,isETF:true,isGold:true,offlinePrice:280,realCash:0,
+           realShares:271000000, etfPE:0},
+  "IAU":  {g:0.04,r:0.06, gt:0.02, years:10,name:"黄金ETF(IAU)",
+           realDebt:0,isETF:true,isGold:true,offlinePrice:46,realCash:0,
+           realShares:635000000, etfPE:0},
+  // VTI：全市美股ETF，持仓约3600只，PE~22
+  "VTI":  {g:0.06,r:0.085,gt:0.02, years:10,name:"全美股市ETF(VTI)",
+           realDebt:0,isETF:true,offlinePrice:280,
+           realShares:1400000000, etfPE:22, realCash:0},
+  // VTV：价值股ETF，PE偏低~17，分红较高
+  "VTV":  {g:0.05,r:0.08, gt:0.02, years:10,name:"价值股ETF(VTV)",
+           realDebt:0,isETF:true,offlinePrice:160,
+           realShares:750000000, etfPE:17, realCash:0},
+  // AGG：综合债券ETF，不产生传统FCF，g≈票息收入
+  "AGG":  {g:0.00,r:0.045,gt:0.00, years:5, name:"综合债券ETF(AGG)",
+           realDebt:0,isETF:true,offlinePrice:98,
+           realShares:700000000, etfPE:20, realCash:0},
+  // TLT：20年+长期国债ETF，久期高，对利率极敏感
+  "TLT":  {g:0.00,r:0.045,gt:0.00, years:10,name:"长期国债ETF(TLT)",
+           realDebt:0,isETF:true,offlinePrice:88,
+           realShares:350000000, etfPE:22, realCash:0},
+  // DBC：大宗商品ETF，追踪期货，无传统PE/FCF，g跟随大宗周期
+  "DBC":  {g:0.02,r:0.07, gt:0.02, years:5, name:"大宗商品ETF(DBC)",
+           realDebt:0,isETF:true,offlinePrice:25,
+           realShares:300000000, etfPE:20, realCash:0},
+  // SHV：超短期国债ETF（<1年），接近现金，收益率~5.2%
+  "SHV":  {g:0.00,r:0.045,gt:0.00, years:1, name:"超短债ETF(SHV)",
+           realDebt:0,isETF:true,offlinePrice:110,
+           realShares:200000000, etfPE:21, realCash:0},
+  // BIL：1-3月美债ETF，流动性极高，近似货币基金
+  "BIL":  {g:0.00,r:0.045,gt:0.00, years:1, name:"短期国债ETF(BIL)",
+           realDebt:0,isETF:true,offlinePrice:91,
+           realShares:500000000, etfPE:21, realCash:0},
+  // MINT：PIMCO超短债ETF，持有1年内投资级债券
+  "MINT": {g:0.00,r:0.045,gt:0.00, years:1, name:"超短债ETF(MINT)",
+           realDebt:0,isETF:true,offlinePrice:97,
+           realShares:400000000, etfPE:21, realCash:0},
+  // GLTS：iShares全球国债ETF，分散全球利率风险
+  "GLTS": {g:0.00,r:0.04, gt:0.00, years:5, name:"全球国债ETF(GLTS)",
+           realDebt:0,isETF:true,offlinePrice:48,
+           realShares:100000000, etfPE:20, realCash:0},
   // BTI：烟草量下滑，g=-1%（量跌价涨净效应），gt=0%
   "BTI":  {g:-0.01,r:0.085,gt:0.00,years:5, name:"英美烟草",
            realDebt:46300000000,offlinePrice:40},
@@ -592,7 +745,8 @@ const PARAMS={
   "O":    {g:0.04,r:0.07, gt:0.015,years:10,name:"Realty Income",
            realDebt:26000000000,offlinePrice:58},
   "SCHD": {g:0.06,r:0.085,gt:0.02, years:10,name:"红利ETF(SCHD)",
-           realDebt:0,isETF:true,offlinePrice:28},
+           realDebt:0,isETF:true,offlinePrice:28,
+           realShares:775000000, etfPE:18, realCash:0},
   // EPD：MLP中游能源管道，含税收复杂性溢价
   "EPD":  {g:0.04,r:0.08, gt:0.015,years:10,name:"Enterprise管道MLP",
            realDebt:30500000000,offlinePrice:33},
@@ -607,7 +761,43 @@ const PARAMS={
   "JPM":  {g:0.06,r:0.09, gt:0.02, years:10,name:"摩根大通",
            realDebt:300000000000,offlinePrice:265},
   "GS":   {g:0.07,r:0.10, gt:0.02, years:10,name:"高盛",
-           realDebt:280000000000,offlinePrice:580}
+           realDebt:280000000000,offlinePrice:580},
+
+  // ── A股内置参数（g/r参考行业均值，FCF由东方财富EPS×75%自动估算）──
+  // 贵州茅台 FY2024：净利润约862亿，高壁垒消费，r偏低
+  "600519":{g:0.10,r:0.082,gt:0.02,years:10,name:"贵州茅台"},
+  // 比亚迪 FY2024：新能源高速扩张，g保守20%，竞争激烈r偏高
+  "002594":{g:0.20,r:0.105,gt:0.02,years:10,name:"比亚迪"},
+  // 宁德时代 FY2024：全球电池龙头，g=15%，r含竞争/价格战风险
+  "300750":{g:0.15,r:0.10, gt:0.02,years:10,name:"宁德时代"},
+  // 招商银行 FY2024：高ROE零售银行，g=8%，r银行类偏低
+  "600036":{g:0.08,r:0.085,gt:0.015,years:10,name:"招商银行"},
+  // 中国平安 FY2024：综合金融，含寿险长周期，g适中
+  "601318":{g:0.07,r:0.09, gt:0.015,years:10,name:"中国平安"},
+  // 工商银行 FY2024：国有大行，低增速高股息，g保守5%
+  "601398":{g:0.05,r:0.085,gt:0.015,years:10,name:"工商银行"},
+  // 长江电力 FY2024：水电公用事业，稳定股息，g=5%，r偏低
+  "600900":{g:0.05,r:0.075,gt:0.02, years:10,name:"长江电力"},
+  // 五粮液 FY2024：次高端白酒，g略低于茅台
+  "000858":{g:0.08,r:0.085,gt:0.02, years:10,name:"五粮液"},
+
+  // ── 港股内置参数（代码5位补零，customFCF单位：港元总量）──
+  // 腾讯控股 FY2024：经营CF≈CNY2260亿≈HK$2440亿，资本支出≈HK$520亿，FCF≈HK$1920亿
+  "00700": {g:0.12,r:0.09, gt:0.02, years:10,name:"腾讯控股",
+            customFCF:180000000000,
+            customFCFNote:"FY2024 经营CF≈HK$2440亿 − 资本支出≈HK$520亿（CNY换算，保守取HK$1800亿）"},
+  // 阿里巴巴 FY2025：经营CF≈CNY2590亿≈HK$2800亿，资本支出≈HK$1080亿，FCF≈HK$1720亿
+  "09988": {g:0.10,r:0.095,gt:0.02, years:10,name:"阿里巴巴",
+            customFCF:170000000000,
+            customFCFNote:"FY2025 经营CF≈HK$2800亿 − 资本支出≈HK$1080亿（CNY换算，保守取HK$1700亿）"},
+  // 美团 FY2024：经营CF≈CNY450亿≈HK$486亿，资本支出≈HK$97亿，FCF≈HK$389亿
+  "03690": {g:0.15,r:0.105,gt:0.02, years:10,name:"美团",
+            customFCF:38000000000,
+            customFCFNote:"FY2024 经营CF≈HK$486亿 − 资本支出≈HK$97亿（CNY换算）"},
+  // 汇丰控股 FY2024：银行业以净利润代FCF；净利润≈USD229亿≈HK$1782亿，×75%≈HK$1337亿
+  "00005": {g:0.03,r:0.09, gt:0.015,years:5, name:"汇丰控股",
+            customFCF:134000000000,
+            customFCFNote:"FY2024 净利润≈USD229亿×7.78≈HK$1782亿×75%（银行业以净利润代FCF）"}
 };
 
 // ═══════════════════════════════════════════════════════
@@ -665,53 +855,125 @@ function dcfPerShare(fcf,shares,g,r,tg,netCash,years){
 // ═══════════════════════════════════════════════════════
 //  主数据获取
 // ═══════════════════════════════════════════════════════
-async function fetchData(ticker,forceRefresh){
+async function fetchData(ticker, forceRefresh, onProgress){
   const t=ticker.toUpperCase();
   const cacheKey=CACHE_VER+t;
   const preset=PARAMS[t];
+  const DAY_MS=24*60*60*1000;
+  const _usedAtStart=getUsed(); // 记录本次请求开始前的累计调用数
 
-  // ── 1. 缓存命中 ──
+  // ── 1. 今日快速缓存（当天内同一股票重复查询直接返回）──
   if(!forceRefresh){
     try{
       const raw=localStorage.getItem(cacheKey);
       if(raw){
         const c=JSON.parse(raw);
-        // 缓存有效条件：未过期 + 有数据 + FCF有效（customFCF公司fcf可能是NaN，用isValid标记）
-        if(Date.now()-c.ts<CACHE_TTL && c.data && c.data._valid){
-          return {...c.data,fromCache:true,cacheAge:Math.floor((Date.now()-c.ts)/86400000)};
+        if(Math.abs(Date.now()-c.ts)<DAY_MS && c.data && c.data._valid){
+          onProgress?.('📦 缓存命中（今日数据），0次API消耗');
+          return {...c.data,fromCache:true,cacheAge:Math.floor((Math.abs(Date.now()-c.ts))/86400000)};
         }
       }
     }catch(_){}
   }
 
-  // ── 2. 串行拉取6个端点（含历史PE所需的EARNINGS+TIME_SERIES_MONTHLY）──
-  const overJson =await avFetch("OVERVIEW",     t); addUsed(1);
-  const quoteJson=await avFetch("GLOBAL_QUOTE", t); addUsed(1);
-  const cfJson   =await avFetch("CASH_FLOW",    t); addUsed(1);
-  const bsJson   =await avFetch("BALANCE_SHEET",t); addUsed(1);
-  const earnJson =await avFetch("EARNINGS",     t); addUsed(1);
-  const priceJson=await avFetch("TIME_SERIES_MONTHLY",t); addUsed(1);
+  // ── 2. 基本面原始缓存（30天）：OVERVIEW / CASH_FLOW / BALANCE_SHEET / EARNINGS / TIME_SERIES_MONTHLY ──
+  let overJson,cfJson,bsJson,earnJson,priceJson,fundFresh=false;
+  if(!forceRefresh){
+    try{
+      const fRaw=localStorage.getItem(CACHE_VER+'f_'+t);
+      if(fRaw){
+        const fc=JSON.parse(fRaw);
+        if(Date.now()-fc.ts<CACHE_TTL){
+          ({overJson,cfJson,bsJson,earnJson,priceJson}=fc);
+          if(overJson&&cfJson&&bsJson&&earnJson&&priceJson) fundFresh=true;
+        }
+      }
+    }catch(_){}
+  }
+  if(!fundFresh){
+    if(preset?.isETF){
+      // ETF快速通道：OVERVIEW/CF/BS/EARNINGS对ETF无意义，仅取月线数据
+      onProgress?.('📡 [1/2] ETF模式：跳过基本面API（不适用）…');
+      overJson ={ SharesOutstanding: String(preset.realShares||1000000000),
+                  PERatio: String(preset.etfPE||22),
+                  Sector:"ETF", Name:preset.name||t, AssetType:"ETF" };
+      cfJson={}; bsJson={}; earnJson={};
+      onProgress?.('📉 [2/2] 获取历史月线 (TIME_SERIES_MONTHLY)…');
+      priceJson=await avFetch("TIME_SERIES_MONTHLY", t); addUsed(1);
+    }else if(preset?.skipFundamentals){
+      // 跳过基本面API通道：内置数据完整的标的（如BRK.B），仅取月线数据
+      onProgress?.('📡 [1/2] 内置数据模式：跳过基本面API（已有完整内置数据）…');
+      overJson ={ SharesOutstanding: String(preset.realShares||1),
+                  Sector: preset.sector||"Unknown", Name:preset.name||t };
+      cfJson={}; bsJson={}; earnJson={};
+      onProgress?.('📉 [2/2] 获取历史月线 (TIME_SERIES_MONTHLY)…');
+      priceJson=await avFetch("TIME_SERIES_MONTHLY", t); addUsed(1);
+      // 写入 f_ 缓存，避免每次重复拉月线（overJson/cfJson/bsJson/earnJson 均为合成值，写入无害）
+      try{ localStorage.setItem(CACHE_VER+'f_'+t,JSON.stringify({ts:Date.now(),overJson,cfJson,bsJson,earnJson,priceJson})); }catch(e){ if(e.name==='QuotaExceededError') onProgress?.('⚠️ 本地存储已满，基本面缓存未能保存（不影响本次结果）'); }
+    }else{
+    onProgress?.('📡 [1/6] 获取公司基本信息 (OVERVIEW)…');
+    overJson =await avFetch("OVERVIEW",            t); addUsed(1);
+    onProgress?.('📊 [2/6] 获取现金流量表 (CASH_FLOW)…');
+    cfJson   =await avFetch("CASH_FLOW",           t); addUsed(1);
+    onProgress?.('🏦 [3/6] 获取资产负债表 (BALANCE_SHEET)…');
+    bsJson   =await avFetch("BALANCE_SHEET",       t); addUsed(1);
+    onProgress?.('📈 [4/6] 获取历史EPS (EARNINGS)…');
+    earnJson =await avFetch("EARNINGS",            t); addUsed(1);
+    onProgress?.('📉 [5/6] 获取历史月线 (TIME_SERIES_MONTHLY)…');
+    priceJson=await avFetch("TIME_SERIES_MONTHLY", t); addUsed(1);
+    try{ localStorage.setItem(CACHE_VER+'f_'+t,JSON.stringify({ts:Date.now(),overJson,cfJson,bsJson,earnJson,priceJson})); }catch(e){ if(e.name==='QuotaExceededError') onProgress?.('⚠️ 本地存储已满，基本面缓存未能保存（不影响本次结果）'); }
+    } // end else (non-ETF)
+  }else{
+    onProgress?.('📦 基本面数据读取缓存（30天内有效，0次消耗）');
+  }
 
   // ── 3. OVERVIEW 校验 ──
   if(!overJson["SharesOutstanding"]||overJson["SharesOutstanding"]==="None"){
-    // 区分：API限速返回空对象 vs 真实找不到股票
     const keys=Object.keys(overJson).length;
     if(keys<=2){
+      // 若内置了 realShares，用合成 overJson 继续（适用于BRK.B等OVERVIEW覆盖不全的标的）
+      if(preset?.realShares){
+        overJson={ SharesOutstanding:String(preset.realShares),
+                   Sector:preset.sector||"Unknown", Name:preset.name||t };
+        onProgress?.(`⚠️ OVERVIEW字段不足，使用内置股本数据（${(preset.realShares/1e8).toFixed(1)}亿股）继续…`);
+      }else{
+        throw new Error(
+          `⚠️ API返回数据异常（字段数：${keys}）\n\n可能是短时限速或网络波动。\n\n`+
+          `建议：\n• 稍等几秒后点击"🔄 强制刷新"重试\n`+
+          `• 或点击"🔍 智能估值"尝试读取缓存`
+        );
+      }
+    }else{
       throw new Error(
-        `⚠️ API返回数据异常（字段数：${keys}）\n\n可能是短时限速或网络波动。\n\n`+
-        `建议：\n• 稍等几秒后点击"🔄 强制刷新"重试\n`+
-        `• 或点击"🔍 智能估值"尝试读取缓存`
+        `未找到 [${t}] 的基本面数据。\n\n请检查：\n`+
+        `• 必须输入英文股票代码，如苹果→AAPL，谷歌→GOOGL\n`+
+        `• 代码已自动转大写\n`+
+        `• 可在搜索引擎查询"公司名 股票代码"确认`
       );
     }
-    throw new Error(
-      `未找到 [${t}] 的基本面数据。\n\n请检查：\n`+
-      `• 必须输入英文股票代码，如苹果→AAPL，谷歌→GOOGL\n`+
-      `• 代码已自动转大写\n`+
-      `• 可在搜索引擎查询"公司名 股票代码"确认`
-    );
   }
 
-  // ── 4. 股价 ──
+  // ── 4. 实时报价（1天缓存）：GLOBAL_QUOTE ──
+  let quoteJson;
+  if(!forceRefresh){
+    try{
+      const qRaw=localStorage.getItem(CACHE_VER+'q_'+t);
+      if(qRaw){
+        const qc=JSON.parse(qRaw);
+        if(Date.now()-qc.ts<DAY_MS) quoteJson=qc.quoteJson;
+      }
+    }catch(_){}
+  }
+  if(!quoteJson){
+    const step=fundFresh?'[1/1]':((preset?.isETF||preset?.skipFundamentals)?'[2/2]':'[6/6]');
+    onProgress?.(`💹 ${step} 获取实时报价 (GLOBAL_QUOTE)…`);
+    quoteJson=await avFetch("GLOBAL_QUOTE",t); addUsed(1);
+    try{ localStorage.setItem(CACHE_VER+'q_'+t,JSON.stringify({ts:Date.now(),quoteJson})); }catch(e){ if(e.name==='QuotaExceededError') onProgress?.('⚠️ 本地存储已满，报价缓存未能保存（不影响本次结果）'); }
+  }
+
+  onProgress?.('⚙️ 正在计算DCF估值…');
+
+  // ── 5. 股价（从 quoteJson 提取）──
   const qBlock=quoteJson["Global Quote"]||{};
   let price=pFloat(qBlock,"05. price");
   if(isNaN(price)||price<=0){
@@ -729,16 +991,19 @@ async function fetchData(ticker,forceRefresh){
   if(isNaN(sharesBasic)||sharesBasic<=0) throw new Error(`[${t}] 股本数据无效`);
 
   let shares=sharesBasic,dilutionNote="";
-  if(preset&&preset.realShares){
+
+  // 优先级：① API DilutedEPS反推 → ② 内置realShares（API无稀释数据时兜底）→ ③ 科技+2%
+  const epsB=pFloat(overJson,"EPS"),epsD=pFloat(overJson,"DilutedEPSTTM");
+  if(!isNaN(epsB)&&!isNaN(epsD)&&epsD>0&&epsB>0){
+    const ratio=epsB/epsD;
+    if(ratio>1.001){ shares=sharesBasic*ratio; dilutionNote=`EPS/DilutedEPS反推稀释 +${fmt((ratio-1)*100)}%`; }
+  }
+
+  // API无稀释数据：用内置realShares（明确校对值优先于+2%估算）
+  if(!dilutionNote&&preset&&preset.realShares){
     shares=preset.realShares;
     dilutionNote=preset.realSharesNote
-      ||`内置真实总股本修正（API仅返回单类股，实际含${(preset.realShares/1e8).toFixed(0)}亿股）`;
-  }else{
-    const epsB=pFloat(overJson,"EPS"),epsD=pFloat(overJson,"DilutedEPSTTM");
-    if(!isNaN(epsB)&&!isNaN(epsD)&&epsD>0&&epsB>0){
-      const ratio=epsB/epsD;
-      if(ratio>1.001){ shares=sharesBasic*ratio; dilutionNote=`EPS/DilutedEPS反推稀释 +${fmt((ratio-1)*100)}%`; }
-    }
+      ||`内置真实总股本修正（API无稀释数据，实际${(preset.realShares/1e8).toFixed(2)}亿股）`;
   }
 
   // ── 6. 行业分类 ──
@@ -749,7 +1014,7 @@ async function fetchData(ticker,forceRefresh){
                    sector.includes("materials");
   const isFinance=sector.includes("financial")||sector.includes("bank");
 
-  // 科技股无稀释数据时保守加2%
+  // 科技股最终兜底：API无稀释+无内置realShares → 保守+2%
   if(!dilutionNote&&isTech){ shares=sharesBasic*1.02; dilutionNote="科技股无稀释数据，保守+2%"; }
 
   const pe=pFloat(overJson,"PERatio");
@@ -757,9 +1022,9 @@ async function fetchData(ticker,forceRefresh){
   const marketCap=price*shares;
 
   // ── 7. 行业自适应参数（内置覆盖）──
-  let autoG=isTech?0.10:(isHeavy?0.04:(isFinance?0.04:0.05));
-  let autoR=isTech?0.095:(isHeavy?0.075:(isFinance?0.08:0.085));
-  let autoGt=isTech?0.025:(isFinance?0.015:0.02);
+  let autoG=isTech?0.10:(isHeavy?0.04:0.05);
+  let autoR=isTech?0.095:(isHeavy?0.075:0.085);
+  let autoGt=isTech?0.020:0.02;
   let autoYrs=isTech?10:5;
   // 金融股默认参数（若有内置会再次覆盖）
   if(isFinance){ autoYrs=5; autoG=0.04; autoR=0.08; autoGt=0.015; }
@@ -835,9 +1100,18 @@ async function fetchData(ticker,forceRefresh){
     }
   }
 
+  // ETF FCF 说明覆盖（末级兜底成功时替换为更准确的描述）
+  if(preset?.isETF && !isNaN(fcf) && fcf>0){
+    const ep=preset.etfPE||22;
+    fcfSource=`ETF盈利代理：市值÷PE(${ep})×60%（指数成分股收益率估算，非传统FCF，仅供参考）`;
+  }
+
   // FCF为负/无效时不报错，带NaN返回，由runSingle读用户输入后再判断
   if(isNaN(fcf)||fcf<=0){
-    fcf=NaN; fcfSource="⚠️ API取数为负/零/无效，请手动输入FCF";
+    fcf=NaN;
+    fcfSource=preset?.isETF
+      ?`⚠️ ETF无传统FCF；可手动输入"年度总分红"或"市值÷${preset?.etfPE||22}×60%"作代理`
+      :"⚠️ API取数为负/零/无效，请手动输入FCF";
   }
 
   // ── 9. 现金（API绝对优先，realCash仅在API完全失效时兜底）──
@@ -845,10 +1119,9 @@ async function fetchData(ticker,forceRefresh){
   //  取数优先级：
   //  ① API: cashAndShortTermInvestments + longTermInvestments（两者均有效时合并）
   //     → 仅限内置了 allowLTI:true 的标的（确认longTermInvestments是有价证券）
-  //     → 避免KO/BRK.B等公司的权益法股权投资被误当现金
-  //  ② API: 仅 cashAndShortTermInvestments（大多数公司足够）
-  //  ③ API: cashAndCashEquivalentsAtCarryingValue + shortTermInvestments
-  //  ④ 内置 realCash（API三个路径都失败才用）
+  //  ② API: cashAndShortTermInvestments（含LTI但LTI字段缺失，或普通路径）
+  //  ③ API: cashAndCashEquivalentsAtCarryingValue + shortTermInvestments（备用字段）
+  //  ④ 内置 realCash（以上三条API路径均失败才用，纯兜底）
   //  ⑤ 经营CF × 25% 降级估算
   //  ⑥ 营收 × 8% 末级兜底
   let cash=0,cashSource="";
@@ -857,37 +1130,27 @@ async function fetchData(ticker,forceRefresh){
   const rawLTI=pFloat(bsA,"longTermInvestments");
   const rawCsh=pFloat(bsA,"cashAndCashEquivalentsAtCarryingValue");
   const rawSTI=pFloat(bsA,"shortTermInvestments");
-  const allowLTI=!!(preset&&preset.allowLTI);   // 明确标记：longTermInvestments可合并
-  const hasRealCash=preset&&preset.realCash>0;
+  const allowLTI=!!(preset&&preset.allowLTI);
+  // realCash=0 的 ETF 需用 !==undefined 而非 >0 判断（零是有效的明确设置值）
+  const hasRealCash=preset&&preset.realCash!==undefined&&preset.realCash!==null;
 
-  if(!isNaN(rawCSI)&&rawCSI>=0&&allowLTI&&!isNaN(rawLTI)&&rawLTI>0){
-    // ① API短期+长期合并（仅限allowLTI标的）
+  if(preset?.isETF){
+    // ETF无资产负债表，现金直接归零，跳过所有API兜底路径
+    cash=0; cashSource="ETF无资产负债表，现金归零";
+  }else if(!isNaN(rawCSI)&&rawCSI>=0&&allowLTI&&!isNaN(rawLTI)&&rawLTI>0){
+    // ① API短期+长期合并（仅限allowLTI标的，LTI字段有效）
     cash=rawCSI+rawLTI;
     cashSource=`BALANCE_SHEET: cashAndShortTermInvestments($${(rawCSI/1e9).toFixed(0)}B)+longTermInvestments($${(rawLTI/1e9).toFixed(0)}B)`;
-  }else if(!isNaN(rawCSI)&&rawCSI>=0&&allowLTI&&hasRealCash){
-    // ① 降级：longTermInvestments取不到，但有realCash内置值 → 用realCash（含长期有价证券）
-    cash=preset.realCash;
-    cashSource=`内置现金库（longTermInvestments字段缺失，API仅$${(rawCSI/1e9).toFixed(0)}B，内置$${(preset.realCash/1e9).toFixed(0)}B）`;
   }else if(!isNaN(rawCSI)&&rawCSI>=0){
-    // ② API仅短期现金（最常用路径）
-    // 偏高修正：API值 > realCash×1.5 → API含非现金资产，用realCash
-    // 偏低修正：API值 < realCash×0.6 → API取到过时/不完整数据，用realCash
-    if(hasRealCash&&rawCSI>preset.realCash*1.5){
-      cash=preset.realCash;
-      cashSource=`内置现金修正（API $${(rawCSI/1e9).toFixed(0)}B含非现金资产，实际$${(preset.realCash/1e9).toFixed(0)}B）`;
-    }else if(hasRealCash&&rawCSI<preset.realCash*0.6){
-      cash=preset.realCash;
-      cashSource=`内置现金修正（API $${(rawCSI/1e9).toFixed(0)}B为过时/不完整数据，实际$${(preset.realCash/1e9).toFixed(0)}B）`;
-    }else{
-      cash=rawCSI;
-      cashSource="BALANCE_SHEET: cashAndShortTermInvestments";
-    }
+    // ② API直取短期现金（allowLTI但LTI字段缺失也走此路径，由API决定）
+    cash=rawCSI;
+    cashSource="BALANCE_SHEET: cashAndShortTermInvestments";
   }else if(!isNaN(rawCsh)&&rawCsh>=0){
     // ③ API备用字段
     cash=rawCsh+(isNaN(rawSTI)?0:Math.max(0,rawSTI));
     cashSource="BALANCE_SHEET: cash + shortTermInvestments";
   }else if(hasRealCash){
-    // ④ API完全无现金数据，才用内置realCash兜底
+    // ④ API三条路径均无数据，才用内置realCash兜底
     cash=preset.realCash;
     cashSource=`内置现金库兜底（API无数据，$${(preset.realCash/1e9).toFixed(0)}B）`;
   }else if(!isNaN(rawOpCF)&&rawOpCF>0){
@@ -900,26 +1163,31 @@ async function fetchData(ticker,forceRefresh){
     cash=rev*0.08; cashSource="营收 × 8%（兜底）";
   }
 
-  // ── 10. 有息负债（realDebt > BALANCE_SHEET > 行业估算）──
+  // ── 10. 有息负债（API优先，realDebt仅在API完全无数据时兜底）──
   let debt=0,debtSource="",hasRealDebt=false;
-  if(preset&&preset.realDebt!==undefined){
-    debt=preset.realDebt; hasRealDebt=true; debtSource="内置人工校对有息负债";
+  const rawDT =pFloat(bsA,"shortLongTermDebtTotal");
+  const rawLTD=pFloat(bsA,"longTermDebtNoncurrent");
+  const rawSTD=pFloat(bsA,"shortLongTermDebt");
+  if(preset&&preset.debtFromPreset&&preset.realDebt!==undefined){
+    debt=preset.realDebt; hasRealDebt=true; debtSource="内置人工校对有息负债（preset优先）";
+  }else if(!isNaN(rawDT)&&rawDT>=0){
+    debt=rawDT; hasRealDebt=true; debtSource="BALANCE_SHEET: shortLongTermDebtTotal";
+  }else if(!isNaN(rawLTD)&&rawLTD>=0){
+    debt=rawLTD+(isNaN(rawSTD)?0:Math.max(0,rawSTD));
+    hasRealDebt=true; debtSource="BALANCE_SHEET: LTDebt + STDebt";
+  }else if(preset&&preset.realDebt!==undefined){
+    debt=preset.realDebt; hasRealDebt=true; debtSource="内置人工校对有息负债（API无数据）";
   }else{
-    const rawDT =pFloat(bsA,"shortLongTermDebtTotal");
-    const rawLTD=pFloat(bsA,"longTermDebtNoncurrent");
-    const rawSTD=pFloat(bsA,"shortLongTermDebt");
-    if(!isNaN(rawDT)&&rawDT>=0){
-      debt=rawDT; hasRealDebt=true; debtSource="BALANCE_SHEET: shortLongTermDebtTotal";
-    }else if(!isNaN(rawLTD)&&rawLTD>=0){
-      debt=rawLTD+(isNaN(rawSTD)?0:Math.max(0,rawSTD));
-      hasRealDebt=true; debtSource="BALANCE_SHEET: LTDebt + STDebt";
-    }else{
-      const dr=isHeavy?0.30:(isTech?0.08:0.15);
-      debt=marketCap*dr; debtSource=`市值 × ${(dr*100).toFixed(0)}% 行业负债率（兜底）`;
-    }
+    const dr=isHeavy?0.30:(isTech?0.08:0.15);
+    debt=marketCap*dr; debtSource=`市值 × ${(dr*100).toFixed(0)}% 行业负债率（兜底）`;
   }
 
   const netCash=cash-debt;
+
+  // ── EV / EBITDA ──
+  const ebitdaRaw = pFloat(overJson, "EBITDA");
+  const evCalc = Math.max(0, marketCap + debt - cash);
+  const evEbitda = (!isNaN(ebitdaRaw) && ebitdaRaw > 0 && evCalc > 0) ? evCalc / ebitdaRaw : NaN;
 
   // ── 11. FCF Yield + ROE ──
   // FCF Yield = FCF / 市值（不依赖资产负债表，100%准确）
@@ -942,7 +1210,7 @@ async function fetchData(ticker,forceRefresh){
   // β   = OVERVIEW.Beta；取不到时用行业默认值
   // kd  = 4.5%（投资级企业债成本估算）
   // t   = 21%（美国联邦企业税率）
-  const RF=0.0445, ERP=0.052, KD=0.045, TAX=0.21;
+  const RF=RF_CURRENT, ERP=0.052, KD=0.045, TAX=0.21;
   const betaRaw=pFloat(overJson,"Beta");
   const betaDefaults={'technology':1.25,'communication services':1.10,
     'consumer cyclical':1.05,'consumer defensive':0.65,'healthcare':0.75,
@@ -982,10 +1250,11 @@ async function fetchData(ticker,forceRefresh){
   // 用TTM滚动求和（最近4个季度EPS相加）而非单季EPS，避免PE出现约4倍的系统性偏差
   // TIME_SERIES_MONTHLY端点：Monthly Time Series = {"2025-12-31":{...,"4. close":"xxx"},...}
   let histPE=NaN, histPEYears=0, histPENote="";
+  // 声明在try块外，monthly8字段需要在data对象中访问
+  const monthlySeries=priceJson["Monthly Time Series"]||{};
+  const monthKeys=Object.keys(monthlySeries);
   try{
     const quarterlyEPS=(earnJson["quarterlyEarnings"]||[]).slice(0,40); // 最近约10年，最新在前
-    const monthlySeries=priceJson["Monthly Time Series"]||{};
-    const monthKeys=Object.keys(monthlySeries);
 
     if(quarterlyEPS.length>=8&&monthKeys.length>0){
       const peSamples=[];
@@ -1032,12 +1301,15 @@ async function fetchData(ticker,forceRefresh){
     fcf,cash,debt,netCash,
     fcfYield,roe,divYield,waccData,fcfHistory,
     histPE,histPEYears,histPENote,
+    monthly8: monthKeys.slice(0,8).map(k=>parseFloat(monthlySeries[k]?.["4. close"]||"0")).filter(v=>v>0),
     isFinance,isTech,isHeavy,
     autoG,autoR,autoGt,autoYrs,
+    ebitda:ebitdaRaw, ev:evCalc, evEbitda,
     compName:overJson["Name"]||t,
     sector:overJson["Sector"]||"Unknown",
     fcfSource,cashSource,debtSource,hasRealDebt,dilutionNote,
     fromCache:false,cacheAge:0,
+    apiCalls:getUsed()-_usedAtStart,
     _valid:true
   };
 
@@ -1053,6 +1325,7 @@ let singleChart=null,multiChart=null;
 async function runSingle(forceRefresh){
   const ticker=document.getElementById("ticker").value.trim().toUpperCase();
   if(!ticker) return alert("请输入股票代码");
+  if(/[\/\\]/.test(ticker)) return alert(`股票代码不能含有斜杠，请检查输入\n例：伯克希尔请用 BRK.B（点号），而非 BRK/B`);
 
   const btnMain=document.getElementById("single-btn");
   const btnRef =document.getElementById("refresh-btn");
@@ -1091,10 +1364,9 @@ async function runSingle(forceRefresh){
     return;
   }
 
-  loadDiv.textContent="⏳ 串行调用中：OVERVIEW → GLOBAL_QUOTE → CASH_FLOW → BALANCE_SHEET → EARNINGS → TIME_SERIES_MONTHLY（每步间隔≥1.2s）…";
   loadDiv.style.display="block";
   try{
-    const d=await fetchData(ticker,forceRefresh);
+    const d=await fetchData(ticker, forceRefresh, msg=>{ loadDiv.textContent='⏳ '+msg; });
 
     // 读取用户覆盖参数
     const uFCF =document.getElementById("custom-fcf").value.trim();
@@ -1110,13 +1382,23 @@ async function runSingle(forceRefresh){
     const years=uYrs?parseInt(uYrs):d.autoYrs;
 
     // FCF校验（此时已读完用户输入）
-    if(isNaN(fcf)||fcf<=0)
+    if(isNaN(fcf)||fcf<=0){
+      const isEtf=PARAMS[ticker]?.isETF;
+      const ep=PARAMS[ticker]?.etfPE||22;
       throw new Error(
-        `[${ticker}] FCF无效（${d.fcfSource||"原因未知"}）。\n\n`+
-        `请在上方"自由现金流FCF"框手动填入年度FCF（美元总量）：\n`+
-        `• 可在 macrotrends.net 查询\n`+
-        `• 例如甲骨文ORCL FCF ≈ 110亿美元，输入：11000000000`
+        isEtf
+          ? `[${ticker}] ETF无传统FCF（${d.fcfSource||"API未能估算"}）。\n\n`+
+            `请在上方"自由现金流FCF"框填入以下代理值之一：\n`+
+            `• 年度总分红：份额数 × 每股股息（可查 etf.com 或 Yahoo Finance）\n`+
+            `• 盈利代理：当前价格 × 份额数 ÷ ${ep} × 60%\n`+
+            `• 例：SPY ≈ $540×9.3亿÷22×60% ≈ $138亿 → 输入：13800000000\n\n`+
+            `注：ETF的DCF估值参考意义有限，建议配合⑤资产轮动分析使用`
+          : `[${ticker}] FCF无效（${d.fcfSource||"原因未知"}）。\n\n`+
+            `请在上方"自由现金流FCF"框手动填入年度FCF（美元总量）：\n`+
+            `• 可在 macrotrends.net 查询\n`+
+            `• 例如甲骨文ORCL FCF ≈ 110亿美元，输入：11000000000`
       );
+    }
 
     // GLD 黄金ETF警告
     if(PARAMS[ticker]&&PARAMS[ticker].isGold){
@@ -1126,8 +1408,12 @@ async function runSingle(forceRefresh){
       )) throw new Error("用户取消GLD估值");
     }
 
-    if(r<=tg)        throw new Error(`折现率 r(${pct(r)}) 必须大于永续增长率 l(${pct(tg)})`);
-    if(g<-0.5||g>1) throw new Error("增长率 g 应在 -50%~100% 之间");
+    if(!years||years<1||years>50) throw new Error("预测年限需在 1~50 年之间");
+    if(r<=tg) throw new Error(`折现率 r(${pct(r)}) 必须大于永续增长率 l(${pct(tg)})`);
+    // r-tg<0.5%时终值极度敏感，给用户警告而非静默console.warn
+    if(r-tg<0.005) throw new Error(`折现率r(${pct(r)})与永续增长率l(${pct(tg)})差距仅${pct(r-tg)}，终值将失真。\n建议r至少比l高0.5%以上`);
+    if(g<-0.5||g>=1) throw new Error("增长率 g 应在 -50%~99% 之间（≥100%会导致DCF结果失真）");
+    if(!isNaN(fcf)&&fcf>1e15) throw new Error("FCF 数值超出合理范围（最大 $1千万亿），请确认单位为美元总量");
 
     // 三情景（保守/基准/乐观）
     // 注：负增长股（BTI g=-1%）保守情景允许负值，不强制归0
@@ -1153,9 +1439,49 @@ async function runSingle(forceRefresh){
   }
 }
 
+// ── 利率/增速敏感性矩阵 ──
+function renderSensitivityMatrix(fcf,shares,g,r,tg,netCash,years,currentPrice){
+  const gSteps=[-0.04,-0.02,0,+0.02,+0.04];
+  const rSteps=[-0.02,-0.01,0,+0.01,+0.02];
+  let html=`<div class="data-matrix" style="margin-top:8px">
+    <b>🔢 DCF敏感性分析（折现率 r × 增长率 g）</b>
+    <div style="font-size:11px;color:#888;margin:4px 0 8px">
+      基准：g=${pct(g)} r=${pct(r)}（橙框格）· 绿色=低估 蓝色=接近市价 黄色=略贵 红色=偏贵</div>
+    <div style="overflow-x:auto">
+    <table style="border-collapse:collapse;font-size:11px;min-width:420px">
+      <thead><tr style="background:#f5f5f5">
+        <th style="padding:5px 9px;border:1px solid #ddd">g \\ r</th>`;
+  for(const dr of rSteps){
+    const rv=r+dr, isB=dr===0;
+    html+=`<th style="padding:5px 9px;border:1px solid #ddd;${isB?'background:#e8f4ff;font-weight:bold;':''}">${pct(rv)}</th>`;
+  }
+  html+='</tr></thead><tbody>';
+  for(const dg of gSteps){
+    const gv=g+dg, isGBase=dg===0;
+    html+=`<tr><td style="padding:5px 9px;border:1px solid #ddd;font-weight:bold;background:${isGBase?'#e8f4ff':'#fafafa'}">${pct(gv)}</td>`;
+    for(const dr of rSteps){
+      const rv=r+dr, isBase=dg===0&&dr===0;
+      if(rv<=tg||gv<-0.49){html+=`<td style="padding:5px 9px;border:1px solid #ddd;text-align:right;color:#ccc">—</td>`;continue;}
+      const v=dcfPerShare(fcf,shares,gv,rv,tg,netCash,years);
+      if(isNaN(v)||v<=0){html+=`<td style="padding:5px 9px;border:1px solid #ddd;text-align:right;color:#ccc">—</td>`;continue;}
+      const ratio=currentPrice/v;
+      const bg=ratio<0.8?'#f6ffed':ratio<1.0?'#e8f4ff':ratio<1.2?'#fffbe6':'#fff2f0';
+      const tc=ratio<0.8?'#237804':ratio<1.0?'#0050b3':ratio<1.2?'#874d00':'#a8071a';
+      const border=isBase?'border:2px solid #fa8c16;':'border:1px solid #ddd;';
+      html+=`<td style="padding:5px 9px;${border}text-align:right;font-weight:${isBase?'bold':'normal'};background:${bg};color:${tc}">$${fmt(v)}</td>`;
+    }
+    html+='</tr>';
+  }
+  html+=`</tbody></table></div>
+    <div style="font-size:10px;color:#aaa;margin-top:4px">当前市价 $${fmt(currentPrice)} · 列=折现率r · 行=FCF增速g · 橙框=当前基准参数</div>
+  </div>`;
+  return html;
+}
+
 function renderResult(ticker,d,vCons,vBase,vOpt,fcf,g,r,tg,years,isCustomFCF,gC,rC,tgC,gO,rO,tgO){
   const el=document.getElementById("single-output");
   el.style.display="block";
+  el.scrollIntoView({behavior:"smooth",block:"start"});
 
   const cacheTag=d.fromCache
     ?`<div class="cache-status" style="background:#fff2e8;color:#d4380d;">
@@ -1163,7 +1489,7 @@ function renderResult(ticker,d,vCons,vBase,vOpt,fcf,g,r,tg,years,isCustomFCF,gC,
        <span style="font-weight:normal;color:#888">如需最新数据请点击"🔄 强制刷新"</span>
      </div>`
     :`<div class="cache-status" style="background:#f6ffed;color:#389e0d;">
-       🌐 实时拉取成功 · 本次消耗 <b>6</b> 次调用（今日累计 ${getUsed()}/${DAY_LIMIT} 次）
+       🌐 实时拉取成功 · 本次消耗 <b>${d.apiCalls??6}</b> 次调用（今日累计 ${getUsed()}/${DAY_LIMIT} 次）
      </div>`;
 
   const pos=positionLabel(d.price,vCons,vBase,vOpt);
@@ -1173,19 +1499,19 @@ function renderResult(ticker,d,vCons,vBase,vOpt,fcf,g,r,tg,years,isCustomFCF,gC,
 
   const fcfTag=isCustomFCF
     ?`<span style="color:#ff4d4f;font-weight:bold">[用户强制输入]</span>`
-    :`<span style="color:#555">[${d.fcfSource}]</span>`;
+    :`<span style="color:#555">[${esc(d.fcfSource)}]</span>`;
   const debtTag=d.hasRealDebt
-    ?`<span style="color:#28a745;font-weight:bold">[${d.debtSource}]</span>`
-    :`<span style="color:#ffa940;font-weight:bold">[${d.debtSource}]</span>`;
+    ?`<span style="color:#28a745;font-weight:bold">[${esc(d.debtSource)}]</span>`
+    :`<span style="color:#ffa940;font-weight:bold">[${esc(d.debtSource)}]</span>`;
   const dilTag=d.dilutionNote
-    ?`<div>• <b>稀释股本：</b>${fmt(d.shares/1e8)} 亿股 <span style="color:#d46b08">[${d.dilutionNote}]</span></div>`
+    ?`<div>• <b>稀释股本：</b>${fmt(d.shares/1e8)} 亿股 <span style="color:#d46b08">[${esc(d.dilutionNote)}]</span></div>`
     :`<div>• <b>股本：</b>${fmt(d.shares/1e8)} 亿股</div>`;
 
   el.innerHTML=`
-    <h3 style="margin:0 0 8px">[${ticker}] ${d.compName} · DCF估值报告</h3>
+    <h3 style="margin:0 0 8px">[${esc(ticker)}] ${esc(d.compName)} · DCF估值报告</h3>
     ${cacheTag}
     <p>
-      <b>行业：</b><span style="color:#0078ff;font-weight:bold">${d.sector}</span>
+      <b>行业：</b><span style="color:#0078ff;font-weight:bold">${esc(d.sector)}</span>
       &nbsp;|&nbsp;<b>实时股价：</b>$${fmt(d.price)}
       &nbsp;|&nbsp;<b>PE(TTM)：</b>${isNaN(d.pe)?"—":fmt(d.pe)}
       &nbsp;|&nbsp;<b>Forward PE：</b>${isNaN(d.forwardPE)?"—":fmt(d.forwardPE)}
@@ -1194,7 +1520,7 @@ function renderResult(ticker,d,vCons,vBase,vOpt,fcf,g,r,tg,years,isCustomFCF,gC,
     <div class="data-matrix">
       <b>📊 财报底层数据矩阵（USD）</b>
       <div>• <b>自由现金流 FCF：</b> $${fmt(fcf)} ${fcfTag}</div>
-      <div>• <b>现金及短期投资：</b> $${fmt(d.cash)} <span style="color:#555;font-size:11px">[${d.cashSource}]</span></div>
+      <div>• <b>现金及短期投资：</b> $${fmt(d.cash)} <span style="color:#555;font-size:11px">[${esc(d.cashSource)}]</span></div>
       <div>• <b>有息负债：</b> $${fmt(d.debt)} ${debtTag}</div>
       <div>• <b>净现金（现金−负债）：</b>
            <span style="color:${d.netCash>=0?"#28a745":"#dc3545"};font-weight:bold">$${fmt(d.netCash)}</span>
@@ -1206,6 +1532,21 @@ function renderResult(ticker,d,vCons,vBase,vOpt,fcf,g,r,tg,years,isCustomFCF,gC,
              :`<span style="color:${d.fcfYield>=0.05?'#28a745':d.fcfYield>=0.02?'#ffa940':'#dc3545'};font-weight:bold">${fmt(d.fcfYield*100)}%</span>
                <span style="color:#888;font-size:11px">（FCF/市值 = P/FCF ${fmt(1/d.fcfYield,1)}x）
                ${d.fcfYield>=0.05?' · 高收益':d.fcfYield>=0.02?' · 正常':' · 偏低'}</span>`}
+      </div>
+      <div>• <b>EV/EBITDA（企业价值倍数）：</b>
+           ${(()=>{
+             if(isNaN(d.evEbitda)||d.evEbitda<=0) return '<span style="color:#aaa">— (EBITDA数据不足或金融股不适用)</span>';
+             const bench={'technology':22,'information technology':22,'communication services':14,
+               'consumer cyclical':13,'consumer discretionary':13,'consumer defensive':14,
+               'consumer staples':14,'healthcare':17,'energy':8,'utilities':12,
+               'industrials':13,'materials':11,'real estate':18};
+             const med=bench[d.sector.toLowerCase()];
+             const valColor=med?(d.evEbitda<med*0.8?'#28a745':d.evEbitda<med?'#52c41a':d.evEbitda<med*1.2?'#ffa940':'#dc3545'):'#096dd9';
+             const verdict=med?(d.evEbitda<med*0.8?'明显低于中位（低估信号）':d.evEbitda<med?'低于行业中位':d.evEbitda<med*1.2?'接近行业中位':'高于行业中位（溢价）'):'';
+             return `<span style="color:${valColor};font-weight:bold">${fmt(d.evEbitda,1)}x</span>`
+               +`<span style="color:#888;font-size:11px"> EV=${d.ev<=0?'—':d.ev>=1e9?(d.ev/1e9).toFixed(1)+'B':(d.ev/1e6).toFixed(0)+'M'}`
+               +`${med?' · 行业中位~'+med+'x · '+verdict:''}</span>`;
+           })()}
       </div>
       <div>• <b>WACC（加权平均资本成本/等同真实市场给的折现率r:可将该值去掉%填入“折现率r”框中进行二次计算DCF）：</b>
            ${!d.waccData?'<span style="color:#aaa">—</span>'
@@ -1219,7 +1560,7 @@ function renderResult(ticker,d,vCons,vBase,vOpt,fcf,g,r,tg,years,isCustomFCF,gC,
                return `<span style="color:${wColor};font-weight:bold">${fmt(w.wacc*100,2)}%</span>
                  <span style="color:#888;font-size:11px">
                  （β=${fmt(w.beta,2)}${w.betaFromAPI?' API直取':' 行业默认'}，ke=${fmt(w.ke*100,1)}%，
-                 E权重${fmt(w.eWt*100,0)}%+D权重${fmt(w.dWt*100,0)}%，rf=4.45%）
+                 E权重${fmt(w.eWt*100,0)}%+D权重${fmt(w.dWt*100,0)}%，rf=${fmt(RF_CURRENT*100,2)}%）
                  · ${diffTip}</span>`;
              })()}
       </div>
@@ -1284,16 +1625,10 @@ function renderResult(ticker,d,vCons,vBase,vOpt,fcf,g,r,tg,years,isCustomFCF,gC,
     ${(()=>{
       // ── 市场隐含增速（二分法反推）──
       // 找到使 DCF = 当前市价 的增速 g_implied
-      function dcfVal(fcf_,sh_,g_,r_,tg_,nc_,yr_){
-        if(r_<=tg_||sh_<=0||fcf_<=0) return NaN;
-        let pv=0,f=fcf_,disc=1/(1+r_);
-        for(let t=1;t<=yr_;t++){f*=(1+g_);pv+=f*disc;disc/=(1+r_);}
-        return (pv+(f*(1+tg_))/(r_-tg_)*disc*(1+r_)+nc_)/sh_;
-      }
       let lo=Math.max(-0.3,tg+0.001), hi=0.80, gImpl=g;
       for(let i=0;i<60;i++){
         const mid=(lo+hi)/2;
-        const v=dcfVal(fcf,d.shares,mid,r,tg,d.netCash,years);
+        const v=dcfPerShare(fcf,d.shares,mid,r,tg,d.netCash,years);
         if(isNaN(v)) hi=mid; else if(v<d.price) lo=mid; else hi=mid;
         gImpl=(lo+hi)/2;
       }
@@ -1426,6 +1761,7 @@ function renderResult(ticker,d,vCons,vBase,vOpt,fcf,g,r,tg,years,isCustomFCF,gC,
         </div>`:''}
       </div>`;
     })()}
+    ${renderSensitivityMatrix(fcf,d.shares,g,r,tg,d.netCash,years,d.price)}
     ${PARAMS[ticker]&&PARAMS[ticker].ddmNote
       ?`<div style="margin-top:6px;padding:8px 12px;background:#fff7e6;border-left:3px solid #ffa940;border-radius:4px;font-size:12px;color:#874d00">
           💡 <b>DDM提示：</b>${PARAMS[ticker].ddmNote}
@@ -1498,10 +1834,10 @@ function renderFCFHistory(history, currentFCF, g, years){
         { label:"历史FCF（$B）",
           data:[...histData,...new Array(futureLabels.length).fill(null)],
           backgroundColor:"#4096ff",borderColor:"#1677ff",borderWidth:1 },
-        { label:`预测FCF（g=${(g*100).toFixed(0)}%，$B）`,
+        { type:"line", label:`预测FCF（g=${(g*100).toFixed(0)}%，$B）`,
           data:[...new Array(histLabels.length).fill(null),...futureFCF],
-          backgroundColor:"rgba(82,196,26,0.5)",borderColor:"#52c41a",
-          borderWidth:1,borderDash:[4,4] }
+          backgroundColor:"rgba(82,196,26,0.15)",borderColor:"#52c41a",
+          borderWidth:2,borderDash:[6,4],pointRadius:4,fill:false }
       ]
     },
     options:{
@@ -1534,10 +1870,29 @@ async function runMulti(){
     const t=tickers[i];
     loadDiv.textContent=`⏳ 处理 ${t}（${i+1}/${tickers.length}）…`;
     try{
-      const d=await fetchData(t,false);
-      const v=dcfPerShare(d.fcf,d.shares,d.autoG,d.autoR,d.autoGt,d.netCash,d.autoYrs);
-      if(!isNaN(v)&&v>0){ labels.push(t); dcfVals.push(parseFloat(v.toFixed(2))); prices.push(d.price); }
-      else errors.push(`${t}: FCF无效或参数异常`);
+      const mkt=detectMarket(t);
+      if(mkt!=='US'){
+        // A股/港股：走东方财富，DCF netCash=0
+        const ts=normalizeTushare(t);
+        const q=await fetchEastmoneyQuote(ts);
+        const _preset=PARAMS[ts.code]||PARAMS[ts.code.replace(/^0+/,'')]||null;
+        const g=_preset?_preset.g:0.08, r=_preset?_preset.r:0.09,
+              tg=_preset?_preset.gt:0.02, yrs=_preset?_preset.years:10;
+        const eps=(q.pe>0&&q.price>0)?q.price/q.pe:NaN;
+        const fcf=(!isNaN(eps)&&eps>0&&q.totalShare>0)
+          ?eps*q.totalShare*0.75
+          :(q.pe>0&&q.totalMv>0?q.totalMv/q.pe*0.75
+          :(!isNaN(q.netProfit)&&q.netProfit>0?q.netProfit*0.75:NaN));
+        if(isNaN(fcf)||fcf<=0){errors.push(`${t}: FCF无效（A/HK）`);continue;}
+        const v=dcfPerShare(fcf,q.totalShare,g,r,tg,0,yrs);
+        if(!isNaN(v)&&v>0){labels.push(t);dcfVals.push(parseFloat(v.toFixed(2)));prices.push(q.price);}
+        else errors.push(`${t}: DCF结果无效`);
+      }else{
+        const d=await fetchData(t,false);
+        const v=dcfPerShare(d.fcf,d.shares,d.autoG,d.autoR,d.autoGt,d.netCash,d.autoYrs);
+        if(!isNaN(v)&&v>0){labels.push(t);dcfVals.push(parseFloat(v.toFixed(2)));prices.push(d.price);}
+        else errors.push(`${t}: FCF无效或参数异常`);
+      }
     }catch(e){ errors.push(`${t}: ${e.message}`); }
   }
 
@@ -1623,7 +1978,7 @@ function renderSummaryTable(){
   tbody.innerHTML = rows.map((r,i)=>`
     <tr style="background:${i%2===0?'#fff':'#fafafa'};text-align:center">
       <td style="padding:6px 10px;border:1px solid #e8e8e8;text-align:left;font-weight:bold">
-        ${r.ticker}<span style="font-weight:normal;color:#888;font-size:11px"> ${r.name||''}</span>
+        ${esc(r.ticker)}<span style="font-weight:normal;color:#888;font-size:11px"> ${esc(r.name||'')}</span>
       </td>
       <td style="padding:6px 10px;border:1px solid #e8e8e8">${yieldFmt(r.fcfYield)}</td>
       <td style="padding:6px 10px;border:1px solid #e8e8e8;color:#555">${isNaN(r.fcfYield)||!r.fcfYield?'—':fmt(1/r.fcfYield,1)+'x'}</td>
@@ -1646,7 +2001,10 @@ function renderSummaryTable(){
 const TRADE_KEY = "dcf_trades_v1";
 
 function getTrades(){ try{ return JSON.parse(localStorage.getItem(TRADE_KEY)||"[]"); }catch(_){ return []; } }
-function saveTrades(t){ localStorage.setItem(TRADE_KEY, JSON.stringify(t)); }
+function saveTrades(t){
+  try{ localStorage.setItem(TRADE_KEY, JSON.stringify(t)); }
+  catch(e){ if(e.name==='QuotaExceededError') alert('⚠️ 本地存储已满，交易记录未能保存，建议清空缓存后重试'); }
+}
 
 function addTrade(){
   const ticker     = document.getElementById("tr-ticker").value.trim().toUpperCase();
@@ -1674,6 +2032,11 @@ function addTrade(){
     return;
   }
 
+  // 卖出价格：有卖出日期时必须填写
+  if(sellDate && sellPrice <= 0){
+    alert("已填写卖出日期，请同时填写卖出价格（必须大于 0）");
+    return;
+  }
   // 卖出数量：留空默认全部卖出；非数字输入直接拒绝
   const sellQtyParsed = sellQtyRaw ? parseFloat(sellQtyRaw) : (sellDate&&sellPrice>0 ? buyQty : 0);
   if(sellQtyRaw && isNaN(sellQtyParsed)){
@@ -1751,14 +2114,14 @@ function renderTrades(){
 
     return `<tr style="background:${i%2===0?'#fff':'#fafafa'}">
       <td style="padding:6px 8px;border:1px solid #e8e8e8;text-align:center;color:#aaa">${i+1}</td>
-      <td style="padding:6px 8px;border:1px solid #e8e8e8;font-weight:bold">${t.ticker} ${dcfTag}</td>
-      <td style="padding:6px 8px;border:1px solid #e8e8e8;text-align:center">${t.buyDate}</td>
-      <td style="padding:6px 8px;border:1px solid #e8e8e8;color:#595959;font-size:11px">${t.buyReason||'—'}</td>
+      <td style="padding:6px 8px;border:1px solid #e8e8e8;font-weight:bold">${esc(t.ticker)} ${dcfTag}</td>
+      <td style="padding:6px 8px;border:1px solid #e8e8e8;text-align:center">${esc(t.buyDate)}</td>
+      <td style="padding:6px 8px;border:1px solid #e8e8e8;color:#595959;font-size:11px">${esc(t.buyReason||'—')}</td>
       <td style="padding:6px 8px;border:1px solid #e8e8e8;text-align:right">$${fmt(t.buyPrice)}</td>
       <td style="padding:6px 8px;border:1px solid #e8e8e8;text-align:right">${t.buyQty.toLocaleString()}</td>
       <td style="padding:6px 8px;border:1px solid #e8e8e8;text-align:right">$${fmt(buyTotal)}</td>
-      <td style="padding:6px 8px;border:1px solid #e8e8e8;text-align:center">${t.sellDate||'—'}</td>
-      <td style="padding:6px 8px;border:1px solid #e8e8e8;color:#595959;font-size:11px">${t.sellReason||'—'}</td>
+      <td style="padding:6px 8px;border:1px solid #e8e8e8;text-align:center">${esc(t.sellDate||'—')}</td>
+      <td style="padding:6px 8px;border:1px solid #e8e8e8;color:#595959;font-size:11px">${esc(t.sellReason||'—')}</td>
       <td style="padding:6px 8px;border:1px solid #e8e8e8;text-align:right">${sellQty>0?sellQty.toLocaleString():'—'}</td>
       <td style="padding:6px 8px;border:1px solid #e8e8e8;text-align:right;font-weight:bold;color:${remainQty>0?'#d46b08':'#888'}">
         ${t.sellDate?remainQty.toLocaleString():'—'}</td>
@@ -1769,7 +2132,7 @@ function renderTrades(){
       <td style="padding:6px 8px;border:1px solid #e8e8e8;text-align:right;font-weight:bold;color:${pnlColor}">
         ${isNaN(pnlPct)?'—':(pnlPct>=0?'+':'')+fmt(pnlPct)+'%'}</td>
       <td style="padding:6px 8px;border:1px solid #e8e8e8;text-align:center">${statusBadge}</td>
-      <td style="padding:6px 8px;border:1px solid #e8e8e8;color:#888;font-size:11px">${t.note||'—'}</td>
+      <td style="padding:6px 8px;border:1px solid #e8e8e8;color:#888;font-size:11px">${esc(t.note||'—')}</td>
       <td style="padding:6px 8px;border:1px solid #e8e8e8;text-align:center">
         <button onclick="deleteTrade(${t.id})"
           style="background:#ff4d4f;color:#fff;border:none;border-radius:4px;padding:2px 8px;cursor:pointer;font-size:11px">删除</button>
@@ -1847,7 +2210,7 @@ async function fetchDailyData(ticker, outputsize) {
       }
     } catch(_) {}
   }
-  const json = await avFetch('TIME_SERIES_DAILY', ticker + `&outputsize=${avSize}`);
+  const json = await avFetch('TIME_SERIES_DAILY', ticker, `&outputsize=${avSize}`);
   addUsed(1);
   const series = json['Time Series (Daily)'];
   if (!series) throw new Error(`无法获取 [${ticker}] 日线数据，请检查代码是否正确`);
@@ -1924,24 +2287,13 @@ function calcMACD(closes, fast = 12, slow = 26, signal = 9) {
 }
 
 // ── 信号生成 ──
-function signalMA(closes) {
-  const ma5 = calcMA(closes, 5), ma20 = calcMA(closes, 20);
-  return closes.map((_, i) => {
-    if (i < 1 || isNaN(ma5[i]) || isNaN(ma20[i]) || isNaN(ma5[i-1]) || isNaN(ma20[i-1])) return 0;
-    if (ma5[i-1] <= ma20[i-1] && ma5[i] > ma20[i]) return 1;  // 金叉买入
-    if (ma5[i-1] >= ma20[i-1] && ma5[i] < ma20[i]) return -1; // 死叉卖出
-    return 0;
-  });
-}
-
-
-function signalMA200(closes) {
-  const ma50 = calcMA(closes, 50), ma200 = calcMA(closes, 200);
+function signalMA2050(closes) {
+  const ma20 = calcMA(closes, 20), ma50 = calcMA(closes, 50);
   const sig = new Array(closes.length).fill(0);
   for (let i = 1; i < closes.length; i++) {
-    if (isNaN(ma50[i]) || isNaN(ma200[i]) || isNaN(ma50[i-1]) || isNaN(ma200[i-1])) continue;
-    if (ma50[i-1] <= ma200[i-1] && ma50[i] > ma200[i]) sig[i] = 1;   // 金叉买入
-    else if (ma50[i-1] >= ma200[i-1] && ma50[i] < ma200[i]) sig[i] = -1; // 死叉卖出
+    if (isNaN(ma20[i]) || isNaN(ma50[i]) || isNaN(ma20[i-1]) || isNaN(ma50[i-1])) continue;
+    if (ma20[i-1] <= ma50[i-1] && ma20[i] > ma50[i]) sig[i] = 1;   // 金叉买入
+    else if (ma20[i-1] >= ma50[i-1] && ma20[i] < ma50[i]) sig[i] = -1; // 死叉卖出
   }
   return sig;
 }
@@ -2009,12 +2361,29 @@ function signalMomentum(closes, n = 20, threshold = 0.05) {
 // ── 回测引擎 ──
 // commission: 单边手续费率（如0.001=0.1%）
 // T+1执行：信号在第i根K线收盘触发，于第i+1根K线收盘成交，消除前视偏差
-function backtest(data, signals, commission = 0) {
+// 量价确认过滤：买入信号须当日成交量 ≥ 20日均量 × 倍数
+function withVolumeFilter(signals, data, multiplier = 1.2, window = 20) {
+  const volumes = data.map(d => d.volume);
+  return signals.map((sig, i) => {
+    if (sig !== 1) return sig;
+    if (i < window) return 0;
+    const avgVol = volumes.slice(i - window, i).reduce((s, v) => s + (v || 0), 0) / window;
+    return (avgVol > 0 && volumes[i] >= avgVol * multiplier) ? 1 : 0;
+  });
+}
+
+// options: { kellyMode, vixMultiplier }
+function backtest(data, signals, commission = 0, options = {}) {
+  const { kellyMode = false, vixMultiplier = 1.0 } = options;
   const closes = data.map(d => d.close);
   let cash = 1, shares = 0, position = 0;
   const equity = [];
   const trades = [];
   let buyPrice = 0, buyDate = '';
+
+  // 凯利滚动统计
+  let kWins = 0, kLosses = 0, kWinSum = 0, kLossSum = 0;
+  let kellyFrac = 1.0; // 首5笔交易前满仓，之后动态计算
 
   for (let i = 0; i < data.length; i++) {
     const price = closes[i];
@@ -2022,51 +2391,85 @@ function backtest(data, signals, commission = 0) {
     // 执行前一根K线产生的信号（T+1：signal[i-1] → execute at close[i]）
     if (i > 0) {
       if (signals[i - 1] === 1 && position === 0) {
-        // 买入：扣除手续费后换股
-        shares = cash * (1 - commission) / price;
-        cash = 0;
+        // 仓位比例：凯利 × VIX调整，夹在[5%, 100%]
+        const posSize = Math.max(0.05, Math.min(1.0, kellyFrac * vixMultiplier));
+        const invest = cash * posSize;
+        shares = invest * (1 - commission) / price;
+        cash = cash - invest; // 未投入部分保留为现金
         position = 1;
         buyPrice = price;
         buyDate = data[i].date;
       } else if (signals[i - 1] === -1 && position === 1) {
-        // 卖出：扣除手续费后回现金
-        cash = shares * price * (1 - commission);
+        const proceeds = shares * price * (1 - commission);
         const ret = (price - buyPrice) / buyPrice;
-        const netRet = Math.pow(1 - commission, 2) * price / buyPrice - 1; // 双边手续费后净收益
+        const netRet = Math.pow(1 - commission, 2) * price / buyPrice - 1;
         trades.push({ buyDate, sellDate: data[i].date, buyPrice, sellPrice: price, ret, netRet });
+        // 更新凯利滚动统计
+        if (netRet > 0) { kWins++; kWinSum += netRet; }
+        else { kLosses++; kLossSum += Math.abs(netRet); }
+        // 5笔后启用半凯利
+        const kTotal = kWins + kLosses;
+        if (kellyMode && kTotal >= 5) {
+          const w = kWins / kTotal;
+          const avgW = kWins > 0 ? kWinSum / kWins : 0.05;
+          const avgL = kLosses > 0 ? kLossSum / kLosses : 0.05;
+          const R = avgL > 0 ? avgW / avgL : 1;
+          kellyFrac = Math.max(0.05, Math.min(0.80, (w - (1 - w) / R) / 2));
+        }
+        cash = cash + proceeds;
         shares = 0;
         position = 0;
       }
     }
 
-    const val = position === 1 ? shares * price : cash;
-    equity.push(val);
+    // 总资产 = 持仓市值 + 闲置现金
+    equity.push(shares * price + cash);
   }
 
   // 未平仓：按最后收盘价强制平仓
   if (position === 1) {
     const lastPrice = closes[closes.length - 1];
-    const finalCash = shares * lastPrice * (1 - commission);
-    const ret = (lastPrice - buyPrice) / buyPrice;
+    const finalProceeds = shares * lastPrice * (1 - commission);
     const netRet = Math.pow(1 - commission, 2) * lastPrice / buyPrice - 1;
-    trades.push({ buyDate, sellDate: data[data.length - 1].date, buyPrice, sellPrice: lastPrice, ret, netRet, open: true });
-    equity[equity.length - 1] = finalCash;
+    trades.push({ buyDate, sellDate: data[data.length - 1].date, buyPrice, sellPrice: lastPrice, ret: (lastPrice - buyPrice) / buyPrice, netRet, open: true });
+    equity[equity.length - 1] = finalProceeds + cash;
   }
 
   const totalReturn = equity.length ? equity[equity.length - 1] - 1 : 0;
 
-  // 最大回撤
-  let maxDD = 0, peak = equity[0] || 1;
-  for (const v of equity) {
-    if (v > peak) peak = v;
-    const dd = (peak - v) / peak;
-    if (dd > maxDD) maxDD = dd;
+  // 最大回撤（含回撤区间起止日期）
+  let maxDD = 0, peak = equity[0] || 1, tempPeakIdx = 0;
+  let maxDDPeakIdx = 0, maxDDTroughIdx = 0;
+  for (let i = 0; i < equity.length; i++) {
+    if (equity[i] > peak) { peak = equity[i]; tempPeakIdx = i; }
+    const dd = (peak - equity[i]) / peak;
+    if (dd > maxDD) { maxDD = dd; maxDDPeakIdx = tempPeakIdx; maxDDTroughIdx = i; }
   }
+  const maxDDPeriod = data.length > 0
+    ? `${(data[maxDDPeakIdx]||data[0]).date.slice(0,7)} → ${(data[maxDDTroughIdx]||data[0]).date.slice(0,7)}`
+    : '';
+
+  // 日收益率序列 → 夏普比率（年化，rf=0）
+  const dailyRets = [];
+  for (let i = 1; i < equity.length; i++) {
+    if (equity[i-1] > 0) dailyRets.push((equity[i] - equity[i-1]) / equity[i-1]);
+  }
+  let sharpe = NaN;
+  if (dailyRets.length >= 20) {
+    const mean = dailyRets.reduce((s,v)=>s+v,0) / dailyRets.length;
+    const std  = Math.sqrt(dailyRets.reduce((s,v)=>s+(v-mean)**2,0) / dailyRets.length);
+    if (std > 0) sharpe = (mean / std) * Math.sqrt(252);
+  }
+
+  // 年化收益率 & 卡玛比率
+  const nYears = data.length / 252;
+  const annReturn = nYears > 0 ? Math.pow(Math.max(0, 1 + totalReturn), 1/nYears) - 1 : NaN;
+  const calmar = (!isNaN(annReturn) && maxDD > 0) ? annReturn / maxDD : NaN;
 
   // winRate 用净收益判断（双边手续费后实际盈亏）
   const winRate = trades.length ? trades.filter(t => t.netRet > 0).length / trades.length : NaN;
 
-  return { totalReturn, maxDD, winRate, trades, equity };
+  return { totalReturn, annReturn, maxDD, maxDDPeriod, winRate, sharpe, calmar, trades, equity, kellyFrac };
 }
 
 // ── K线图渲染 ──
@@ -2084,8 +2487,8 @@ function renderKlineChart(data, allSignals) {
   }));
 
   // 买卖点标注
-  const colors = { ma: '#1677ff', ma200: '#096dd9', rsi: '#52c41a', macd: '#fa8c16', mom: '#722ed1', boll: '#c41d7f' };
-  const names  = { ma: 'MA5/20', ma200: 'MA50/200', rsi: 'RSI', macd: 'MACD', mom: '动量', boll: '布林带' };
+  const colors = { ma2050: '#096dd9', rsi: '#52c41a', macd: '#fa8c16', mom: '#722ed1', boll: '#c41d7f' };
+  const names  = { ma2050: 'MA20/50', rsi: 'RSI', macd: 'MACD', mom: '动量', boll: '布林带' };
   const annotations = { points: [] };
 
   Object.entries(allSignals).forEach(([key, signals]) => {
@@ -2130,25 +2533,40 @@ function renderKlineChart(data, allSignals) {
 }
 
 // ── 回测结果表渲染 ──
-function renderBtResults(results, bnhReturn, commission) {
+function renderBtResults(results, bnhReturn, bnhAnn, bnhSharpe, commission, btOptions) {
   const tbody = document.getElementById('bt-result-tbody');
-  const names  = { ma: '双均线 MA5/20', ma200: '双均线 MA50/200', rsi: 'RSI(14) 超买超卖', macd: 'MACD 金叉死叉', mom: '动量策略(20日)', boll: '布林带(20,2σ)' };
-  const colors = { ma: '#1677ff', ma200: '#096dd9', rsi: '#52c41a', macd: '#fa8c16', mom: '#722ed1', boll: '#c41d7f' };
+  const names  = { ma2050: '双均线 MA20/50', rsi: 'RSI(14) 超买超卖', macd: 'MACD 金叉死叉', mom: '动量策略(20日)', boll: '布林带(20,2σ)' };
+  const colors = { ma2050: '#096dd9', rsi: '#52c41a', macd: '#fa8c16', mom: '#722ed1', boll: '#c41d7f' };
   const ticker = document.getElementById('bt-ticker').value.trim().toUpperCase();
   const mkt = detectMarket(ticker);
   const cur = mkt === 'A' ? '¥' : mkt === 'HK' ? 'HK$' : '$';
 
   tbody.innerHTML = Object.entries(results).map(([key, r]) => {
     const retColor = r.totalReturn >= 0 ? '#28a745' : '#dc3545';
-    const ddColor = r.maxDD > 0.2 ? '#dc3545' : r.maxDD > 0.1 ? '#ffa940' : '#28a745';
-    const wrColor = isNaN(r.winRate) ? '#aaa' : r.winRate >= 0.5 ? '#28a745' : '#dc3545';
-    const buyCnt = r.trades.length;
+    const annColor = isNaN(r.annReturn) ? '#aaa' : r.annReturn >= 0 ? '#28a745' : '#dc3545';
+    const ddColor  = r.maxDD > 0.2 ? '#dc3545' : r.maxDD > 0.1 ? '#ffa940' : '#28a745';
+    const wrColor  = isNaN(r.winRate) ? '#aaa' : r.winRate >= 0.5 ? '#28a745' : '#dc3545';
+    const shrColor = isNaN(r.sharpe) ? '#aaa' : r.sharpe >= 1.0 ? '#28a745' : r.sharpe >= 0.5 ? '#ffa940' : '#dc3545';
+    const calColor = isNaN(r.calmar) ? '#aaa' : r.calmar >= 1.0 ? '#28a745' : r.calmar >= 0.5 ? '#ffa940' : '#dc3545';
+    const buyCnt   = r.trades.length;
     return `<tr style="text-align:center">
       <td style="padding:7px 10px;border:1px solid #e8e8e8;text-align:left;font-weight:bold;color:${colors[key]}">${names[key]}</td>
       <td style="padding:7px 10px;border:1px solid #e8e8e8;font-weight:bold;color:${retColor}">
         ${r.totalReturn >= 0 ? '+' : ''}${(r.totalReturn*100).toFixed(2)}%</td>
+      <td style="padding:7px 10px;border:1px solid #e8e8e8;font-weight:bold;color:${annColor}">
+        ${isNaN(r.annReturn)?'—':(r.annReturn>=0?'+':'')+( r.annReturn*100).toFixed(1)+'%/年'}</td>
       <td style="padding:7px 10px;border:1px solid #e8e8e8;font-weight:bold;color:${ddColor}">
-        -${(r.maxDD*100).toFixed(2)}%</td>
+        -${(r.maxDD*100).toFixed(2)}%
+        ${r.maxDDPeriod?`<div style="font-size:10px;color:#aaa;font-weight:normal">${r.maxDDPeriod}</div>`:''}
+      </td>
+      <td style="padding:7px 10px;border:1px solid #e8e8e8;font-weight:bold;color:${shrColor}">
+        ${isNaN(r.sharpe)?'—':r.sharpe.toFixed(2)}
+        <div style="font-size:10px;color:#aaa;font-weight:normal">${isNaN(r.sharpe)?'':(r.sharpe>=1?'优秀':r.sharpe>=0.5?'一般':'偏低')}</div>
+      </td>
+      <td style="padding:7px 10px;border:1px solid #e8e8e8;font-weight:bold;color:${calColor}">
+        ${isNaN(r.calmar)?'—':r.calmar.toFixed(2)}
+        <div style="font-size:10px;color:#aaa;font-weight:normal">${isNaN(r.calmar)?'':(r.calmar>=1?'优秀':r.calmar>=0.5?'一般':'偏低')}</div>
+      </td>
       <td style="padding:7px 10px;border:1px solid #e8e8e8;font-weight:bold;color:${wrColor}">
         ${isNaN(r.winRate) ? '—' : (r.winRate*100).toFixed(1)+'%'}</td>
       <td style="padding:7px 10px;border:1px solid #e8e8e8">${buyCnt} 次</td>
@@ -2160,13 +2578,39 @@ function renderBtResults(results, bnhReturn, commission) {
   }).join('');
 
   document.getElementById('bt-results').style.display = 'block';
-  const bnhColor = bnhReturn >= 0 ? '#28a745' : '#dc3545';
-  const commPct = (commission * 100).toFixed(2);
+  const bnhColor  = bnhReturn >= 0 ? '#28a745' : '#dc3545';
+  const bnhAnnC   = isNaN(bnhAnn)    ? '#aaa' : bnhAnn >= 0    ? '#28a745' : '#dc3545';
+  const bnhShrC   = isNaN(bnhSharpe) ? '#aaa' : bnhSharpe >= 1 ? '#28a745' : bnhSharpe >= 0.5 ? '#ffa940' : '#dc3545';
+  const commPct   = (commission * 100).toFixed(2);
+  const kellyOn  = btOptions?.kellyMode  ?? document.getElementById('bt-kelly')?.checked;
+  const volOn    = btOptions?.volConfirm ?? document.getElementById('bt-vol-confirm')?.checked;
+  const vixPosOn = btOptions?.useVixPos  ?? document.getElementById('bt-vix-pos')?.checked;
+  const vixVal   = btOptions?.vixInput   ?? parseFloat(document.getElementById('vix-manual')?.value);
+  const vixMult  = btOptions?.vixMultiplier ?? ((vixPosOn && !isNaN(vixVal) && vixVal > 0)
+    ? Math.max(0.20, Math.min(1.0, 1 - (vixVal - 15) / 25)) : 1.0);
+
+  // 凯利公式汇总（各策略末期Kelly比例）
+  const kellyLine = kellyOn
+    ? '<br><span style="font-size:11px;color:#722ed1">📐 凯利仓控已启用 · 末期半凯利仓位：'
+      + Object.entries(results).map(([k,r]) => {
+          const n = {ma2050:'MA20/50',rsi:'RSI',macd:'MACD',mom:'动量',boll:'布林带'}[k];
+          return `${n} ${isNaN(r.kellyFrac)?'—':(r.kellyFrac*100).toFixed(0)+'%'}`;
+        }).join(' / ') + '</span>'
+    : '';
+  const vixLine = (vixPosOn && !isNaN(vixVal) && vixVal > 0)
+    ? `<br><span style="font-size:11px;color:#13c2c2">🎯 VIX=${vixVal.toFixed(0)} → 仓位 × ${(vixMult*100).toFixed(0)}% 已全局应用</span>`
+    : '';
+  const volLine = volOn
+    ? '<br><span style="font-size:11px;color:#28a745">✅ 量价确认已启用：买入须成交量 ≥ 1.2× 20日均量</span>'
+    : '';
+
   document.getElementById('bt-bnh-row').innerHTML =
     `📌 <b>买入持有对照（Buy & Hold）：</b>
-    <span style="color:${bnhColor};font-weight:bold">${bnhReturn >= 0 ? '+' : ''}${(bnhReturn*100).toFixed(2)}%</span>
-    &nbsp;（直接持有全程，首尾各一次手续费${commPct}%，用于对比策略效果）
-    &nbsp;<span style="color:#888;font-size:11px">· 所有策略均采用T+1收盘执行 · 单边手续费${commPct}%</span>`;
+    总收益 <span style="color:${bnhColor};font-weight:bold">${bnhReturn>=0?'+':''}${(bnhReturn*100).toFixed(2)}%</span>
+    &nbsp;|&nbsp; 年化 <span style="color:${bnhAnnC};font-weight:bold">${isNaN(bnhAnn)?'—':(bnhAnn>=0?'+':'')+( bnhAnn*100).toFixed(1)+'%'}</span>
+    &nbsp;|&nbsp; 夏普 <span style="color:${bnhShrC};font-weight:bold">${isNaN(bnhSharpe)?'—':bnhSharpe.toFixed(2)}</span>
+    &nbsp;<span style="color:#888;font-size:11px">· 首尾各扣手续费${commPct}% · T+1收盘执行</span>
+    ${kellyLine}${vixLine}${volLine}`;
 }
 
 // ── 主入口 ──
@@ -2176,6 +2620,8 @@ async function runBacktest(forceRefresh = true) {
   const outputsize = document.getElementById('bt-outputsize').value;
   const lmt = outputsize === 'full' ? 2000 : outputsize === 'medium' ? 750 : 100;
 
+  const btBtn = document.getElementById('bt-run-btn');
+  btBtn.disabled = true;
   const btLoad = document.getElementById('bt-loading');
   btLoad.style.display = 'block';
   document.getElementById('bt-results').style.display = 'none';
@@ -2205,14 +2651,17 @@ async function runBacktest(forceRefresh = true) {
       ({ data, fromCache } = await fetchDailyData(ticker, outputsize));
     }
     if (data.length < 30) throw new Error('数据不足（<30条），无法回测');
+    if (data.length < 100) {
+      btLoad.textContent = `⚠️ 数据仅 ${data.length} 条，统计可靠性不足（建议≥100条），结果仅供参考`;
+      btLoad.style.display = 'block';
+    }
     _tsData = data; _tsTicker = ticker;   // 供择时评分复用
 
     const closes = data.map(d => d.close);
     const commission = Math.max(0, parseFloat(document.getElementById('bt-commission').value) || 0) / 100;
 
     const selectedStrategies = {};
-    if (document.getElementById('bt-ma').checked)    selectedStrategies.ma    = signalMA(closes);
-    if (document.getElementById('bt-ma200').checked) selectedStrategies.ma200 = signalMA200(closes);
+    if (document.getElementById('bt-ma2050').checked) selectedStrategies.ma2050 = signalMA2050(closes);
     if (document.getElementById('bt-rsi').checked)   selectedStrategies.rsi   = signalRSIClean(closes);
     if (document.getElementById('bt-macd').checked)  selectedStrategies.macd  = signalMACD(closes);
     if (document.getElementById('bt-mom').checked)   selectedStrategies.mom   = signalMomentum(closes);
@@ -2220,24 +2669,53 @@ async function runBacktest(forceRefresh = true) {
 
     if (!Object.keys(selectedStrategies).length) return alert('请至少选择一种策略');
 
+    // 量价确认过滤（买入信号须≥1.2x 20日均量）
+    if (document.getElementById('bt-vol-confirm').checked) {
+      Object.keys(selectedStrategies).forEach(k => {
+        selectedStrategies[k] = withVolumeFilter(selectedStrategies[k], data);
+      });
+    }
+
+    // 凯利仓控 & VIX仓位缩减选项
+    const kellyMode = document.getElementById('bt-kelly').checked;
+    const useVixPos = document.getElementById('bt-vix-pos').checked;
+    const vixInput  = parseFloat(document.getElementById('vix-manual')?.value);
+    const vixMultiplier = (useVixPos && !isNaN(vixInput) && vixInput > 0)
+      ? Math.max(0.20, Math.min(1.0, 1 - (vixInput - 15) / 25))
+      : 1.0;
+
     const results = {};
     Object.entries(selectedStrategies).forEach(([key, signals]) => {
-      results[key] = backtest(data, signals, commission);
+      results[key] = backtest(data, signals, commission, { kellyMode, vixMultiplier });
     });
 
     // BnH：从 closes[1] 起算（与策略最早成交点对齐，避免基准虚高）
     const bnhReturn = closes[closes.length - 1] / closes[1] * Math.pow(1 - commission, 2) - 1;
+    const bnhNYears = data.length / 252;
+    const bnhAnn    = bnhNYears > 0 ? Math.pow(Math.max(0, 1 + bnhReturn), 1/bnhNYears) - 1 : NaN;
+    // BnH 日收益序列（用于夏普）
+    const bnhRets = [];
+    for (let i = 1; i < closes.length; i++) bnhRets.push(closes[i]/closes[i-1]-1);
+    let bnhSharpe = NaN;
+    if (bnhRets.length >= 20) {
+      const bm = bnhRets.reduce((s,v)=>s+v,0)/bnhRets.length;
+      const bs = Math.sqrt(bnhRets.reduce((s,v)=>s+(v-bm)**2,0)/bnhRets.length);
+      if (bs > 0) bnhSharpe = bm/bs*Math.sqrt(252);
+    }
 
     document.getElementById('bt-chart-title').textContent =
       `${ticker} K线图（${data[0].date} → ${data[data.length-1].date}，${data.length}个交易日）` +
       (fromCache ? ' 📦缓存' : ' 🌐实时');
 
     renderKlineChart(data, selectedStrategies);
-    renderBtResults(results, bnhReturn, commission);
+    renderBtResults(results, bnhReturn, bnhAnn, bnhSharpe, commission,
+      { kellyMode, volConfirm: document.getElementById('bt-vol-confirm').checked,
+        useVixPos, vixInput, vixMultiplier });
   } catch(e) {
     alert('❌ 回测失败\n\n' + e.message);
   } finally {
     btLoad.style.display = 'none';
+    btBtn.disabled = false;
   }
 }
 
@@ -2296,27 +2774,28 @@ function normalizeTushare(ticker) {
 }
 
 // 获取最新行情及基本面（东方财富免费接口）
-// 字段：f43=最新价(分)  f58=名称  f84=总股本(万股)  f116=总市值(元)
-//       f162=PE(TTM,×100)  f167=PB(×100)
+// 字段：f43=最新价(分)  f58=名称  f84=总股本(股)  f116=总市值(元)
+//       f162=PE(TTM,×100)  f167=PB(×100)  f105=净利润(元/港元，港股TTM PE缺失时用于估算FCF)
 async function fetchEastmoneyQuote(ts) {
-  const url = `https://push2.eastmoney.com/api/qt/stock/get?secid=${ts.secid}&fields=f43,f57,f58,f84,f116,f162,f167,f9`;
-  const res = await fetch(url);
+  const url = `https://push2.eastmoney.com/api/qt/stock/get?secid=${ts.secid}&fields=f43,f57,f58,f84,f116,f162,f167,f9,f105`;
+  const res = await fetchWithTimeout(url);
   if (!res.ok) throw new Error(`东方财富 HTTP ${res.status}`);
   const json = await res.json();
   const d = json.data;
   if (!d || d.f43 === undefined || d.f43 === '-' || d.f43 === null) {
     throw new Error(`无法获取[${ts.code}]行情，请确认代码正确（A股6位数字·港股4-5位数字）`);
   }
-  const price      = d.f43 / 100;
+  const price      = ts.market === 'HK' ? d.f43 / 1000 : d.f43 / 100; // HK stocks: f43 in thousandths of HKD
   // f162=PE(TTM)，f9=动态PE；TTM优先，动态PE兜底（港股TTM有时返回'-'）
   const peTTM  = (d.f162 === '-' || d.f162 === null || d.f162 <= 0) ? NaN : d.f162 / 100;
   const peDyn  = (d.f9   === '-' || d.f9   === null || d.f9   <= 0) ? NaN : d.f9   / 100;
   const pe         = !isNaN(peTTM) ? peTTM : peDyn;
   const pb         = (d.f167 === '-' || d.f167 <= 0) ? NaN : d.f167 / 100;
   const totalMv    = (d.f116 === '-' || !d.f116)     ? NaN : d.f116;
-  const totalShare = (d.f84  === '-' || !d.f84)      ? NaN : d.f84 * 1e4; // 万股→股
+  const totalShare = (d.f84  === '-' || !d.f84)      ? NaN : d.f84; // 股（API直接返回股数，非万股）
+  const netProfit  = (d.f105 === '-' || d.f105 === null || d.f105 <= 0) ? NaN : d.f105; // 净利润（元/港元）
   const tradeDate  = new Date().toISOString().slice(0,10).replace(/-/g,'');
-  return { name: d.f58 || ts.code, price, pe, pb, totalMv, totalShare, tradeDate };
+  return { name: d.f58 || ts.code, price, pe, pb, totalMv, totalShare, netProfit, tradeDate };
 }
 
 // 获取历史K线（东方财富，日线前复权）
@@ -2324,7 +2803,7 @@ async function fetchEastmoneyQuote(ts) {
 // 返回字段顺序：日期,开盘,收盘,最高,最低,成交量(手),...
 async function fetchEastmoneyKline(ts, lmt) {
   const url = `https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=${ts.secid}&fields1=f1,f2,f3,f4,f5,f6&fields2=f51,f52,f53,f54,f55,f56&klt=101&fqt=1&lmt=${lmt}&end=20500101`;
-  const res = await fetch(url);
+  const res = await fetchWithTimeout(url);
   if (!res.ok) throw new Error(`东方财富K线 HTTP ${res.status}`);
   const json = await res.json();
   const klines = json.data && json.data.klines;
@@ -2355,12 +2834,12 @@ async function runSingleTS(ts, preloadedQuote = null, cacheKey = null) {
     }
   }
 
-  const { name, price, pe, pb, totalMv, totalShare, tradeDate } = q;
+  const { name, price, pe, pb, totalMv, totalShare, netProfit, tradeDate } = q;
 
   // EPS = 价格 / PE(TTM)
   const eps = (pe > 0 && price > 0) ? price / pe : NaN;
 
-  // FCF估算：EPS×总股本×75% → 市值/PE×75%
+  // FCF估算三级链：① EPS×股本×75% → ② 市值÷PE×75% → ③ 净利润×75%（港股PE缺失兜底）
   let fcf = NaN, fcfSource = '';
   if (!isNaN(eps) && eps > 0 && totalShare > 0) {
     fcf = eps * totalShare * 0.75;
@@ -2368,6 +2847,9 @@ async function runSingleTS(ts, preloadedQuote = null, cacheKey = null) {
   } else if (pe > 0 && totalMv > 0) {
     fcf = (totalMv / pe) * 0.75;
     fcfSource = `市值÷PE(${fmt(pe)}) × 75% 估算`;
+  } else if (!isNaN(netProfit) && netProfit > 0) {
+    fcf = netProfit * 0.75;
+    fcfSource = `净利润(${ts.currency}${fmt(netProfit)}) × 75% 估算（PE缺失，以净利润代替）`;
   }
 
   // 用户覆盖参数
@@ -2377,11 +2859,17 @@ async function runSingleTS(ts, preloadedQuote = null, cacheKey = null) {
   const uTG  = document.getElementById('terminal').value.trim();
   const uYrs = document.getElementById('years').value.trim();
 
-  const finalFCF = uFCF ? parseFloat(uFCF) : fcf;
-  const g   = uG  ? parseFloat(uG)/100  : 0.08;
-  const r   = uR  ? parseFloat(uR)/100  : 0.09;
-  const tg  = uTG ? parseFloat(uTG)/100 : 0.02;
-  const yrs = uYrs ? parseInt(uYrs)     : 10;
+  // 优先读内置PARAMS（以ts.code或原始ticker为key），否则用默认值
+  const _preset = PARAMS[ts.code] || PARAMS[ts.code.replace(/^0+/,'')] || null;
+  // FCF优先级：① 用户手动输入 → ② 自动估算 → ③ PARAMS内置customFCF（港股PE缺失时兜底）
+  const finalFCF = uFCF ? parseFloat(uFCF) : (!isNaN(fcf) && fcf > 0 ? fcf : (_preset?.customFCF || NaN));
+  if (_preset?.customFCF && isNaN(fcf) && !uFCF) {
+    fcfSource = `${_preset.customFCFNote || '内置FCF'}（${ts.currency}，年度总量）`;
+  }
+  const g   = uG  ? parseFloat(uG)/100  : (_preset ? _preset.g   : 0.08);
+  const r   = uR  ? parseFloat(uR)/100  : (_preset ? _preset.r   : 0.09);
+  const tg  = uTG ? parseFloat(uTG)/100 : (_preset ? _preset.gt  : 0.02);
+  const yrs = uYrs ? parseInt(uYrs)     : (_preset ? _preset.years: 10);
 
   if (isNaN(finalFCF) || finalFCF <= 0) {
     throw new Error(
@@ -2408,7 +2896,7 @@ async function runSingleTS(ts, preloadedQuote = null, cacheKey = null) {
   const outDiv = document.getElementById('single-output');
   outDiv.style.display = 'block';
   outDiv.innerHTML = `
-    <h3 style="margin:0 0 8px">[${ts.code}] ${name} · DCF估值报告（${ts.marketName}）</h3>
+    <h3 style="margin:0 0 8px">[${esc(ts.code)}] ${esc(name)} · DCF估值报告（${esc(ts.marketName)}）</h3>
     <div class="cache-status" style="background:${preloadedQuote?'#fff2e8':'#f6ffed'};color:${preloadedQuote?'#d4380d':'#237804'};">
       ${preloadedQuote
         ? '🚀 缓存命中（30天内数据）· 本次消耗 <b>0</b> 次调用 · <span style="font-weight:normal;color:#888">如需最新数据请点击"🔄 强制刷新"</span>'
@@ -2435,7 +2923,8 @@ async function runSingleTS(ts, preloadedQuote = null, cacheKey = null) {
     <div class="data-matrix">
       <b>⚙️ DCF精算参数</b>
       <div>增长率 g = ${(g*100).toFixed(1)}% &nbsp;|&nbsp; 折现率 r = ${(r*100).toFixed(1)}% &nbsp;|&nbsp; 永续增长 l = ${(tg*100).toFixed(1)}% &nbsp;|&nbsp; 年限 = ${yrs} 年
-           <span style="color:#aaa;font-size:11px">（A/HK默认：g=8% r=9% l=2%，可在上方覆盖）</span>
+           <span style="color:${_preset?'#389e0d':'#aaa'};font-size:11px">
+             ${_preset?`✅ 已命中内置参数（${_preset.name}）`:'默认参数：g=8% r=9% l=2%，可在上方覆盖'}</span>
       </div>
     </div>
     <p><b>每股内在价值DCF值（基准）：</b>
@@ -2465,46 +2954,42 @@ async function avFetchEcon(fn, extraParams = '') {
   const wait = Math.max(0, _nextSlotTime - now);
   _nextSlotTime = Math.max(_nextSlotTime, now) + REQ_GAP;
   if (wait > 0) await new Promise(r => setTimeout(r, wait));
-  const res = await fetch(`${AV_BASE}?function=${fn}${extraParams}&apikey=${API_KEY}`);
+  const res = await fetchWithTimeout(`${AV_BASE}?function=${fn}${extraParams}&apikey=${API_KEY}`);
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const json = await res.json();
   if (json['Note'] || json['Information']) throw new Error(json['Note'] || json['Information']);
   return json;
 }
 
-// OBV（累积量差指标）
-function calcOBV(data) {
-  const obv = new Array(data.length).fill(0);
-  for (let i = 1; i < data.length; i++) {
-    if      (data[i].close > data[i-1].close) obv[i] = obv[i-1] + data[i].volume;
-    else if (data[i].close < data[i-1].close) obv[i] = obv[i-1] - data[i].volume;
-    else                                       obv[i] = obv[i-1];
-  }
-  return obv;
-}
 
 // ── 第一层：宏观环境 ──
-function tsComputeMacro(spyData, vixLevel, y10, y2) {
+// isUS=true: 美股模式（SPY/VIX/美债）；isUS=false: A/港股模式（上证/跳过VIX&美债）
+function tsComputeMacro(mktData, vixLevel, y10, y2, isUS = true, mktName = 'SPY') {
   const items = [];
   let posLimit = 1.0;
+  const currSym = isUS ? '$' : '';
 
-  // 1. SPY 200MA
-  if (spyData && spyData.length >= 200) {
-    const sc = spyData.map(d => d.close), n = sc.length;
+  // 1. 市场基准 200MA
+  if (mktData && mktData.length >= 200) {
+    const sc = mktData.map(d => d.close), n = sc.length;
     const ma200 = calcMA(sc, 200);
     const last = sc[n-1], ma = ma200[n-1];
     const above = last > ma;
-    items.push({ name: 'SPY 200日均线', val: `$${fmt(last)} / MA200 $${fmt(ma)}`,
+    items.push({ name: `${mktName} 200日均线`,
+      val: `${currSym}${fmt(last)} / MA200 ${currSym}${fmt(ma)}`,
       ok: above ? 'green' : 'yellow',
-      note: above ? '均线上方，趋势健康' : '跌破均线 → 仓位上限50%' });
+      note: above ? '均线上方，趋势健康' : `跌破均线 → 仓位上限50%` });
     if (!above) posLimit = Math.min(posLimit, 0.5);
   } else {
-    items.push({ name: 'SPY 200日均线', val: '数据不足', ok: 'grey',
-      note: '请先为SPY运行一次回测（选"近3年"）' });
+    items.push({ name: `${mktName} 200日均线`, val: '数据不足', ok: 'grey',
+      note: isUS ? '请先为SPY运行一次回测（选"近3年"）' : `请先为${mktName}运行一次回测` });
   }
 
-  // 2. VIX
-  if (!isNaN(vixLevel) && vixLevel > 0) {
+  // 2. VIX / 波动率（A/港股跳过，标注不适用）
+  if (!isUS) {
+    items.push({ name: 'VIX 恐慌指数', val: '不适用（A/港股）', ok: 'grey',
+      note: '宏观波动率指标仅适用于美股；A/港股此项不计入评分' });
+  } else if (!isNaN(vixLevel) && vixLevel > 0) {
     const ok = vixLevel < 20 ? 'green' : vixLevel < 25 ? 'yellow' : 'red';
     items.push({ name: 'VIX 恐慌指数', val: vixLevel.toFixed(1), ok,
       note: vixLevel < 20 ? '市场平静，风险偏好高'
@@ -2516,137 +3001,195 @@ function tsComputeMacro(spyData, vixLevel, y10, y2) {
       note: 'API暂时无法获取，策略信号偏保守' });
   }
 
-  // 3. 收益率曲线 10Y-2Y
-  if (!isNaN(y10) && !isNaN(y2)) {
+  // 3. 收益率曲线（美股：美债10Y-2Y；A股：中国国债10Y；港股：跳过）
+  if (!isUS && !isNaN(y10) && y10 > 0) {
+    // A股：只有10Y，显示绝对值
+    const ok = y10 > 2.5 ? 'green' : y10 > 2.0 ? 'yellow' : 'red';
+    items.push({ name: '中国国债收益率 10Y',
+      val: `${y10.toFixed(2)}%`,
+      ok,
+      note: y10 > 2.5 ? '收益率正常，资金成本合理'
+          : y10 > 2.0 ? '收益率偏低，货币宽松信号'
+          : '收益率极低，可能处于宽松周期末端' });
+  } else if (!isUS) {
+    items.push({ name: '国债收益率', val: '不适用（A/港股跳过）', ok: 'grey',
+      note: '美债利率对A/港股参考意义有限；此项不计入评分' });
+  } else if (!isNaN(y10) && !isNaN(y2)) {
     const spread = y10 - y2;
-    const ok = spread > 0.5 ? 'green' : spread > 0 ? 'yellow' : 'red';
+    const ok = spread > 0.5 ? 'green' : 'yellow';
     items.push({ name: '收益率曲线 10Y−2Y',
       val: `${spread >= 0 ? '+' : ''}${spread.toFixed(2)}%（10Y=${y10.toFixed(2)}%，2Y=${y2.toFixed(2)}%）`, ok,
       note: spread > 0.5 ? '正向曲线，经济扩张信号'
           : spread > 0   ? '趋于平坦，注意防御'
-          : '倒挂 → 衰退信号，偏防御配置' });
-    if (spread < 0) posLimit = Math.min(posLimit, 0.75);
+          : '倒挂（领先衰退12-18个月，仅作警示，不触发减仓）' });
   } else {
     items.push({ name: '收益率曲线 10Y−2Y', val: '获取中/失败', ok: 'grey',
       note: 'TREASURY_YIELD端点，Premium账户可用' });
   }
 
-  // 4. PMI代理：SPY近3月动量（无免费PMI接口，用市场价格作为领先指标代理）
-  if (spyData && spyData.length >= 63) {
-    const sc = spyData.map(d => d.close), n = sc.length;
+  // 4. PMI代理：基准指数近3月动量
+  if (mktData && mktData.length >= 63) {
+    const sc = mktData.map(d => d.close), n = sc.length;
     const m = (sc[n-1] - sc[n-63]) / sc[n-63];
     const ok = m > 0.03 ? 'green' : m > -0.02 ? 'yellow' : 'red';
-    items.push({ name: 'PMI代理（SPY近3月动量）',
-      val: `SPY近3月 ${m >= 0 ? '+' : ''}${(m*100).toFixed(1)}%`, ok,
-      note: ok === 'green' ? '市场动量正向，回避周期股风险低'
-          : ok === 'yellow' ? '动量平淡，谨慎配置周期股'
-          : '动量负向 → 回避周期股，偏防御' });
+    items.push({ name: `PMI代理（${mktName}近3月动量）`,
+      val: `${mktName}近3月 ${m >= 0 ? '+' : ''}${(m*100).toFixed(1)}%`, ok,
+      note: ok === 'green' ? '市场动量正向，风险偏好较高'
+          : ok === 'yellow' ? '动量平淡，谨慎配置'
+          : '动量负向 → 偏防御' });
     if (m < -0.02) posLimit = Math.min(posLimit, 0.75);
   }
 
-  const reds   = items.filter(i => i.ok === 'red').length;
+  const reds    = items.filter(i => i.ok === 'red').length;
   const yellows = items.filter(i => i.ok === 'yellow').length;
-  const greys  = items.filter(i => i.ok === 'grey').length;
-  // 全部数据缺失时不能误报绿灯；有效指标不足2个时降为黄色
+  const greys   = items.filter(i => i.ok === 'grey').length;
   const validCount = items.length - greys;
   const macroColor = reds >= 2 ? 'red'
     : (reds === 1 || yellows >= 2) ? 'yellow'
-    : validCount < 2 ? 'yellow'   // 数据严重缺失，保守处理
+    : validCount < 2 ? 'yellow'
     : 'green';
   return { items, posLimit, macroColor };
 }
 
 // ── 第二层：个股综合打分（满分10分）──
-function tsComputeScore(data, spyData) {
+// benchmarkData: 相对强度基准行情（美股=SPY，A股=沪深300，港股=恒生指数）
+// benchmarkName: 基准显示名称
+function tsComputeScore(data, benchmarkData, benchmarkName = 'SPY') {
   const closes = data.map(d => d.close), n = closes.length;
   const sections = [];
-  let totalMom = 0, totalTrend = 0, totalRS = 0;
+  // Z-score 因子模型：动量60% + 趋势40%（Asness实证权重）
+  // zs: clip到[-2,2]；各指标z均值→MC/TC→线性映射到[0,6]/[0,4]
+  const zs = (val, mean, std) => Math.max(-2, Math.min(2, (val - mean) / std));
+  const zbar = z => ({ score: Math.max(0, z + 2) / 4, max: 1 }); // 进度条：[-2,2]→[0,1]
 
-  // 动量分（满分4.0）
-  const momRows = [];
+  // ── 动量因子（60%，满分6.0） ──
+  const momRows = [], zMoms = [];
 
+  // 6个月动量（均值5%，std 20%）
   if (n >= 127) {
     const r = (closes[n-1] - closes[n-127]) / closes[n-127];
-    const s = r > 0.30 ? 2.0 : r > 0.20 ? 1.7 : r > 0.10 ? 1.3 : r > 0.05 ? 0.8 : r > 0 ? 0.4 : 0;
-    momRows.push({ label: '6个月涨幅', val: `${r >= 0 ? '+' : ''}${(r*100).toFixed(1)}%`, score: s, max: 2.0,
-      note: r > 0.20 ? '强势动量' : r > 0 ? '正向' : '负动量，不利' });
-    totalMom += s;
+    const z = zs(r, 0.05, 0.20);
+    zMoms.push(z);
+    momRows.push({ label: '6个月涨幅', val: `${r>=0?'+':''}${(r*100).toFixed(1)}%  z=${z>=0?'+':''}${z.toFixed(2)}`,
+      ...zbar(z), note: r > 0.25 ? '强势动量' : r > 0.05 ? '正向动量' : r > 0 ? '弱正向' : '负动量，不利' });
   }
+
+  // 1个月动量（均值1%，std 6%；z>1.5逆转惩罚：追高风险）
   if (n >= 22) {
     const r = (closes[n-1] - closes[n-22]) / closes[n-22];
-    const s = (r >= 0.02 && r <= 0.08) ? 1.0   // 最佳区间
-            : (r > 0.08)              ? 0.5   // 追高风险（超过8%）
-            : (r >= -0.02)            ? 0.4   // 轻微正向或轻微负向（弱于追高）
-            : 0.2;                            // 弱势（跌超2%）
-    momRows.push({ label: '1个月涨幅（最佳2-8%，避免追高）', val: `${r >= 0 ? '+' : ''}${(r*100).toFixed(1)}%`, score: s, max: 1.0,
-      note: r > 0.12 ? '⚠️ 近期涨幅过大，追高风险' : r >= 0.02 ? '✅ 适中区间' : '动量偏弱' });
-    totalMom += s;
+    let z = zs(r, 0.01, 0.06);
+    const raw = r;
+    if (z > 1.5) z = Math.max(0, 3 - z); // 超涨反转：z=2→1，z=3→0
+    zMoms.push(z);
+    momRows.push({ label: '1个月涨幅（z>1.5触发追高惩罚）', val: `${raw>=0?'+':''}${(raw*100).toFixed(1)}%  z=${z>=0?'+':''}${z.toFixed(2)}`,
+      ...zbar(z), note: raw > 0.12 ? '⚠️ 近期涨幅过大，追高风险（z已下调）' : raw >= 0.02 ? '✅ 适中区间' : '动量偏弱' });
   }
-  if (n >= 50) {
-    const ma50 = calcMA(closes, 50);
-    const ratio = closes[n-1] / ma50[n-1] - 1;
-    const s = ratio > 0.02 ? 1.0 : ratio > -0.02 ? 0.5 : 0.1;
-    momRows.push({ label: '价格相对50日均线位置', val: `${ratio >= 0 ? '+' : ''}${(ratio*100).toFixed(1)}%`, score: s, max: 1.0,
-      note: ratio > 0 ? '均线上方' : '均线下方，动量偏弱' });
-    totalMom += s;
-  }
-  totalMom = Math.min(4.0, totalMom);
-  sections.push({ name: '动量分（40%，满分4.0）', rows: momRows, total: totalMom, max: 4.0 });
 
-  // 趋势分（满分3.5 = 3项×1分 折算）
-  const trendRows = [];
-  let tp = 0;
-  if (n >= 50) {
-    const ma50 = calcMA(closes, 50);
-    const ok = closes[n-1] > ma50[n-1];
-    trendRows.push({ label: '价格 > 50日均线', val: `$${fmt(closes[n-1])} vs MA50 $${fmt(ma50[n-1])}`, score: ok ? 1 : 0, max: 1 });
-    if (ok) tp++;
-  }
-  if (n >= 200) {
-    const ma50 = calcMA(closes, 50), ma200 = calcMA(closes, 200);
-    const ok = ma50[n-1] > ma200[n-1];
-    trendRows.push({ label: '50MA > 200MA（金叉 / 死叉）', val: `MA50 $${fmt(ma50[n-1])} vs MA200 $${fmt(ma200[n-1])}`, score: ok ? 1 : 0, max: 1,
-      note: ok ? '多头排列 ✅' : '空头排列 ❌' });
-    if (ok) tp++;
-  }
-  if (n >= 40) {
-    const obv = calcOBV(data);
-    const o20 = calcMA(obv, 20), o40 = calcMA(obv, 40);
-    const ok = !isNaN(o40[n-1]) && o20[n-1] > o40[n-1];
-    trendRows.push({ label: '成交量配合上涨（OBV均线方向）', val: `OBV20MA ${ok ? '>' : '<'} OBV40MA`, score: ok ? 1 : 0, max: 1,
-      note: ok ? '量价配合，主力积累' : '量价背离，注意分发' });
-    if (ok) tp++;
-  }
-  const trendItems = trendRows.length || 1;
-  totalTrend = +(tp * (3.5 / trendItems)).toFixed(2);
-  sections.push({ name: '趋势分（35%，满分3.5）', rows: trendRows, total: totalTrend, max: 3.5 });
+  // RSI 已移至趋势因子（时间序列指标，不含截面信息）
 
-  // 相对强度分（满分2.5）
-  const rsRows = [];
-  if (spyData && spyData.length >= 65 && n >= 65) {
-    const sc = spyData.map(d => d.close), sn = sc.length;
-    const stkR = (closes[n-1] - closes[n-64]) / closes[n-64];
-    const spyR = (sc[sn-1]   - sc[sn-64])     / sc[sn-64];
-    const exc  = stkR - spyR;
-    const r1   = exc > 0.10 ? 1.5 : exc > 0.05 ? 1.2 : exc > 0 ? 0.8 : 0.3;
-    rsRows.push({ label: '3个月超额收益 vs SPY',
-      val: `本股 ${stkR>=0?'+':''}${(stkR*100).toFixed(1)}%  SPY ${spyR>=0?'+':''}${(spyR*100).toFixed(1)}%  超额 ${exc>=0?'+':''}${(exc*100).toFixed(1)}%`,
-      score: r1, max: 1.5, note: exc > 0 ? '跑赢大盘，相对强势' : '跑输大盘，相对弱势' });
-    let r2 = 0;
+  // 相对强度 vs 基准（美股=SPY，A股=沪深300，港股=恒生指数）
+  if (benchmarkData && benchmarkData.length >= 65 && n >= 65) {
+    const sc = benchmarkData.map(d => d.close), sn = sc.length;
+    const exc = (closes[n-1]-closes[n-64])/closes[n-64] - (sc[sn-1]-sc[sn-64])/sc[sn-64];
+    const z3 = zs(exc, 0, 0.10);
+    zMoms.push(z3);
+    momRows.push({ label: `3月超额收益 vs ${benchmarkName}`,
+      val: `超额 ${exc>=0?'+':''}${(exc*100).toFixed(1)}%  z=${z3>=0?'+':''}${z3.toFixed(2)}`,
+      ...zbar(z3), note: exc > 0.10 ? '显著跑赢基准' : exc > 0 ? '跑赢基准' : '跑输基准' });
     if (n >= 22 && sn >= 22) {
       const e1m = (closes[n-1]-closes[n-22])/closes[n-22] - (sc[sn-1]-sc[sn-22])/sc[sn-22];
-      r2 = e1m > 0.03 ? 1.0 : e1m > 0 ? 0.7 : 0.2;
-      rsRows.push({ label: '近1月超额（行业领涨代理）',
-        val: `超额 ${e1m>=0?'+':''}${(e1m*100).toFixed(1)}%`, score: r2, max: 1.0,
-        note: e1m > 0.03 ? '板块领涨，资金流入' : e1m > 0 ? '略强于大盘' : '板块未领涨' });
+      let z1 = zs(e1m, 0, 0.05);
+      if (z1 > 1.5) z1 = Math.max(0, 3 - z1);
+      zMoms.push(z1);
+      momRows.push({ label: `1月超额收益 vs ${benchmarkName}`,
+        val: `超额 ${e1m>=0?'+':''}${(e1m*100).toFixed(1)}%  z=${z1>=0?'+':''}${z1.toFixed(2)}`,
+        ...zbar(z1), note: e1m > 0.05 ? '板块领涨，资金流入' : e1m > 0 ? '略强于基准' : '板块未领涨' });
     }
-    totalRS = Math.min(2.5, r1 + r2);
   } else {
-    rsRows.push({ label: '相对强度（需SPY日线数据）', val: '请先为SPY运行回测后再评分', score: 0, max: 2.5 });
+    momRows.push({ label: `相对强度 vs ${benchmarkName}`, val: `${benchmarkName}数据缺失，跳过`, score: 0, max: 1,
+      note: benchmarkName === 'SPY' ? '运行一次SPY回测后可获得此项' : `${benchmarkName}数据未加载，跳过` });
   }
-  sections.push({ name: '相对强度分（25%，满分2.5）', rows: rsRows, total: totalRS, max: 2.5 });
 
-  return { sections, total: totalMom + totalTrend + totalRS, totalMom, totalTrend, totalRS };
+  // MC = 各动量z均值 ∈ [-2,2]；映射到[0,6]
+  const MC = zMoms.length ? zMoms.reduce((s,v)=>s+v,0)/zMoms.length : 0;
+  const totalMom = Math.max(0, Math.min(6, +(MC * 1.5 + 3).toFixed(2)));
+  sections.push({ name: `动量因子（60%权重，满分6.0）MC=${MC>=0?'+':''}${MC.toFixed(2)}`, rows: momRows, total: totalMom, max: 6.0 });
+
+  // ── 趋势因子（40%，满分4.0） ──
+  const trendRows = [], zTrends = [];
+
+  // 价格 vs MA50：+1/-1
+  if (n >= 50) {
+    const ma50 = calcMA(closes, 50);
+    const sig = closes[n-1] > ma50[n-1] ? 1 : -1;
+    zTrends.push(sig);
+    trendRows.push({ label: '价格 vs 50日均线', val: `${fmt(closes[n-1])} vs MA50 ${fmt(ma50[n-1])}`,
+      score: sig > 0 ? 1 : 0, max: 1, note: sig > 0 ? '价格在均线上方 ✅' : '价格在均线下方 ❌' });
+  }
+
+  // 金叉/死叉：MA50 vs MA200：+1/-1
+  if (n >= 200) {
+    const ma50 = calcMA(closes, 50), ma200 = calcMA(closes, 200);
+    const sig = ma50[n-1] > ma200[n-1] ? 1 : -1;
+    zTrends.push(sig);
+    trendRows.push({ label: '50MA vs 200MA（金叉/死叉）', val: `MA50 ${fmt(ma50[n-1])} vs MA200 ${fmt(ma200[n-1])}`,
+      score: sig > 0 ? 1 : 0, max: 1, note: sig > 0 ? '多头排列 ✅' : '空头排列 ❌' });
+  }
+
+  // 量价配合：价涨量增：+1/-1
+  if (n >= 40) {
+    const vols = data.map(d => d.volume);
+    const avgVol20 = vols.slice(n-20, n).reduce((s,v)=>s+v,0) / 20;
+    const avgVol40 = vols.slice(n-40, n-20).reduce((s,v)=>s+v,0) / 20;
+    const priceUp = closes[n-1] > closes[n-20];
+    const volUp   = avgVol20 > avgVol40;
+    const sig = (priceUp && volUp) ? 1 : -1;
+    zTrends.push(sig);
+    trendRows.push({ label: '量价配合（价涨量增）',
+      val: `近20日均量 ${volUp?'>':'<'} 前20日均量，价格${priceUp?'上涨':'下跌'}`,
+      score: sig > 0 ? 1 : 0, max: 1,
+      note: !priceUp ? '价格下跌，量能无效' : volUp ? '价涨量增，资金支撑 ✅' : '⚠️ 价涨量缩，缺乏支撑' });
+  }
+
+  // RSI(14) 方向：时间序列趋势强弱，RSI>50多头偏强 ±1
+  if (n >= 50) {
+    const rsi = calcRSI(closes, 14)[n-1];
+    if (!isNaN(rsi)) {
+      const sig = rsi > 50 ? 1 : -1;
+      zTrends.push(sig);
+      trendRows.push({ label: 'RSI(14) 趋势方向',
+        val: `RSI ${rsi.toFixed(1)}`,
+        score: sig > 0 ? 1 : 0, max: 1,
+        note: rsi > 70 ? '⚠️ 超买，趋势强但注意回调' : rsi > 50 ? '多头区间，趋势偏强 ✅' : rsi > 30 ? '空头区间，趋势偏弱 ❌' : '⚠️ 超卖区间' });
+    }
+  }
+
+  // MACD(12,26,9) 趋势方向：MACD线高于信号线 → +1，反之 -1
+  if (n >= 60) {
+    const { macdLine, signalLine, hist } = calcMACD(closes);
+    const ml = macdLine[n-1], sl = signalLine[n-1], h = hist[n-1];
+    if (!isNaN(ml) && !isNaN(sl) && !isNaN(h)) {
+      const sig = ml > sl ? 1 : -1;
+      zTrends.push(sig);
+      const prevHist = hist[n-2];
+      const histDir = (!isNaN(prevHist) && h > prevHist) ? '扩张' : (!isNaN(prevHist) ? '收缩' : '—');
+      trendRows.push({ label: 'MACD(12,26,9) 趋势方向',
+        val: `MACD ${ml>=0?'+':''}${ml.toFixed(3)}  信号线 ${sl.toFixed(3)}  柱状 ${h>=0?'+':''}${h.toFixed(3)}（${histDir}）`,
+        score: sig > 0 ? 1 : 0, max: 1,
+        note: sig > 0
+          ? (h > 0 ? 'MACD多头且柱状扩张，动能强 ✅' : 'MACD多头但柱状收缩，注意动能减弱')
+          : (h < 0 ? 'MACD空头且柱状扩张，下行动能强 ❌' : 'MACD空头但柱状收缩，可能触底') });
+    }
+  }
+
+  // TC = ±1信号均值 ∈ [-1,1]；映射到[0,4]
+  const TC = zTrends.length ? zTrends.reduce((s,v)=>s+v,0)/zTrends.length : 0;
+  const totalTrend = Math.max(0, Math.min(4, +(TC * 2 + 2).toFixed(2)));
+  sections.push({ name: `趋势因子（40%权重，满分4.0）TC=${TC>=0?'+':''}${TC.toFixed(2)}`, rows: trendRows, total: totalTrend, max: 4.0 });
+
+  // 总分 = 1.5×MC + 2×TC + 5 ∈ [0,10]（宏观乘数由调用方施加）
+  const total = Math.max(0, Math.min(10, +(1.5 * MC + 2 * TC + 5).toFixed(2)));
+  return { sections, total, totalMom, totalTrend };
 }
 
 // ── 第三层：入场触发信号 ──
@@ -2663,13 +3206,13 @@ function tsComputeTriggers(data) {
     const bull = last.close >= last.open;
     const ok   = pb >= 0.05 && pb <= 0.10 && bull;
     res.push({ name: '① 回调触发', ok,
-      desc: ok ? `从20日高点 $${fmt(hi)} 回调 ${(pb*100).toFixed(1)}%，当日收阳线 ✅`
-               : `当前回调 ${(pb*100).toFixed(1)}%（需5-10%，20日高点 $${fmt(hi)}）${!bull ? '，且当日收阴' : ''}` });
+      desc: ok ? `从20日高点 ${fmt(hi)} 回调 ${(pb*100).toFixed(1)}%，当日收阳线 ✅`
+               : `当前回调 ${(pb*100).toFixed(1)}%（需5-10%，20日高点 ${fmt(hi)}）${!bull ? '，且当日收阴' : ''}` });
   }
 
   // ② 突破触发：突破20日区间高点，成交量≥1.5x均量
-  if (n >= 22) {
-    const win  = data.slice(-22, -1);
+  if (n >= 21) {
+    const win  = data.slice(-21, -1);
     const hi   = Math.max(...win.map(d => d.high));
     const avgV = win.reduce((s, d) => s + d.volume, 0) / win.length;
     const last = data[n-1];
@@ -2677,18 +3220,18 @@ function tsComputeTriggers(data) {
     const vol  = last.volume > avgV * 1.5;
     const ok   = brk && vol;
     res.push({ name: '② 突破触发', ok,
-      desc: ok ? `突破20日区间高点 $${fmt(hi)}，量能 ${(last.volume/avgV).toFixed(1)}x均量 ✅`
-               : `区间高点 $${fmt(hi)}，当前 $${fmt(last.close)}${!brk ? '（未突破）' : ''}${!vol ? `，量能不足（${(last.volume/avgV).toFixed(1)}x）` : ''}` });
+      desc: ok ? `突破20日区间高点 ${fmt(hi)}，量能 ${(last.volume/avgV).toFixed(1)}x均量 ✅`
+               : `区间高点 ${fmt(hi)}，当前 ${fmt(last.close)}${!brk ? '（未突破）' : ''}${!vol ? `，量能不足（${(last.volume/avgV).toFixed(1)}x）` : ''}` });
   }
 
   // ③ 均线触发：今日上穿20MA，50MA方向向上
   if (n >= 51) {
     const ma20 = calcMA(closes, 20), ma50 = calcMA(closes, 50);
     const cross = closes[n-2] <= ma20[n-2] && closes[n-1] > ma20[n-1];
-    const up50  = ma50[n-1] > ma50[Math.max(0, n-11)];
+    const up50  = ma50[n-1] > ma50[Math.max(0, n-21)];
     const ok    = cross && up50;
     res.push({ name: '③ 均线触发', ok,
-      desc: ok ? `今日上穿20日均线（$${fmt(ma20[n-1])}），50日线方向向上 ✅`
+      desc: ok ? `今日上穿20日均线（${fmt(ma20[n-1])}），50日线方向向上 ✅`
                : `价格${closes[n-1]>ma20[n-1]?'在':'未穿越'}20日均线${!cross?' （非今日穿越）':''}，50日线${up50?'向上':'持平/向下'}` });
   }
 
@@ -2697,64 +3240,163 @@ function tsComputeTriggers(data) {
 
 // ── 主入口 ──
 async function runTimingScore() {
-  if (!_tsData || _tsData.length < 200) {
-    alert('请先点击"📈 运行回测"（选择"近3年"数据量，需至少200天数据），再运行择时评分。');
-    return;
-  }
   const btn  = document.getElementById('ts-btn');
   const wrap = document.getElementById('timing-score-wrap');
   const out  = document.getElementById('timing-score-output');
   btn.disabled = true;
   wrap.style.display = 'block';
-  out.innerHTML = '<div style="color:#389e0d;font-size:13px;font-weight:bold">⏳ 正在获取宏观数据（VIX + 国债收益率）…</div>';
+
+  // 若尚未运行回测，或已切换标的，自动拉取行情数据
+  const ticker = document.getElementById('bt-ticker').value.trim().toUpperCase();
+  if (!_tsData || _tsData.length < 200 || _tsTicker !== ticker) {
+    if (!ticker) {
+      out.innerHTML = '<div style="color:#dc3545;padding:10px">❌ 请先在上方输入股票代码</div>';
+      btn.disabled = false;
+      return;
+    }
+    out.innerHTML = `<div style="color:#389e0d;font-size:13px;font-weight:bold">⏳ 正在获取 ${esc(ticker)} 行情数据…</div>`;
+    try {
+      const market = detectMarket(ticker);
+      if (market !== 'US') {
+        const ts = normalizeTushare(ticker);
+        _tsData = await fetchEastmoneyKline(ts, 750);
+      } else {
+        const { data } = await fetchDailyData(ticker, 'medium');
+        _tsData = data;
+      }
+      _tsTicker = ticker;
+    } catch(e) {
+      out.innerHTML = `<div style="color:#dc3545;padding:10px">❌ 行情数据获取失败：${e.message}</div>`;
+      btn.disabled = false;
+      return;
+    }
+    if (!_tsData || _tsData.length < 200) {
+      out.innerHTML = '<div style="color:#dc3545;padding:10px">❌ 数据不足（< 200天），请确认代码正确</div>';
+      btn.disabled = false;
+      return;
+    }
+  }
+
+  const tsMarket = detectMarket(ticker);
+  const isUSStock = tsMarket === 'US';
+  out.innerHTML = `<div style="color:#389e0d;font-size:13px;font-weight:bold">⏳ 正在获取${isUSStock ? '宏观数据（VIX + 国债收益率）' : '基准指数数据（上证/沪深300）'}…</div>`;
 
   try {
-    // SPY 日线（宏观层 + 相对强度，优先缓存）
-    let spyData = null;
-    try {
-      const { data: sd } = await fetchDailyData('SPY', 'medium');
-      spyData = sd;
-    } catch(_) {
-      try {
-        const c = JSON.parse(localStorage.getItem(CACHE_VER + 'daily_SPY_full') || '{}');
-        if (c.data && Date.now() - c.ts <= BT_CACHE_TTL) spyData = c.data;
-      } catch(_) {}
-    }
-
-    // VIX：优先读手动输入，否则尝试 API
-    let vixLevel = NaN;
-    const vixManual = parseFloat(document.getElementById('vix-manual')?.value);
-    if (!isNaN(vixManual) && vixManual > 0) {
-      vixLevel = vixManual;
-    } else {
-      try {
-        const vj = await avFetch('GLOBAL_QUOTE', 'VIX');
-        addUsed(1);
-        vixLevel = parseFloat((vj['Global Quote'] || {})['05. price']);
-      } catch(_) {}
-    }
-
-    // 国债收益率 10Y / 2Y
+    let mktData = null;       // 宏观基准：美股=SPY，A/港股=上证指数
+    let benchmarkData = null; // 相对强度基准：美股=SPY，A/港股=沪深300
+    let benchmarkName = 'SPY';
+    let mktName = 'SPY';
     let y10 = NaN, y2 = NaN;
-    try {
-      const j10 = await avFetchEcon('TREASURY_YIELD', '&interval=daily&maturity=10year');
-      addUsed(1);
-      const d0 = (j10.data || [])[0];
-      if (d0 && d0.value !== '.') y10 = parseFloat(d0.value);
-    } catch(_) {}
-    try {
-      const j2 = await avFetchEcon('TREASURY_YIELD', '&interval=daily&maturity=2year');
-      addUsed(1);
-      const d0 = (j2.data || [])[0];
-      if (d0 && d0.value !== '.') y2 = parseFloat(d0.value);
-    } catch(_) {}
+    let vixLevel = 20;
 
-    const macro    = tsComputeMacro(spyData, vixLevel, y10, y2);
-    const score    = tsComputeScore(_tsData, spyData);
+    if (isUSStock) {
+      // ── 美股路径：SPY + VIX手动 + 美债收益率 ──
+      try {
+        const { data: sd } = await fetchDailyData('SPY', 'medium');
+        mktData = sd;
+      } catch(_) {
+        for (const size of ['medium', 'full']) {
+          try {
+            const c = JSON.parse(localStorage.getItem(CACHE_VER + 'daily_SPY_' + size) || '{}');
+            if (c.data && Date.now() - c.ts <= BT_CACHE_TTL) { mktData = c.data; break; }
+          } catch(_) {}
+        }
+      }
+      benchmarkData = mktData;
+      benchmarkName = 'SPY';
+      mktName = 'SPY';
+
+      const vixManual = parseFloat(document.getElementById('vix-manual')?.value);
+      vixLevel = (!isNaN(vixManual) && vixManual > 0) ? vixManual : 20;
+
+      // 美债收益率（1天缓存）
+      const yieldCacheKey10 = CACHE_VER + 'yield_10y';
+      const yieldCacheKey2  = CACHE_VER + 'yield_2y';
+      try {
+        const c = JSON.parse(localStorage.getItem(yieldCacheKey10) || '{}');
+        if (c.v > 0 && Date.now() - c.ts < BT_CACHE_TTL) { y10 = c.v; }
+        else {
+          const j10 = await avFetchEcon('TREASURY_YIELD', '&interval=daily&maturity=10year');
+          addUsed(1);
+          const d0 = (j10.data || [])[0];
+          if (d0 && d0.value !== '.') {
+            y10 = parseFloat(d0.value);
+            try { localStorage.setItem(yieldCacheKey10, JSON.stringify({ ts: Date.now(), v: y10 })); } catch(_) {}
+          }
+        }
+      } catch(_) {}
+      try {
+        const c = JSON.parse(localStorage.getItem(yieldCacheKey2) || '{}');
+        if (c.v > 0 && Date.now() - c.ts < BT_CACHE_TTL) { y2 = c.v; }
+        else {
+          const j2 = await avFetchEcon('TREASURY_YIELD', '&interval=daily&maturity=2year');
+          addUsed(1);
+          const d0 = (j2.data || [])[0];
+          if (d0 && d0.value !== '.') {
+            y2 = parseFloat(d0.value);
+            try { localStorage.setItem(yieldCacheKey2, JSON.stringify({ ts: Date.now(), v: y2 })); } catch(_) {}
+          }
+        }
+      } catch(_) {}
+
+    } else {
+      // ── A/港股路径：上证指数(宏观) + 沪深300(相对强度) + 中国国债10Y ──
+      mktName = '上证指数';
+      benchmarkName = tsMarket === 'HK' ? '沪深300' : '沪深300'; // HK暂无恒指日K接口，统一用沪深300作相对强度基准
+
+      // 上证指数日K（宏观基准）
+      try {
+        const tsIdx = { secid: '1.000001', code: '000001', marketName: '上证指数', market: 'A' };
+        const cacheKey = CACHE_VER + 'ts_kline_sh000001';
+        const raw = localStorage.getItem(cacheKey);
+        let cached = null;
+        if (raw) { try { const c = JSON.parse(raw); if (Date.now() - c.ts < BT_CACHE_TTL) cached = c.data; } catch(_) {} }
+        mktData = cached || await fetchEastmoneyKline(tsIdx, 750);
+        if (!cached) { try { localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), data: mktData })); } catch(_) {} }
+      } catch(_) {}
+
+      // 沪深300日K（相对强度基准）
+      try {
+        const tsHS = { secid: '1.000300', code: '000300', marketName: '沪深300', market: 'A' };
+        const cacheKey = CACHE_VER + 'ts_kline_hs300';
+        const raw = localStorage.getItem(cacheKey);
+        let cached = null;
+        if (raw) { try { const c = JSON.parse(raw); if (Date.now() - c.ts < BT_CACHE_TTL) cached = c.data; } catch(_) {} }
+        benchmarkData = cached || await fetchEastmoneyKline(tsHS, 750);
+        if (!cached) { try { localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), data: benchmarkData })); } catch(_) {} }
+      } catch(_) {}
+
+      // 中国国债10Y（东方财富，1天缓存）
+      try {
+        const cnYieldKey = CACHE_VER + 'yield_cn10y';
+        const c = JSON.parse(localStorage.getItem(cnYieldKey) || '{}');
+        if (c.v > 0 && Date.now() - c.ts < BT_CACHE_TTL) {
+          y10 = c.v;
+        } else {
+          const res = await fetchWithTimeout(
+            'https://push2.eastmoney.com/api/qt/stock/get?secid=0.CN10YR&fields=f43,f58'
+          );
+          if (res.ok) {
+            const j = await res.json();
+            const raw = j?.data?.f43;
+            if (raw && raw !== '-' && raw !== null) {
+              // 东方财富国债收益率单位：直接为百分比（如2.30），无需除100
+              y10 = parseFloat(raw);
+              if (y10 > 20) y10 = y10 / 100; // 若返回基点形式则转换
+              try { localStorage.setItem(cnYieldKey, JSON.stringify({ ts: Date.now(), v: y10 })); } catch(_) {}
+            }
+          }
+        }
+      } catch(_) {}
+    }
+
+    const macro    = tsComputeMacro(mktData, vixLevel, y10, y2, isUSStock, mktName);
+    const score    = tsComputeScore(_tsData, benchmarkData, benchmarkName);
     const triggers = tsComputeTriggers(_tsData);
     const lastP    = _tsData[_tsData.length - 1].close;
+    const tsCurrSym = tsMarket === 'A' ? '¥' : tsMarket === 'HK' ? 'HK$' : '$';
 
-    out.innerHTML = tsRenderHTML(_tsTicker, macro, score, triggers, lastP, _tsData[_tsData.length-1].date);
+    out.innerHTML = tsRenderHTML(_tsTicker, macro, score, triggers, lastP, _tsData[_tsData.length-1].date, tsCurrSym);
   } catch(e) {
     out.innerHTML = `<div style="color:#dc3545;padding:10px">❌ 错误：${e.message}</div>`;
   } finally {
@@ -2763,59 +3405,101 @@ async function runTimingScore() {
 }
 
 // ── 渲染 ──
-function tsRenderHTML(ticker, macro, score, triggers, lastP, lastDate) {
+function tsRenderHTML(ticker, macro, score, triggers, lastP, lastDate, currSym = '$') {
   const anyTrigger = triggers.some(t => t.ok);
-  const total = score.total;
+  const macroMult = macro.macroColor === 'green' ? 1.0 : macro.macroColor === 'yellow' ? 0.8 : 0.5;
+  const total = +(score.total * macroMult).toFixed(2);
   const okC = { green: '#28a745', yellow: '#ffa940', red: '#dc3545', grey: '#aaa' };
   const okI = { green: '✅', yellow: '⚠️', red: '❌', grey: '—' };
 
   // 综合建议
   let action, abg, abc;
   if (macro.macroColor === 'red') {
-    action = '⛔ 宏观不支持，建议空仓或全防御配置'; abg = '#fff2f0'; abc = '#dc3545';
+    action = '⛔ 宏观不支持（月度信号）：建议空仓或全防御配置'; abg = '#fff2f0'; abc = '#dc3545';
   } else if (total >= 7.0 && anyTrigger) {
-    action = '✅ 高胜率买入机会：评分达标 + 触发信号已出现'; abg = '#f6ffed'; abc = '#52c41a';
+    action = '✅ 多维信号共振：评分达标（月度）+ 日线触发信号已出现，可考虑建仓'; abg = '#f6ffed'; abc = '#52c41a';
   } else if (total >= 5.5 && anyTrigger) {
-    action = '🟡 谨慎轻仓：信号触发但评分中等，轻仓试水+严格止损'; abg = '#fffbe6'; abc = '#faad14';
+    action = '🟡 谨慎轻仓：日线触发信号出现但月度评分中等，轻仓试水+严格止损'; abg = '#fffbe6'; abc = '#faad14';
   } else if (total >= 5.5) {
-    action = '⏳ 列入候选池：评分达标，等待①②③任一触发信号出现后再建仓'; abg = '#e6f7ff'; abc = '#1890ff';
+    action = '⏳ 列入候选池：月度评分达标，等待日线①②③任一触发信号出现后再建仓'; abg = '#e6f7ff'; abc = '#1890ff';
   } else {
     action = '❌ 跳过：综合评分不足（< 5.5/10），当前不适合入场'; abg = '#fff2f0'; abc = '#dc3545';
   }
 
   const scoreColor = total >= 7 ? '#28a745' : total >= 5.5 ? '#ffa940' : '#dc3545';
 
-  // 汇总表
+  // ── 决策仪表盘（一目了然：三色灯 + 仓位 + 止损）──
+  const scoreDots = Array.from({length:10},(_,i)=>
+    `<span style="color:${i<Math.round(total)?scoreColor:'#e0e0e0'};font-size:15px">●</span>`).join('');
+  const posLimit = Math.round(macro.posLimit * 100);
+  const stopLoss8  = fmt(lastP * 0.92);
+  const stopLoss10 = fmt(lastP * 0.90);
+  const macroLabel = macro.macroColor==='green'?'支持入场':macro.macroColor==='yellow'?'中性观望':'不利回避';
+  const trigLabel  = anyTrigger
+    ? triggers.filter(t=>t.ok).map(t=>t.name).join(' + ')
+    : '⏳ 等待信号';
+  const actionTitle = action.split('：')[0];
+  const actionBody  = action.split('：').slice(1).join('：');
+
   const summaryHTML = `
-    <div style="overflow-x:auto;margin-bottom:10px">
-    <table style="width:100%;border-collapse:collapse;font-size:13px;min-width:580px">
-      <thead><tr style="background:#f0f5ff;text-align:center">
-        <th style="padding:8px 10px;border:1px solid #d9d9d9;text-align:left">股票</th>
-        <th style="padding:8px 10px;border:1px solid #d9d9d9">宏观环境</th>
-        <th style="padding:8px 10px;border:1px solid #d9d9d9">综合评分</th>
-        <th style="padding:8px 10px;border:1px solid #d9d9d9">触发信号</th>
-        <th style="padding:8px 10px;border:1px solid #d9d9d9">建议操作</th>
-      </tr></thead>
-      <tbody><tr>
-        <td style="padding:8px 10px;border:1px solid #e8e8e8;font-weight:bold">${ticker}
-          <div style="font-size:11px;color:#888;font-weight:normal">$${fmt(lastP)}（${lastDate}）</div></td>
-        <td style="padding:8px 10px;border:1px solid #e8e8e8;text-align:center;color:${okC[macro.macroColor]};font-weight:bold">
-          ${okI[macro.macroColor]} ${macro.macroColor === 'green' ? '支持' : macro.macroColor === 'yellow' ? '一般' : '不利'}</td>
-        <td style="padding:8px 10px;border:1px solid #e8e8e8;text-align:center">
-          <span style="color:${scoreColor};font-weight:bold;font-size:18px">${total.toFixed(1)}</span><span style="color:#aaa">/10</span></td>
-        <td style="padding:8px 10px;border:1px solid #e8e8e8;text-align:center;font-size:12px">
-          ${anyTrigger ? triggers.filter(t=>t.ok).map(t=>`<span style="color:#389e0d;font-weight:bold">${t.name}</span>`).join('<br>') : '<span style="color:#aaa">⏳ 未触发</span>'}</td>
-        <td style="padding:8px 10px;border:1px solid #e8e8e8;font-size:12px;font-weight:bold;color:${abc}">${action.split('：')[0]}</td>
-      </tr></tbody>
-    </table></div>
-    <div style="padding:10px 14px;background:${abg};border-left:4px solid ${abc};border-radius:5px;font-size:13px;font-weight:bold;margin-bottom:6px">${action}</div>
-    <div style="font-size:12px;color:#555;margin-bottom:12px">📐 当前宏观信号对应仓位上限：<b style="color:#0078ff;font-size:14px">${Math.round(macro.posLimit*100)}%</b></div>`;
+  <div style="font-size:11px;color:#888;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;padding:6px 12px;margin-bottom:10px">
+    ⏱️ 本评分适用于<b>中线持仓（3–12个月）</b>，短线交易者请自行调整RSI方向判断
+  </div>
+  <div style="background:linear-gradient(135deg,${abg} 0%,#fff 100%);border:2px solid ${abc};border-radius:14px;padding:20px 22px;margin-bottom:16px;box-shadow:0 3px 14px rgba(0,0,0,0.08)">
+
+    <div style="font-size:11px;color:#aaa;margin-bottom:10px">
+      📅 ${new Date().toLocaleDateString('zh-CN')} &nbsp;·&nbsp; 基于 ${lastDate} 收盘价 &nbsp;<b style="color:#333">${currSym}${fmt(lastP)}</b></div>
+
+    <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start">
+
+      <!-- 左：主结论 -->
+      <div style="flex:2;min-width:200px">
+        <div style="font-size:11px;font-weight:600;color:#888;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">
+          ${esc(ticker)} · 综合决策</div>
+        <div style="font-size:26px;font-weight:900;color:${abc};line-height:1.2;margin-bottom:8px">
+          ${actionTitle}</div>
+        <div style="font-size:13px;color:#555;line-height:1.7;padding:8px 12px;background:#fff;border-radius:7px;border-left:3px solid ${abc}">
+          ${actionBody}</div>
+      </div>
+
+      <!-- 右：评分圆盘 -->
+      <div style="min-width:130px;text-align:center;background:#fff;border-radius:10px;padding:14px 18px;border:1px solid ${abc}30;flex-shrink:0">
+        <div style="font-size:10px;color:#aaa;margin-bottom:4px;letter-spacing:1px">综合评分</div>
+        <div style="font-size:44px;font-weight:900;color:${scoreColor};line-height:1">${total.toFixed(1)}</div>
+        <div style="font-size:12px;color:#ccc;margin-bottom:6px">/ 10</div>
+        <div>${scoreDots}</div>
+        <div style="font-size:10px;color:#bbb;margin-top:6px;line-height:1.4">阈值7.0/5.5为经验设定<br>非回测验证，仅供参考</div>
+      </div>
+    </div>
+
+    <!-- 底部4格关键数字 -->
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
+      <div style="flex:1;min-width:90px;padding:10px 12px;background:#fff;border-radius:8px;border:1px solid ${abc}40;text-align:center">
+        <div style="font-size:10px;color:#aaa;margin-bottom:3px">建议仓位上限</div>
+        <div style="font-size:22px;font-weight:900;color:#0078ff">${posLimit}%</div>
+      </div>
+      <div style="flex:1;min-width:90px;padding:10px 12px;background:#fff2f0;border-radius:8px;border:1px solid #ffccc7;text-align:center">
+        <div style="font-size:10px;color:#aaa;margin-bottom:3px">硬止损 (−8%)</div>
+        <div style="font-size:20px;font-weight:900;color:#dc3545">${currSym}${stopLoss8}</div>
+        <div style="font-size:10px;color:#aaa">极限 ${currSym}${stopLoss10}(−10%)</div>
+      </div>
+      <div style="flex:1;min-width:90px;padding:10px 12px;background:#fff;border-radius:8px;border:1px solid ${okC[macro.macroColor]}40;text-align:center">
+        <div style="font-size:10px;color:#aaa;margin-bottom:3px">宏观环境</div>
+        <div style="font-size:16px;font-weight:bold;color:${okC[macro.macroColor]}">${okI[macro.macroColor]} ${macroLabel}</div>
+      </div>
+      <div style="flex:1;min-width:90px;padding:10px 12px;background:${anyTrigger?'#f6ffed':'#fafafa'};border-radius:8px;border:1px solid ${anyTrigger?'#b7eb8f':'#e8e8e8'};text-align:center">
+        <div style="font-size:10px;color:#aaa;margin-bottom:3px">入场触发信号</div>
+        <div style="font-size:13px;font-weight:bold;color:${anyTrigger?'#389e0d':'#aaa'};line-height:1.4">${trigLabel}</div>
+      </div>
+    </div>
+
+  </div>`;
 
   // 宏观层
   const macroHTML = `
     <details open style="margin-bottom:10px">
       <summary style="font-weight:bold;font-size:13px;cursor:pointer;padding:5px 0;color:#444;user-select:none">
-        第一层 · 宏观环境过滤 <span style="color:${okC[macro.macroColor]};margin-left:6px">${okI[macro.macroColor]}</span></summary>
+        第一层 · 宏观环境过滤 <span style="color:${okC[macro.macroColor]};margin-left:6px">${okI[macro.macroColor]}</span><span style="font-size:11px;color:#aaa;font-weight:normal;margin-left:8px">月度信号 · 变化缓慢</span></summary>
       <div style="overflow-x:auto;margin-top:6px">
       <table style="width:100%;border-collapse:collapse;font-size:12px">
         <thead><tr style="background:#fafafa">
@@ -2878,7 +3562,7 @@ function tsRenderHTML(ticker, macro, score, triggers, lastP, lastDate) {
     <details open style="margin-bottom:10px">
       <summary style="font-weight:bold;font-size:13px;cursor:pointer;padding:5px 0;color:#444;user-select:none">
         第三层 · 入场触发信号（满足其一方可买入）
-        <span style="margin-left:6px">${anyTrigger ? '<span style="color:#389e0d">✅ 已触发</span>' : '<span style="color:#aaa">⏳ 未触发</span>'}</span></summary>
+        <span style="margin-left:6px">${anyTrigger ? '<span style="color:#389e0d">✅ 已触发</span>' : '<span style="color:#aaa">⏳ 未触发</span>'}</span><span style="font-size:11px;color:#aaa;font-weight:normal;margin-left:8px">日线信号 · 需当日确认</span></summary>
       <div style="margin-top:8px">${triggers.map(t=>`
         <div style="margin-bottom:7px;padding:8px 12px;border-radius:5px;
           background:${t.ok?'#f6ffed':'#fafafa'};border:1px solid ${t.ok?'#b7eb8f':'#e8e8e8'}">
@@ -2898,10 +3582,10 @@ function tsRenderHTML(ticker, macro, score, triggers, lastP, lastDate) {
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;font-size:12px">
         <div style="flex:1;min-width:170px;padding:8px 12px;background:#fff2f0;border-radius:5px;border:1px solid #ffccc7">
           🛑 <b>硬止损</b><br>
-          买入价 × 92% = <b style="color:#dc3545">$${fmt(lastP*0.92)}</b>（−8%）<br>
-          买入价 × 90% = <b style="color:#dc3545">$${fmt(lastP*0.90)}</b>（−10%）</div>
+          买入价 × 92% = <b style="color:#dc3545">${currSym}${fmt(lastP*0.92)}</b>（−8%）<br>
+          买入价 × 90% = <b style="color:#dc3545">${currSym}${fmt(lastP*0.90)}</b>（−10%）</div>
         <div style="flex:1;min-width:170px;padding:8px 12px;background:#fff7e6;border-radius:5px;border:1px solid #ffd591">
-          📉 <b>信号反转</b><br>综合评分跌破 <b>5.0/10</b><br>或死叉 + OBV转负 → 减仓</div>
+          📉 <b>信号反转</b><br>综合评分跌破 <b>5.0/10</b><br>或死叉 + 量能萎缩 → 减仓</div>
         <div style="flex:1;min-width:170px;padding:8px 12px;background:#f9f0ff;border-radius:5px;border:1px solid #d3adf7">
           🌐 <b>宏观恶化</b><br>第一层出现 ≥2 个红灯<br>→ 触发全局减仓/空仓信号</div>
         <div style="flex:1;min-width:170px;padding:8px 12px;background:#e6f7ff;border-radius:5px;border:1px solid #91d5ff">
@@ -2910,11 +3594,170 @@ function tsRenderHTML(ticker, macro, score, triggers, lastP, lastDate) {
     </details>`;
 
   return `
-    <div style="font-size:11px;color:#aaa;margin-bottom:10px">
-      📅 评分时间：${new Date().toLocaleDateString('zh-CN')} · 基于 ${lastDate} 最新收盘价 $${fmt(lastP)}</div>
     ${summaryHTML}${macroHTML}${scoreHTML}${trigHTML}${exitHTML}
     <div style="font-size:11px;color:#aaa;margin-top:12px;padding:8px 12px;background:#fafafa;border-radius:4px">
       ⚠️ 以上三层评分仅供量化参考，不构成任何投资建议。胜率高 ≠ 必赚，请结合基本面分析与个人风控执行。</div>`;
+}
+
+// ═══════════════════════════════════════════════════════
+//  评分阈值历史回测验证
+// ═══════════════════════════════════════════════════════
+async function runScoreBacktest() {
+  const btn = document.getElementById('score-bt-btn');
+  const out = document.getElementById('score-bt-output');
+  btn.disabled = true;
+  out.innerHTML = '<div style="color:#389e0d;font-size:13px">⏳ 正在拉取历史月线数据…</div>';
+
+  try {
+    // 1. SPY 月线（已有缓存概率高）
+    out.innerHTML = '<div style="color:#389e0d;font-size:13px">⏳ 获取 SPY 月线…</div>';
+    const spyMonthly = await fetchRotMonthly('SPY', false);
+    if (!spyMonthly || spyMonthly.length < 20) throw new Error('SPY 月线数据不足');
+
+    // 2. 仅处理①区已有DCF缓存的标的，上限30只
+    const tickers = Object.keys(PARAMS).filter(t =>
+      !PARAMS[t].isETF && !PARAMS[t].isGold && !PARAMS[t].skipFundamentals &&
+      localStorage.getItem(CACHE_VER + t)
+    ).slice(0, 30);
+    const records = [];
+
+    for (const ticker of tickers) {
+      out.innerHTML = `<div style="color:#389e0d;font-size:13px">⏳ 处理 ${ticker}…（${records.length} 个样本已收集）</div>`;
+      let monthly;
+      try { monthly = await fetchRotMonthly(ticker, false); } catch(_) { continue; }
+      if (!monthly || monthly.length < 20) continue;
+
+      const sc = monthly.map(d => d.close);
+      const sp = spyMonthly.map(d => d.close);
+      const n = monthly.length, sn = spyMonthly.length;
+
+      for (let i = 13; i < n - 6; i++) {
+        // 对齐 SPY 时间轴
+        const targetDate = monthly[i].date;
+        let si = spyMonthly.findIndex(d => d.date >= targetDate);
+        if (si < 7 || si >= sn - 6) continue;
+
+        let score = 0;
+
+        // 6M 动量（max 2.0）：跳过最近1月，取 i-1 vs i-7
+        if (i >= 8) {
+          const r = (sc[i-1] - sc[i-7]) / sc[i-7];
+          score += r > 0.30 ? 2.0 : r > 0.20 ? 1.7 : r > 0.10 ? 1.3 : r > 0.05 ? 0.8 : r > 0 ? 0.4 : 0;
+        }
+
+        // 1M 动量（max 1.0）
+        if (i >= 2) {
+          const r = (sc[i] - sc[i-1]) / sc[i-1];
+          score += (r >= 0.02 && r <= 0.08) ? 1.0 : r > 0.08 ? 0.5 : r >= -0.02 ? 0.4 : 0.2;
+        }
+
+        // 3M 超额 vs SPY（max 1.5）
+        if (i >= 4 && si >= 4) {
+          const exc = (sc[i]-sc[i-3])/sc[i-3] - (sp[si]-sp[si-3])/sp[si-3];
+          score += exc > 0.10 ? 1.5 : exc > 0.05 ? 1.2 : exc > 0 ? 0.8 : 0.3;
+        }
+
+        // 1M 超额 vs SPY（max 1.0）
+        if (i >= 2 && si >= 2) {
+          const e1m = (sc[i]-sc[i-1])/sc[i-1] - (sp[si]-sp[si-1])/sp[si-1];
+          score += e1m > 0.03 ? 1.0 : e1m > 0 ? 0.7 : 0.2;
+        }
+
+        // 缩放至满分10（动量+相对强度最大5.5分）
+        const scaled = Math.min(10, +(score / 5.5 * 10).toFixed(2));
+
+        // 6M 远期收益
+        const fwd6m = (sc[i+6] - sc[i]) / sc[i];
+
+        records.push({ ticker, date: monthly[i].date.slice(0,7), score: scaled, fwd6m });
+      }
+    }
+
+    // 无论样本多少都继续渲染，提示信息在 renderScoreBtHTML 中处理
+
+    // 3. 分桶统计
+    const buckets = [
+      { label: '< 5.5（跳过）',   min: 0,   max: 5.5 },
+      { label: '5.5–7.0（候选）', min: 5.5,  max: 7.0 },
+      { label: '≥ 7.0（买入）',   min: 7.0,  max: 999 },
+    ];
+
+    const results = buckets.map(b => {
+      const sub = records.filter(r => r.score >= b.min && r.score < b.max);
+      if (!sub.length) return { ...b, n: 0, avg: NaN, med: NaN, win: NaN };
+      const rets = sub.map(r => r.fwd6m);
+      const avg = rets.reduce((s,v)=>s+v,0) / rets.length;
+      const sorted = [...rets].sort((a,b)=>a-b);
+      const med = sorted[Math.floor(sorted.length/2)];
+      const win = rets.filter(r=>r>0).length / rets.length;
+      return { ...b, n: sub.length, avg, med, win };
+    });
+
+    out.innerHTML = renderScoreBtHTML(results, records.length, tickers.length);
+
+  } catch(e) {
+    out.innerHTML = `<div style="color:#dc3545;font-size:13px">❌ 回测失败：${e.message}</div>`;
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function renderScoreBtHTML(results, total, tickerCount) {
+  const pct = v => isNaN(v) ? '—' : (v>=0?'+':'')+(v*100).toFixed(1)+'%';
+  const col = v => isNaN(v) ? '#888' : v>=0 ? '#28a745' : '#dc3545';
+
+  // 验证阈值是否有效：买入桶均值 > 候选桶 > 跳过桶
+  const [skip, cand, buy] = results;
+  let verdict = '';
+  if (buy.n >= 5 && cand.n >= 5 && skip.n >= 5) {
+    if (buy.avg > cand.avg && cand.avg > skip.avg) {
+      verdict = `<div style="color:#28a745;font-weight:bold;margin-top:8px">✅ 阈值有效：三档评分与6M远期收益单调递增，7.0/5.5分界线具有预测力</div>`;
+    } else if (buy.avg > skip.avg) {
+      verdict = `<div style="color:#ffa940;font-weight:bold;margin-top:8px">⚠️ 部分有效：买入档优于跳过档，但候选档排序不稳定，阈值可参考</div>`;
+    } else {
+      verdict = `<div style="color:#dc3545;font-weight:bold;margin-top:8px">❌ 阈值存疑：当前评分与远期收益相关性弱，建议审查评分权重</div>`;
+    }
+  } else {
+    verdict = `<div style="color:#aaa;margin-top:8px">样本量偏少（需各档≥5个），结论仅供参考</div>`;
+  }
+
+  const rows = results.map(r => `
+    <tr>
+      <td style="padding:6px 10px;border:1px solid #e8e8e8;font-weight:bold">${r.label}</td>
+      <td style="padding:6px 10px;border:1px solid #e8e8e8;text-align:center">${r.n}</td>
+      <td style="padding:6px 10px;border:1px solid #e8e8e8;text-align:center;color:${col(r.avg)};font-weight:bold">${pct(r.avg)}</td>
+      <td style="padding:6px 10px;border:1px solid #e8e8e8;text-align:center;color:${col(r.med)}">${pct(r.med)}</td>
+      <td style="padding:6px 10px;border:1px solid #e8e8e8;text-align:center">${isNaN(r.win)?'—':(r.win*100).toFixed(0)+'%'}</td>
+    </tr>`).join('');
+
+  const sampleNote = total === 0
+    ? `<div style="color:#dc3545;font-size:12px;margin-bottom:8px">⚠️ 暂无样本。请先在 <b>① 单只股票智能估值</b> 中查询目标股票后重试。</div>`
+    : `<div style="font-size:11px;color:${total < 30 ? '#fa8c16' : '#888'};margin-bottom:8px">
+        ${total < 30
+          ? `⚠️ 样本偏少（${total}个），结论仅供参考，建议在①区查询更多标的使样本≥30个。`
+          : `样本量${total >= 100 ? '充足' : '适中'}（${total}个），查询更多标的可进一步提升可信度。`}
+       </div>`;
+
+  return `
+    <div style="font-size:13px;font-weight:bold;margin-bottom:4px">
+      评分阈值历史验证（共 ${total} 个月度样本，6个月持有期）
+    </div>
+    ${sampleNote}
+    <table style="width:100%;border-collapse:collapse;font-size:13px">
+      <thead><tr style="background:#f5f5f5;text-align:center">
+        <th style="padding:6px 10px;border:1px solid #e8e8e8;text-align:left">评分区间</th>
+        <th style="padding:6px 10px;border:1px solid #e8e8e8">样本数</th>
+        <th style="padding:6px 10px;border:1px solid #e8e8e8">平均6M收益</th>
+        <th style="padding:6px 10px;border:1px solid #e8e8e8">中位6M收益</th>
+        <th style="padding:6px 10px;border:1px solid #e8e8e8">胜率</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    ${verdict}
+    <div style="font-size:11px;color:#aaa;margin-top:8px;line-height:1.6">
+      说明：仅含动量+相对强度维度（月线可计算）；RSI/均线趋势因需日线数据未纳入。<br>
+      评分已缩放：原始5.5分满分 → 等比映射至10分制后与阈值对比。
+    </div>`;
 }
 
 // ═══════════════════════════════════════════════════════
@@ -2952,14 +3795,6 @@ function rotCalc12M(closes) {
   return (!p0 || p0 <= 0) ? NaN : (p1 - p0) / p0;
 }
 
-// 近6个月收益（同样跳过最近1个不完整月，与rotCalc12M保持方法论一致）
-function rotCalc6M(closes) {
-  const n = closes.length;
-  if (n < 8) return NaN;
-  const p1 = closes[n - 2].close;  // 上月末（跳过当前不完整月）
-  const p0 = closes[n - 8].close;  // 7个月前月末（覆盖6个月区间）
-  return (!p0 || p0 <= 0) ? NaN : (p1 - p0) / p0;
-}
 
 function rotPct(v) {
   return isNaN(v) ? '—' : (v >= 0 ? '+' : '') + (v * 100).toFixed(1) + '%';
@@ -2982,7 +3817,7 @@ async function runRotation(forceRefresh) {
     const mData = {};
     for (const t of rotTickers) {
       loadDiv.textContent = `⏳ 获取 ${t} 月线数据…（优先缓存）`;
-      mData[t] = await fetchRotMonthly(t, forceRefresh);
+      try { mData[t] = await fetchRotMonthly(t, forceRefresh); } catch(_) { mData[t] = null; }
     }
 
     // ── 策略二：SPY 日线（200MA） ──
@@ -2999,23 +3834,13 @@ async function runRotation(forceRefresh) {
       } catch(_) {}
     }
 
-    // ── 策略二：VIX（优先读手动输入，否则尝试 API）──
-    loadDiv.textContent = '⏳ 获取 VIX 实时价格…';
-    let vixLevel = NaN;
+    // ── 策略二：VIX（API不支持，直接读手动输入，无则默认20）──
     const vixManualRot = parseFloat(document.getElementById('vix-manual')?.value);
-    if (!isNaN(vixManualRot) && vixManualRot > 0) {
-      vixLevel = vixManualRot;
-    } else {
-      try {
-        const vixJson = await avFetch('GLOBAL_QUOTE', 'VIX');
-        addUsed(1);
-        vixLevel = parseFloat((vixJson['Global Quote'] || {})['05. price']);
-      } catch(_) {}
-    }
+    const vixLevel = (!isNaN(vixManualRot) && vixManualRot > 0) ? vixManualRot : 20;
 
     // ── 策略一计算 ──
     const s1Tickers = ['SPY', 'TLT', 'GLD', 'DBC'];
-    const s1Returns = s1Tickers.map(t => ({ t, r: rotCalc12M(mData[t]) }));
+    const s1Returns = s1Tickers.map(t => ({ t, r: rotCalc12M(mData[t] || []) }));
     const s1Valid   = s1Returns.filter(x => !isNaN(x.r)).sort((a, b) => b.r - a.r);
 
     // ── 策略二计算 ──
@@ -3026,24 +3851,26 @@ async function runRotation(forceRefresh) {
       const lastC   = closes[closes.length - 1];
       const lastMA  = ma200v[ma200v.length - 1];
       const lastDate = spyDailyArr[spyDailyArr.length - 1].date;
-      s2Signal = { price: lastC, ma200: lastMA, above: lastC > lastMA, date: lastDate };
+      const aggRet = rotCalc12M(mData['AGG'] || []);
+      const s2Refuge = (!isNaN(aggRet) && aggRet > 0) ? 'AGG' : 'CASH';
+      s2Signal = { price: lastC, ma200: lastMA, above: lastC > lastMA, date: lastDate, aggRet, s2Refuge };
     }
 
     // ── 策略三（GEM）计算 ──
-    const spyRet  = rotCalc12M(mData['SPY']);
-    const acwiRet = rotCalc12M(mData['ACWI']);
-    const CASH_RATE = 0.035;
+    const spyRet  = rotCalc12M(mData['SPY'] || []);
+    const acwiRet = rotCalc12M(mData['ACWI'] || []);
+    const CASH_RATE = 0.040;
     let gemRec;
     if (!isNaN(spyRet) && spyRet > CASH_RATE) {
       if (isNaN(acwiRet)) {
-        gemRec = { ticker: 'SPY',  reason: `SPY 12M ${rotPct(spyRet)} > 现金3.5%，ACWI 数据不可用，默认持有 SPY` };
+        gemRec = { ticker: 'SPY',  reason: `SPY 12M ${rotPct(spyRet)} > 现金4.0%，ACWI 数据不可用，默认持有 SPY` };
       } else if (spyRet >= acwiRet) {
-        gemRec = { ticker: 'SPY',  reason: `SPY 12M ${rotPct(spyRet)} > 现金3.5%，且 SPY ≥ ACWI（${rotPct(acwiRet)}）` };
+        gemRec = { ticker: 'SPY',  reason: `SPY 12M ${rotPct(spyRet)} > 现金4.0%，且 SPY ≥ ACWI（${rotPct(acwiRet)}）` };
       } else {
-        gemRec = { ticker: 'ACWI', reason: `SPY 12M ${rotPct(spyRet)} > 3.5%，但 ACWI（${rotPct(acwiRet)}）更强` };
+        gemRec = { ticker: 'ACWI', reason: `SPY 12M ${rotPct(spyRet)} > 4.0%，但 ACWI（${rotPct(acwiRet)}）更强` };
       }
     } else {
-      gemRec = { ticker: 'AGG', reason: `SPY 12M ${rotPct(spyRet)} ≤ 3.5% 现金利率，切换债券避险` };
+      gemRec = { ticker: 'AGG', reason: `SPY 12M ${rotPct(spyRet)} ≤ 4.0% 现金利率，切换债券避险` };
     }
 
     // ── 策略四：价值+动量，仅读本地缓存 ──
@@ -3057,15 +3884,12 @@ async function runRotation(forceRefresh) {
         const d = c.data;
         if (!d || !d._valid) continue;
         if (Date.now() - c.ts > CACHE_TTL) continue;   // 超过30天不用
-        if (isNaN(d.pe) || d.pe <= 0 || d.pe >= 20) continue;
-        // 近6个月动量（从月线缓存读取）
+        if (isNaN(d.pe) || d.pe <= 0 || d.pe >= 40) continue;
+        // 近6个月动量（从①区缓存的 monthly8 直接计算，无需额外API）
         let mom6m = NaN;
-        const mRaw = localStorage.getItem(CACHE_VER + 'rot_m_' + ticker);
-        if (mRaw) {
-          try {
-            const mc = JSON.parse(mRaw);
-            if (mc.data && Date.now() - mc.ts <= CACHE_TTL) mom6m = rotCalc6M(mc.data);
-          } catch(_) {}
+        if (d.monthly8 && d.monthly8.length >= 8) {
+          const p1 = d.monthly8[1], p0 = d.monthly8[7]; // 跳过当月，取上月→7月前
+          if (p1 > 0 && p0 > 0) mom6m = (p1 - p0) / p0;
         }
         if (isNaN(mom6m) || mom6m <= 0.05) continue;
         s4Rows.push({ ticker, name: d.compName, pe: d.pe, price: d.price, mom6m });
@@ -3146,13 +3970,15 @@ function buildRotationHTML({ s1Valid, s1Returns, s2Signal, vixLevel, gemRec, spy
       <div style="padding:8px 12px;background:${s2Signal.above ? '#f6ffed' : '#fff7e6'};border-radius:4px;font-size:13px">
         📌 本月建议：${s2Signal.above
           ? '<b style="color:#28a745">正常持仓 SPY</b>（月末收盘 > 200日均线）'
-          : '<b style="color:#ffa940">切换现金或 TLT</b>（月末收盘跌破200日均线）'}
+          : s2Signal.s2Refuge === 'AGG'
+            ? `<b style="color:#ffa940">切换 AGG 债券</b>（跌破200MA，AGG 12M ${rotPct(s2Signal.aggRet)} > 0，债券正收益）`
+            : '<b style="color:#ffa940">切换现金</b>（跌破200MA，AGG 12M 收益为负，债券不适合避险）'}
       </div>`;
   }
   const s2Html = `
     <div style="margin-bottom:10px;padding:12px;background:#fff7e6;border-left:4px solid #fa8c16;border-radius:6px">
       <div style="font-weight:bold;font-size:14px;margin-bottom:4px">策略二 · 趋势跟随（SPY 200日均线）</div>
-      <p style="font-size:12px;color:#555;margin:0 0 8px">月末收盘 &gt; 200MA → 持有SPY；跌破200MA → 持现金或TLT。VIX &gt; 30分批建仓，&lt; 15谨慎。</p>
+      <p style="font-size:12px;color:#555;margin:0 0 8px">月末收盘 &gt; 200MA → 持有SPY；跌破200MA → AGG 12M正收益则切AGG，否则持现金。VIX &gt; 30分批建仓，&lt; 15谨慎。</p>
       ${s2Inner}
     </div>`;
 
@@ -3162,12 +3988,12 @@ function buildRotationHTML({ s1Valid, s1Returns, s2Signal, vixLevel, gemRec, spy
     <div style="margin-bottom:10px;padding:12px;background:#f9f0ff;border-left:4px solid #722ed1;border-radius:6px">
       <div style="font-weight:bold;font-size:14px;margin-bottom:4px">策略三 · GEM 全球股票动量</div>
       <p style="font-size:12px;color:#555;margin:0 0 8px">
-        若SPY 12M收益 &gt; 3.5%（现金利率）→ 比较SPY vs ACWI，买入更强者；否则 → 买入AGG债券避险。
+        若SPY 12M收益 &gt; 4.0%（现金利率）→ 比较SPY vs ACWI，买入更强者；否则 → 买入AGG债券避险。
       </p>
       <div style="font-size:13px;display:flex;gap:16px;flex-wrap:wrap;margin-bottom:8px">
         <span>SPY 12M: <b style="color:${rotColor(spyRet)}">${rotPct(spyRet)}</b></span>
         <span>ACWI 12M: <b style="color:${rotColor(acwiRet)}">${rotPct(acwiRet)}</b></span>
-        <span>现金利率门槛: <b>3.5%</b></span>
+        <span>现金利率门槛: <b>4.0%</b></span>
       </div>
       <div style="padding:8px 12px;background:#fafafa;border-radius:4px;font-size:13px">
         📌 本月建议：<b style="color:${gemColors[gemRec.ticker] || '#333'};font-size:15px">买入 ${assetName[gemRec.ticker] || gemRec.ticker}</b>
@@ -3179,7 +4005,7 @@ function buildRotationHTML({ s1Valid, s1Returns, s2Signal, vixLevel, gemRec, spy
   let s4Inner;
   if (!s4Rows.length) {
     s4Inner = `<div style="color:#aaa;font-size:12px;padding:6px">
-      暂无符合条件的内置标的（PE(TTM) &lt; 20x 且近6月动量 &gt; 5%）。<br>
+      暂无符合条件的内置标的（PE(TTM) &lt; 40x 且近6月动量 &gt; 5%）。<br>
       · 需先在 <b>①区</b> 查询对应标的（生成缓存）<br>
       · 动量数据在运行本模块后自动积累，首次运行后次月起可正常显示
     </div>`;
@@ -3195,7 +4021,7 @@ function buildRotationHTML({ s1Valid, s1Returns, s2Signal, vixLevel, gemRec, spy
         <tbody>${s4Rows.map((r, i) => `
           <tr style="background:${i % 2 ? '#fafafa' : '#fff'}">
             <td style="padding:5px 10px;border:1px solid #e8e8e8;font-weight:bold">${r.ticker}
-              <span style="color:#888;font-weight:normal;font-size:11px"> ${r.name}</span></td>
+              <span style="color:#888;font-weight:normal;font-size:11px"> ${esc(r.name||'')}</span></td>
             <td style="padding:5px 10px;border:1px solid #e8e8e8;text-align:center;color:#28a745;font-weight:bold">${fmt(r.pe, 1)}x</td>
             <td style="padding:5px 10px;border:1px solid #e8e8e8;text-align:center;color:#28a745;font-weight:bold">${rotPct(r.mom6m)}</td>
             <td style="padding:5px 10px;border:1px solid #e8e8e8;text-align:right">$${fmt(r.price)}</td>
@@ -3207,7 +4033,7 @@ function buildRotationHTML({ s1Valid, s1Returns, s2Signal, vixLevel, gemRec, spy
     <div style="margin-bottom:10px;padding:12px;background:#fff9f0;border-left:4px solid #fa541c;border-radius:6px">
       <div style="font-weight:bold;font-size:14px;margin-bottom:4px">策略四 · 价值 + 动量</div>
       <p style="font-size:12px;color:#555;margin:0 0 8px">
-        从内置标的中筛选 PE(TTM) &lt; 20x 且近6个月动量 &gt; 5% 的股票（需先在①区查询过对应标的）供参考。
+        从内置标的中筛选 PE(TTM) &lt; 40x 且近6个月动量 &gt; 5% 的股票（需先在①区查询过对应标的）供参考。
       </p>
       ${s4Inner}
     </div>`;
@@ -3227,10 +4053,29 @@ document.getElementById('bt-ticker').addEventListener('input', function(e) {
   document.getElementById('bt-commission').value = defaultComm;
 });
 
-// 页面初始化
+// 页面初始化：清理过期历史缓存键（旧版本遗留 + 30天前的API计数器）
+(function pruneStaleKeys(){
+  try {
+    const today = new Date().toISOString().slice(0,10);
+    const cutoff = Date.now() - 30*24*60*60*1000;
+    Object.keys(localStorage).forEach(k => {
+      // 旧版本缓存（非当前 CACHE_VER 开头的 dcf_v* 键）
+      if (/^dcf_v/.test(k) && !k.startsWith(CACHE_VER)) {
+        localStorage.removeItem(k);
+        return;
+      }
+      // 30天前的 API 计数器键
+      if (/^dcf_apicount_(\d{4}-\d{2}-\d{2})$/.test(k)) {
+        const d = k.replace('dcf_apicount_','');
+        if (d < today && new Date(d).getTime() < cutoff) localStorage.removeItem(k);
+      }
+    });
+  } catch(_) {}
+})();
 renderCounter();
 renderSummaryTable();
 renderTrades();
+initRF(); // 后台静默加载10年期美债无风险利率
 </script>
 <script>
 (function(){
@@ -3270,8 +4115,8 @@ renderTrades();
     const uh = await sha256(u);
     const ph = await sha256(p);
     document.getElementById('hash-result').innerHTML =
-      `<b>用户名哈希：</b><br><span style="color:#0078ff;cursor:pointer" onclick="navigator.clipboard.writeText('${uh}')" title="点击复制">${uh}</span><br><br>` +
-      `<b>密码哈希：</b><br><span style="color:#0078ff;cursor:pointer" onclick="navigator.clipboard.writeText('${ph}')" title="点击复制">${ph}</span><br><br>` +
+      `<b>用户名哈希：</b><br><span style="color:#0078ff;cursor:pointer" onclick="navigator.clipboard?.writeText('${uh}')?.catch(()=>{})" title="点击复制">${uh}</span><br><br>` +
+      `<b>密码哈希：</b><br><span style="color:#0078ff;cursor:pointer" onclick="navigator.clipboard?.writeText('${ph}')?.catch(()=>{})" title="点击复制">${ph}</span><br><br>` +
       `<span style="color:#888">👆 点击哈希值可复制，粘贴替换代码里对应的 USER_HASH / PW_HASH</span>`;
   };
 })();
