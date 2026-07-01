@@ -31,7 +31,7 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0;height:100%;background:var(--bg);color:var(--text);
   font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue',Arial,sans-serif;
-  font-size:14px;overflow:hidden}
+  font-size:16px;overflow:hidden}
 
 /* ── 顶栏 ── */
 #top-bar{
@@ -42,15 +42,15 @@ html,body{margin:0;padding:0;height:100%;background:var(--bg);color:var(--text);
   display:flex;align-items:center;justify-content:space-between;
   padding:0 16px;gap:8px;
 }
-#top-bar-title{font-size:15px;font-weight:700;color:var(--text);white-space:nowrap}
+#top-bar-title{font-size:17px;font-weight:700;color:var(--text);white-space:nowrap}
 #top-bar-meta{display:flex;align-items:center;gap:8px;flex-shrink:0}
-#rf-badge{font-size:11px;padding:2px 7px;background:#162032;color:#60a5fa;
+#rf-badge{font-size:13px;padding:2px 7px;background:#162032;color:#60a5fa;
   border-radius:4px;cursor:pointer;border:1px solid #1e3a5f;white-space:nowrap}
-.api-cnt{font-size:11px;color:var(--muted);white-space:nowrap}
+.api-cnt{font-size:13px;color:var(--muted);white-space:nowrap}
 .api-num{font-weight:700;color:var(--accent)}
 .api-num.warn{color:var(--yellow)}
 .api-num.danger{color:var(--red)}
-#btn-clear-cache{font-size:10px;padding:3px 8px;background:#1e2d47;color:var(--muted);
+#btn-clear-cache{font-size:12px;padding:3px 8px;background:#1e2d47;color:var(--muted);
   border:none;border-radius:4px;cursor:pointer;white-space:nowrap;min-height:0;width:auto;margin:0}
 #api-hint{display:none}
 
@@ -68,10 +68,10 @@ html,body{margin:0;padding:0;height:100%;background:var(--bg);color:var(--text);
 .nav-item{
   flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:2px;cursor:pointer;border:none;background:none;color:var(--muted);
-  font-size:10px;font-weight:500;padding:4px 0;transition:color .15s;
+  font-size:12px;font-weight:500;padding:4px 0;transition:color .15s;
   -webkit-user-select:none;user-select:none;
 }
-.nav-item .icon{font-size:20px;line-height:1;transition:transform .15s}
+.nav-item .icon{font-size:22px;line-height:1;transition:transform .15s}
 .nav-item.active{color:var(--accent)}
 .nav-item.active .icon{transform:scale(1.12)}
 
@@ -97,10 +97,10 @@ html,body{margin:0;padding:0;height:100%;background:var(--bg);color:var(--text);
   background:var(--card);border:1px solid var(--border);
   border-radius:var(--radius);padding:14px;margin-bottom:12px;
 }
-.card-title{font-size:11px;font-weight:600;color:var(--muted);
+.card-title{font-size:13px;font-weight:600;color:var(--muted);
   letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
 .sec-title{
-  font-size:13px;font-weight:700;color:var(--text);
+  font-size:15px;font-weight:700;color:var(--text);
   display:flex;align-items:center;gap:6px;margin:16px 0 8px;
 }
 .sec-title:first-child{margin-top:0}
@@ -108,7 +108,7 @@ html,body{margin:0;padding:0;height:100%;background:var(--bg);color:var(--text);
 /* ── 输入框 & 按钮 ── */
 input,select,textarea{
   width:100%;padding:10px 12px;background:#0d1525;color:var(--text);
-  border:1px solid var(--border);border-radius:8px;font-size:14px;
+  border:1px solid var(--border);border-radius:8px;font-size:16px;
   outline:none;transition:border-color .15s;
 }
 input::placeholder{color:var(--muted)}
@@ -119,25 +119,25 @@ input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button{opacity:.4}
 button{
   display:block;width:100%;padding:11px 14px;border:none;border-radius:8px;
-  font-size:14px;font-weight:700;cursor:pointer;transition:opacity .15s;min-height:44px;
+  font-size:16px;font-weight:700;cursor:pointer;transition:opacity .15s;min-height:44px;
   background:var(--accent);color:#fff;margin-top:0;
 }
 button:active{opacity:.75}
 button:disabled{background:var(--muted);cursor:not-allowed;opacity:.6}
-label{font-size:12px;color:var(--label);display:block;margin-bottom:4px}
-.lbl-sm{font-size:11px;color:var(--muted);margin-bottom:3px}
+label{font-size:14px;color:var(--label);display:block;margin-bottom:4px}
+.lbl-sm{font-size:13px;color:var(--muted);margin-bottom:3px}
 
 /* ── 搜索栏 ── */
 .search-row{display:flex;gap:8px;align-items:stretch;margin-bottom:10px}
-.search-row input{font-size:16px;padding:12px 14px;border-radius:10px;flex:1}
-.search-row button{flex-shrink:0;width:auto;padding:12px 18px;border-radius:10px;font-size:15px}
+.search-row input{font-size:18px;padding:12px 14px;border-radius:10px;flex:1}
+.search-row button{flex-shrink:0;width:auto;padding:12px 18px;border-radius:10px;font-size:17px}
 
 /* ── 行布局 ── */
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
 .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px}
 .btn-row{display:flex;gap:8px;margin-bottom:8px}
 .btn-row button{flex:1}
-.btn-sm{font-size:12px!important;padding:8px 10px!important;min-height:36px!important}
+.btn-sm{font-size:14px!important;padding:8px 10px!important;min-height:36px!important}
 
 /* ── 估值结果大卡片 ── */
 #result-hero{display:none;margin-bottom:12px}
@@ -146,13 +146,13 @@ label{font-size:12px;color:var(--label);display:block;margin-bottom:4px}
   border:1px solid var(--border);border-radius:16px;overflow:hidden;
 }
 .hero-top{padding:16px 16px 0}
-.hero-name{font-size:12px;color:var(--muted);margin-bottom:2px}
-.hero-sym{font-size:22px;font-weight:800;color:var(--text);margin-bottom:2px}
+.hero-name{font-size:14px;color:var(--muted);margin-bottom:2px}
+.hero-sym{font-size:25px;font-weight:800;color:var(--text);margin-bottom:2px}
 .hero-price-row{display:flex;align-items:baseline;gap:8px}
-.hero-price{font-size:32px;font-weight:900;color:var(--text)}
+.hero-price{font-size:35px;font-weight:900;color:var(--text)}
 .hero-badge{
   display:inline-flex;align-items:center;gap:4px;
-  padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700;
+  padding:4px 10px;border-radius:20px;font-size:14px;font-weight:700;
 }
 .badge-low{background:#052e16;color:#4ade80;border:1px solid #166534}
 .badge-fair{background:#451a03;color:#fbbf24;border:1px solid #92400e}
@@ -160,7 +160,7 @@ label{font-size:12px;color:var(--label);display:block;margin-bottom:4px}
 
 /* 价值区间条 */
 .value-bar-wrap{padding:14px 16px;border-top:1px solid var(--border)}
-.vb-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:6px}
+.vb-labels{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px}
 .vb-track{position:relative;height:6px;border-radius:3px;background:var(--border);overflow:visible}
 .vb-range{
   position:absolute;height:6px;border-radius:3px;
@@ -172,13 +172,13 @@ label{font-size:12px;color:var(--label);display:block;margin-bottom:4px}
   transform:translateX(-50%);
 }
 .vb-price-label{
-  position:absolute;top:14px;font-size:10px;color:var(--text);
+  position:absolute;top:14px;font-size:12px;color:var(--text);
   font-weight:700;transform:translateX(-50%);white-space:nowrap;
 }
-.vb-nums{display:flex;justify-content:space-between;margin-top:22px;font-size:12px}
+.vb-nums{display:flex;justify-content:space-between;margin-top:22px;font-size:14px}
 .vb-num{text-align:center}
-.vb-num .val{font-size:15px;font-weight:700}
-.vb-num .lbl{font-size:10px;color:var(--muted)}
+.vb-num .val{font-size:17px;font-weight:700}
+.vb-num .lbl{font-size:12px;color:var(--muted)}
 
 /* 关键指标格 */
 .metrics-grid{
@@ -191,8 +191,8 @@ label{font-size:12px;color:var(--label);display:block;margin-bottom:4px}
 }
 .metric-cell:nth-child(3n){border-right:none}
 .metric-cell:nth-child(n+4){border-top:1px solid var(--border)}
-.metric-val{font-size:17px;font-weight:800;margin-bottom:2px}
-.metric-lbl{font-size:9px;color:var(--muted);letter-spacing:.05em}
+.metric-val{font-size:19px;font-weight:800;margin-bottom:2px}
+.metric-lbl{font-size:11px;color:var(--muted);letter-spacing:.05em}
 
 /* 年化收益行 */
 .ann-row{
@@ -200,8 +200,8 @@ label{font-size:12px;color:var(--label);display:block;margin-bottom:4px}
 }
 .ann-cell{flex:1;padding:12px 10px;text-align:center}
 .ann-cell:first-child{border-right:1px solid var(--border)}
-.ann-big{font-size:20px;font-weight:900}
-.ann-lbl{font-size:10px;color:var(--muted);margin-top:2px}
+.ann-big{font-size:22px;font-weight:900}
+.ann-lbl{font-size:12px;color:var(--muted);margin-top:2px}
 
 /* ── 折叠详情 ── */
 details.detail-block{
@@ -209,32 +209,32 @@ details.detail-block{
   border-radius:10px;margin-bottom:8px;overflow:hidden;
 }
 details.detail-block summary{
-  padding:12px 14px;cursor:pointer;font-size:13px;font-weight:600;
+  padding:12px 14px;cursor:pointer;font-size:15px;font-weight:600;
   color:var(--text);list-style:none;display:flex;align-items:center;
   justify-content:space-between;
 }
-details.detail-block summary::after{content:'›';color:var(--muted);font-size:18px;transition:transform .2s}
+details.detail-block summary::after{content:'›';color:var(--muted);font-size:20px;transition:transform .2s}
 details.detail-block[open] summary::after{transform:rotate(90deg)}
-details.detail-block .inner{padding:0 14px 14px;font-size:12px;color:var(--label);line-height:1.7}
+details.detail-block .inner{padding:0 14px 14px;font-size:14px;color:var(--label);line-height:1.7}
 .detail-row{padding:6px 0;border-bottom:1px solid var(--border);display:flex;gap:6px;align-items:baseline}
 .detail-row:last-child{border-bottom:none}
-.detail-row .dk{color:var(--muted);flex-shrink:0;font-size:11px}
-.detail-row .dv{color:var(--text);font-weight:600;flex:1;text-align:right;font-size:12px}
+.detail-row .dk{color:var(--muted);flex-shrink:0;font-size:13px}
+.detail-row .dv{color:var(--text);font-weight:600;flex:1;text-align:right;font-size:14px}
 
 /* ── 结果输出容器（原始HTML输出区，保持可读） ── */
 #single-output{
   background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
-  padding:12px;font-size:12px;color:#d1d5db;margin-bottom:10px;
+  padding:12px;font-size:14px;color:#d1d5db;margin-bottom:10px;
   display:none;overflow-x:auto;
 }
-#single-output h3{font-size:14px;color:var(--text);margin:0 0 8px}
+#single-output h3{font-size:16px;color:var(--text);margin:0 0 8px}
 #single-output b{color:var(--text)}
-#single-output .cache-status{padding:6px 8px;border-radius:6px;font-size:11px;margin-bottom:8px}
+#single-output .cache-status{padding:6px 8px;border-radius:6px;font-size:13px;margin-bottom:8px}
 #single-output .data-matrix{
   background:#0d1525;border:1px solid var(--border);border-radius:6px;
   padding:10px;margin:8px 0;
 }
-#single-output .data-matrix b{font-size:12px}
+#single-output .data-matrix b{font-size:14px}
 #single-output .data-matrix div{margin:3px 0;color:#9ca3af}
 
 /* ── 汇总表容器 ── */
@@ -245,18 +245,18 @@ details.detail-block .inner{padding:0 14px 14px;font-size:12px;color:var(--label
   cursor:pointer;
 }
 .sum-card:active{background:var(--card2)}
-.sum-ticker{font-size:16px;font-weight:800;color:var(--text);min-width:52px}
-.sum-name{font-size:11px;color:var(--muted);margin-top:1px}
+.sum-ticker{font-size:18px;font-weight:800;color:var(--text);min-width:52px}
+.sum-name{font-size:13px;color:var(--muted);margin-top:1px}
 .sum-mid{flex:1}
 .sum-badge{margin-top:4px}
-.sum-dcf{font-size:11px;color:var(--muted);margin-top:3px}
+.sum-dcf{font-size:13px;color:var(--muted);margin-top:3px}
 .sum-price{text-align:right}
-.sum-price .p{font-size:18px;font-weight:800;color:var(--text)}
-.sum-price .r{font-size:11px;margin-top:2px}
+.sum-price .p{font-size:20px;font-weight:800;color:var(--text)}
+.sum-price .r{font-size:13px;margin-top:2px}
 
 /* 表格容器兜底（汇总 summary-tbody 保留为表格但横向可滚） */
 #sum-table-wrap{overflow-x:auto;border-radius:8px;margin-top:0}
-#sum-table-wrap table{width:100%;border-collapse:collapse;font-size:11px;white-space:nowrap}
+#sum-table-wrap table{width:100%;border-collapse:collapse;font-size:13px;white-space:nowrap}
 #sum-table-wrap th{
   background:#101828;color:var(--muted);padding:8px 10px;
   border-bottom:1px solid var(--border);font-weight:600;text-align:center;
@@ -272,7 +272,7 @@ details.detail-block .inner{padding:0 14px 14px;font-size:12px;color:var(--label
 .strat-chip{
   display:flex;align-items:center;gap:5px;
   padding:7px 11px;border:1px solid var(--border);border-radius:20px;
-  font-size:12px;cursor:pointer;color:var(--label);background:var(--card2);
+  font-size:14px;cursor:pointer;color:var(--label);background:var(--card2);
   white-space:nowrap;
 }
 .strat-chip input{width:14px;height:14px;margin:0;padding:0;accent-color:var(--accent);cursor:pointer}
@@ -281,10 +281,10 @@ details.detail-block .inner{padding:0 14px 14px;font-size:12px;color:var(--label
   background:#130d2e;border:1px solid #4c1d95;border-radius:8px;
   padding:10px 12px;margin-bottom:10px;
 }
-.boost-title{font-size:11px;font-weight:700;color:#a78bfa;margin-bottom:6px}
+.boost-title{font-size:13px;font-weight:700;color:#a78bfa;margin-bottom:6px}
 
 #bt-results{display:none;margin-top:10px}
-#bt-result-table{width:100%;border-collapse:collapse;font-size:11px;min-width:600px}
+#bt-result-table{width:100%;border-collapse:collapse;font-size:13px;min-width:600px}
 #bt-result-table th{
   background:#101828;color:var(--muted);padding:7px 8px;
   border-bottom:1px solid var(--border);font-weight:600;white-space:nowrap;
@@ -296,12 +296,12 @@ details.detail-block .inner{padding:0 14px 14px;font-size:12px;color:var(--label
 .bt-wrap{overflow-x:auto;border-radius:8px}
 
 #timing-score-wrap{display:none;margin-top:12px;border-top:1px solid var(--border);padding-top:12px}
-#bt-loading{display:none;color:#a78bfa;font-size:12px;font-weight:700;
+#bt-loading{display:none;color:#a78bfa;font-size:14px;font-weight:700;
   padding:8px 0;text-align:center}
 
 /* ── 轮动区 ── */
-#rotation-loading{display:none;color:#22d3ee;font-size:12px;font-weight:700;text-align:center;padding:16px 0}
-#rotation-output{font-size:12px}
+#rotation-loading{display:none;color:#22d3ee;font-size:14px;font-weight:700;text-align:center;padding:16px 0}
+#rotation-output{font-size:14px}
 
 /* ── 交易记录 ── */
 .trade-form-grid{
@@ -309,10 +309,10 @@ details.detail-block .inner{padding:0 14px 14px;font-size:12px;color:var(--label
 }
 .trade-form-grid .full{grid-column:1/-1}
 #trade-stats{display:none;background:#052e16;border:1px solid #166534;
-  border-radius:8px;padding:10px 12px;font-size:12px;margin-bottom:10px;color:#4ade80}
+  border-radius:8px;padding:10px 12px;font-size:14px;margin-bottom:10px;color:#4ade80}
 #trade-tbody tr:nth-child(even) td{background:#0d1525}
 .trade-table-wrap{overflow-x:auto;border-radius:8px;margin-top:8px}
-.trade-table-wrap table{width:100%;border-collapse:collapse;font-size:11px;min-width:1100px}
+.trade-table-wrap table{width:100%;border-collapse:collapse;font-size:13px;min-width:1100px}
 .trade-table-wrap th{
   background:#101828;color:var(--muted);padding:7px 8px;
   border-bottom:1px solid var(--border);white-space:nowrap;
@@ -320,19 +320,19 @@ details.detail-block .inner{padding:0 14px 14px;font-size:12px;color:var(--label
 .trade-table-wrap td{padding:6px 8px;border-bottom:1px solid var(--border);color:var(--label)}
 
 /* ── 多股对比 ── */
-#multi-loading{display:none;color:var(--accent);font-size:12px;font-weight:700;
+#multi-loading{display:none;color:var(--accent);font-size:14px;font-weight:700;
   padding:8px 0;text-align:center}
 
 /* ── VIX 输入行 ── */
 .vix-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
 .vix-row label{flex-shrink:0;margin:0}
 .vix-row input{width:90px;flex-shrink:0}
-.vix-hint{font-size:11px;color:var(--muted)}
+.vix-hint{font-size:13px;color:var(--muted)}
 
 /* ── 加载指示 ── */
 #loading-single{
   display:none;text-align:center;padding:20px;
-  color:var(--accent);font-size:13px;font-weight:700;
+  color:var(--accent);font-size:15px;font-weight:700;
 }
 @keyframes spin{to{transform:rotate(360deg)}}
 .spinner{display:inline-block;width:18px;height:18px;border:2px solid var(--border);
@@ -342,11 +342,11 @@ details.detail-block .inner{padding:0 14px 14px;font-size:12px;color:var(--label
 /* ── canvas ── */
 canvas{max-width:100%;border-radius:8px}
 #fcf-history-wrap{display:none;margin-top:10px}
-#fcf-cagr-label{font-size:11px;color:var(--muted);font-weight:normal}
+#fcf-cagr-label{font-size:13px;color:var(--muted);font-weight:normal}
 
 /* ── 切换按钮组 ── */
 .tab-btns{display:flex;background:var(--card2);border-radius:8px;padding:3px;margin-bottom:12px;gap:2px}
-.tab-btn{flex:1;padding:7px 4px;border:none;border-radius:6px;font-size:12px;
+.tab-btn{flex:1;padding:7px 4px;border:none;border-radius:6px;font-size:14px;
   background:transparent;color:var(--muted);cursor:pointer;font-weight:600;min-height:0}
 .tab-btn.active{background:var(--card);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.3)}
 
@@ -359,11 +359,11 @@ canvas{max-width:100%;border-radius:8px}
 /* ── 原始HTML注入区的样式修正 ── */
 #single-output p{margin:4px 0;color:#9ca3af}
 #single-output span[style]{color:inherit}
-#single-output table{width:100%;font-size:11px}
+#single-output table{width:100%;font-size:13px}
 #single-output td,#single-output th{padding:4px 6px;border:1px solid #1e2d47}
 .data-matrix{background:#0d1525!important;border-color:#1e2d47!important;color:#9ca3af}
-#score-bt-output table,#bt-result-table,#timing-score-output table{font-size:11px}
-#timing-score-output,#score-bt-output,#rotation-output,#bt-bnh-row{color:#9ca3af;font-size:12px}
+#score-bt-output table,#bt-result-table,#timing-score-output table{font-size:13px}
+#timing-score-output,#score-bt-output,#rotation-output,#bt-bnh-row{color:#9ca3af;font-size:14px}
 #timing-score-output b,#rotation-output b{color:var(--text)}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -379,56 +379,56 @@ canvas{max-width:100%;border-radius:8px}
     <!-- Logo -->
     <div style="width:64px;height:64px;margin:0 auto 16px;border-radius:18px;
       background:linear-gradient(135deg,#1d4ed8,#6366f1);
-      display:flex;align-items:center;justify-content:center;font-size:30px;
+      display:flex;align-items:center;justify-content:center;font-size:33px;
       box-shadow:0 8px 32px rgba(99,102,241,.4)">📊</div>
-    <div style="font-size:20px;font-weight:800;color:#f1f5f9;margin-bottom:4px">DCF 智能估值</div>
-    <div style="font-size:12px;color:#64748b;margin-bottom:28px;letter-spacing:.05em">V5.18 · 美股/A股/港股</div>
+    <div style="font-size:22px;font-weight:800;color:#f1f5f9;margin-bottom:4px">DCF 智能估值</div>
+    <div style="font-size:14px;color:#64748b;margin-bottom:28px;letter-spacing:.05em">V5.18 · 美股/A股/港股</div>
     <!-- 输入区 -->
     <input id="pw-user" type="text" autocomplete="username" placeholder="用户名"
       style="display:block;width:100%;padding:13px 14px;background:#0d1525;color:#e2e8f0;
-             border:1px solid #1e2d47;border-radius:10px;font-size:15px;
+             border:1px solid #1e2d47;border-radius:10px;font-size:17px;
              box-sizing:border-box;outline:none;margin-bottom:10px;text-align:center"
       onkeydown="if(event.key==='Enter')document.getElementById('pw-input').focus()">
     <input id="pw-input" type="password" autocomplete="current-password" placeholder="密码"
       style="display:block;width:100%;padding:13px 14px;background:#0d1525;color:#e2e8f0;
-             border:1px solid #1e2d47;border-radius:10px;font-size:15px;
+             border:1px solid #1e2d47;border-radius:10px;font-size:17px;
              box-sizing:border-box;outline:none;margin-bottom:14px;text-align:center"
       onkeydown="if(event.key==='Enter')pwUnlock()">
     <button onclick="pwUnlock()"
       style="width:100%;padding:13px;background:linear-gradient(90deg,#1d4ed8,#6366f1);
-             color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;
+             color:#fff;border:none;border-radius:10px;font-size:17px;font-weight:700;
              cursor:pointer;letter-spacing:.05em;box-shadow:0 4px 16px rgba(99,102,241,.35)">
       进入系统
     </button>
-    <div id="pw-err" style="color:#f87171;font-size:12px;margin-top:10px;min-height:16px"></div>
+    <div id="pw-err" style="color:#f87171;font-size:14px;margin-top:10px;min-height:16px"></div>
     <!-- 哈希生成器入口 -->
     <div style="margin-top:10px">
       <span onclick="(function(){var p=document.getElementById('pw-hash-panel');var show=p.style.display==='none';p.style.display=show?'block':'none';if(show){var DEFAULT='8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918';document.getElementById('pw-default-warn').style.display=(typeof USER_HASH!=='undefined'&&USER_HASH===DEFAULT)?'block':'none';}})()"
-        style="color:#334155;font-size:13px;cursor:pointer;user-select:none" title="修改密码">⚙</span>
+        style="color:#334155;font-size:15px;cursor:pointer;user-select:none" title="修改密码">⚙</span>
     </div>
     <div id="pw-hash-panel" style="display:none;margin-top:8px;padding:12px;background:#0d1525;
       border-radius:10px;border:1px solid #1e2d47;text-align:left">
-      <div id="pw-default-warn" style="display:none;font-size:11px;color:#fbbf24;background:#1c1400;border:1px solid #78350f;border-radius:6px;padding:6px 8px;margin-bottom:8px">
+      <div id="pw-default-warn" style="display:none;font-size:13px;color:#fbbf24;background:#1c1400;border:1px solid #78350f;border-radius:6px;padding:6px 8px;margin-bottom:8px">
         ⚠️ 当前使用默认密码 admin/admin，存在安全风险。请在下方设置新密码后替换代码中 USER_HASH / PW_HASH 的值。
       </div>
-      <div style="font-size:11px;font-weight:700;color:#64748b;margin-bottom:8px">🔧 修改账号密码</div>
+      <div style="font-size:13px;font-weight:700;color:#64748b;margin-bottom:8px">🔧 修改账号密码</div>
       <input id="hash-user-input" type="text" placeholder="新用户名"
         style="display:block;width:100%;padding:7px 9px;background:#060d1a;color:#e2e8f0;
-               border:1px solid #1e2d47;border-radius:6px;font-size:12px;box-sizing:border-box;margin-bottom:6px">
+               border:1px solid #1e2d47;border-radius:6px;font-size:14px;box-sizing:border-box;margin-bottom:6px">
       <input id="hash-pw-input" type="text" placeholder="新密码（明文）"
         style="display:block;width:100%;padding:7px 9px;background:#060d1a;color:#e2e8f0;
-               border:1px solid #1e2d47;border-radius:6px;font-size:12px;box-sizing:border-box;margin-bottom:8px">
+               border:1px solid #1e2d47;border-radius:6px;font-size:14px;box-sizing:border-box;margin-bottom:8px">
       <button onclick="pwGenHash()"
         style="width:100%;padding:7px;background:#334155;color:#e2e8f0;border:none;
-               border-radius:6px;font-size:12px;cursor:pointer;margin-bottom:8px">生成哈希</button>
-      <div id="hash-result" style="font-size:11px;color:#94a3b8;word-break:break-all;line-height:1.7"></div>
+               border-radius:6px;font-size:14px;cursor:pointer;margin-bottom:8px">生成哈希</button>
+      <div id="hash-result" style="font-size:13px;color:#94a3b8;word-break:break-all;line-height:1.7"></div>
     </div>
   </div>
 </div>
 
 <!-- ══ 顶栏 ══ -->
 <header id="top-bar">
-  <div id="top-bar-title">📊 DCF估值 <span style="font-size:10px;color:var(--muted);font-weight:400">V5.18</span></div>
+  <div id="top-bar-title">📊 DCF估值 <span style="font-size:12px;color:var(--muted);font-weight:400">V5.18</span></div>
   <div id="top-bar-meta">
     <span id="rf-badge" title="10年期美债无风险利率（点击刷新）" onclick="initRF(true)"></span>
     <span class="api-cnt">API <span class="api-num" id="api-num">0</span><span id="api-hint"></span></span>
@@ -452,7 +452,7 @@ canvas{max-width:100%;border-radius:8px}
 
     <!-- 高级参数（折叠） -->
     <details class="detail-block" style="margin-bottom:10px">
-      <summary>高级参数 <span style="font-size:11px;font-weight:400;color:var(--muted)">· 留空使用内置自适应值</span></summary>
+      <summary>高级参数 <span style="font-size:13px;font-weight:400;color:var(--muted)">· 留空使用内置自适应值</span></summary>
       <div class="inner" style="padding-top:12px">
         <div class="row2">
           <div>
@@ -489,7 +489,7 @@ canvas{max-width:100%;border-radius:8px}
     <div id="single-output"></div>
     <canvas id="single-chart" style="margin-top:10px;max-height:240px"></canvas>
     <div id="fcf-history-wrap" style="margin-top:10px">
-      <div style="font-size:12px;font-weight:700;color:var(--label);margin-bottom:6px">
+      <div style="font-size:14px;font-weight:700;color:var(--label);margin-bottom:6px">
         📊 历史FCF趋势 <span id="fcf-cagr-label"></span>
       </div>
       <canvas id="fcf-history-chart" style="max-height:180px"></canvas>
@@ -513,7 +513,7 @@ canvas{max-width:100%;border-radius:8px}
   <!-- ② 汇总 Tab -->
   <div id="pane-summary" class="pane">
     <div class="sec-title">📋 内置标的核查汇总</div>
-    <div style="font-size:11px;color:var(--muted);margin-bottom:12px;line-height:1.6">
+    <div style="font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.6">
       按DCF状态排序 · 点击估值查询后自动更新 · 数据来源：Alpha Vantage API
     </div>
     <div id="sum-table-wrap">
@@ -587,7 +587,7 @@ canvas{max-width:100%;border-radius:8px}
         <input id="vix-manual" type="number" min="0" max="100" step="0.1" placeholder="留空默认20">
       </div>
     </div>
-    <div style="font-size:11px;color:var(--muted);margin-bottom:10px">
+    <div style="font-size:13px;color:var(--muted);margin-bottom:10px">
       💡 美股≈0.05% · A股≈0.15% · VIX可在 finance.yahoo.com 搜 ^VIX · T+1执行
     </div>
 
@@ -602,14 +602,14 @@ canvas{max-width:100%;border-radius:8px}
 
     <!-- K线图 -->
     <div id="bt-chart-wrap" style="display:none;margin-bottom:12px">
-      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px" id="bt-chart-title"></div>
+      <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px" id="bt-chart-title"></div>
       <div id="bt-kline-chart"></div>
-      <div id="bt-signal-legend" style="font-size:11px;color:var(--muted);margin-top:6px"></div>
+      <div id="bt-signal-legend" style="font-size:13px;color:var(--muted);margin-top:6px"></div>
     </div>
 
     <!-- 回测结果表 -->
     <div id="bt-results">
-      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px">📊 回测结果</div>
+      <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px">📊 回测结果</div>
       <div class="bt-wrap">
         <table id="bt-result-table">
           <thead>
@@ -628,16 +628,16 @@ canvas{max-width:100%;border-radius:8px}
           <tbody id="bt-result-tbody"></tbody>
         </table>
       </div>
-      <div id="bt-bnh-row" style="margin-top:8px;padding:8px 10px;background:#1e1030;border-left:3px solid #7c3aed;border-radius:6px;font-size:12px"></div>
+      <div id="bt-bnh-row" style="margin-top:8px;padding:8px 10px;background:#1e1030;border-left:3px solid #7c3aed;border-radius:6px;font-size:14px"></div>
     </div>
 
     <!-- 择时评分 -->
     <div id="timing-score-wrap">
-      <div style="font-size:13px;font-weight:700;color:#4ade80;margin:12px 0 6px">🎯 择时综合评分（三层过滤）</div>
-      <p style="font-size:11px;color:var(--muted);margin:0 0 10px">判断「现在买这只胜率高不高」，三层全通过才买。</p>
+      <div style="font-size:15px;font-weight:700;color:#4ade80;margin:12px 0 6px">🎯 择时综合评分（三层过滤）</div>
+      <p style="font-size:13px;color:var(--muted);margin:0 0 10px">判断「现在买这只胜率高不高」，三层全通过才买。</p>
       <div id="timing-score-output"></div>
       <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:12px">
-        <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px">📊 评分阈值历史验证</div>
+        <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px">📊 评分阈值历史验证</div>
         <button id="score-bt-btn" onclick="runScoreBacktest()" style="background:#7c3aed;margin-bottom:8px">🔬 运行评分阈值回测</button>
         <div id="score-bt-output"></div>
       </div>
@@ -649,7 +649,7 @@ canvas{max-width:100%;border-radius:8px}
   <!-- ④ 轮动 Tab -->
   <div id="pane-rot" class="pane">
     <div class="sec-title">🔄 资产轮动建议</div>
-    <p style="font-size:11px;color:var(--muted);margin:0 0 12px;line-height:1.6">
+    <p style="font-size:13px;color:var(--muted);margin:0 0 12px;line-height:1.6">
       综合四大量化轮动策略 · 建议每月末运行一次 · 策略四直读本地缓存（需先在估值区查询）
     </p>
     <div class="btn-row" style="margin-bottom:12px">
@@ -719,7 +719,7 @@ canvas{max-width:100%;border-radius:8px}
         <tbody id="trade-tbody"></tbody>
       </table>
     </div>
-    <p style="font-size:11px;color:var(--muted);margin-top:8px">
+    <p style="font-size:13px;color:var(--muted);margin-top:8px">
       数据存于浏览器本地（localStorage）· 刷新不丢失
     </p>
   </div><!-- /pane-rec -->
@@ -785,7 +785,7 @@ function renderHeroCard(ticker, name, sector, price, vCons, vBase, vOpt, pos, me
   hero.innerHTML = `
   <div class="hero-card">
     <div class="hero-top">
-      <div class="hero-name">${name || ''}  <span style="color:var(--muted);font-size:11px">${sector || ''}</span></div>
+      <div class="hero-name">${name || ''}  <span style="color:var(--muted);font-size:13px">${sector || ''}</span></div>
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px">
         <div class="hero-price-row">
           <span class="hero-price">$${fmt(price)}</span>
@@ -845,7 +845,7 @@ function renderHeroCard(ticker, name, sector, price, vCons, vBase, vOpt, pos, me
     <div class="ann-row">
       <div class="ann-cell">
         <div class="ann-big" style="color:${annACol}">${metrics.annA >= 0 ? '+' : ''}${isNaN(metrics.annA) ? '—' : metrics.annA.toFixed(1) + '%'}</div>
-        <div class="ann-lbl">10年年化（估值回归）</div>
+        <div class="ann-lbl">10年年化（估值回归${metrics.annAIncludesDiv ? '+股息' : ''}）</div>
       </div>
       <div class="ann-cell">
         <div class="ann-big" style="color:${annBCol}">${metrics.annB >= 0 ? '+' : ''}${isNaN(metrics.annB) ? '—' : metrics.annB.toFixed(1) + '%'}</div>
@@ -1906,10 +1906,10 @@ function renderSensitivityMatrix(fcf,shares,g,r,tg,netCash,years,currentPrice){
   const rSteps=[-0.02,-0.01,0,+0.01,+0.02];
   let html=`<div class="data-matrix" style="margin-top:8px">
     <b>🔢 DCF敏感性分析（折现率 r × 增长率 g）</b>
-    <div style="font-size:11px;color:#888;margin:4px 0 8px">
+    <div style="font-size:13px;color:#888;margin:4px 0 8px">
       基准：g=${pct(g)} r=${pct(r)}（橙框格）· 绿色=低估 蓝色=接近市价 黄色=略贵 红色=偏贵</div>
     <div style="overflow-x:auto">
-    <table style="border-collapse:collapse;font-size:11px;min-width:420px">
+    <table style="border-collapse:collapse;font-size:13px;min-width:420px">
       <thead><tr style="background:#101828">
         <th style="padding:5px 9px;border:1px solid #1e2d47;color:#94a3b8">g \\ r</th>`;
   for(const dr of rSteps){
@@ -1934,7 +1934,7 @@ function renderSensitivityMatrix(fcf,shares,g,r,tg,netCash,years,currentPrice){
     html+='</tr>';
   }
   html+=`</tbody></table></div>
-    <div style="font-size:10px;color:#aaa;margin-top:4px">当前市价 $${fmt(currentPrice)} · 列=折现率r · 行=FCF增速g · 橙框=当前基准参数</div>
+    <div style="font-size:12px;color:#aaa;margin-top:4px">当前市价 $${fmt(currentPrice)} · 列=折现率r · 行=FCF增速g · 橙框=当前基准参数</div>
   </div>`;
   return html;
 }
@@ -1981,17 +1981,17 @@ function renderResult(ticker,d,vCons,vBase,vOpt,fcf,g,r,tg,years,isCustomFCF,gC,
     <div class="data-matrix">
       <b>📊 财报底层数据矩阵（USD）</b>
       <div>• <b>自由现金流 FCF：</b> $${fmt(fcf)} ${fcfTag}</div>
-      <div>• <b>现金及短期投资：</b> $${fmt(d.cash)} <span style="color:#555;font-size:11px">[${esc(d.cashSource)}]</span></div>
+      <div>• <b>现金及短期投资：</b> $${fmt(d.cash)} <span style="color:#555;font-size:13px">[${esc(d.cashSource)}]</span></div>
       <div>• <b>有息负债：</b> $${fmt(d.debt)} ${debtTag}</div>
       <div>• <b>净现金（现金−负债）：</b>
            <span style="color:${d.netCash>=0?"#28a745":"#dc3545"};font-weight:bold">$${fmt(d.netCash)}</span>
-           <span style="color:#888;font-size:11px">（企业价值→股权价值）</span></div>
+           <span style="color:#888;font-size:13px">（企业价值→股权价值）</span></div>
       ${dilTag}
       <div>• <b>FCF Yield（自由现金流收益率）：</b>
            ${isNaN(d.fcfYield)||d.fcfYield<=0
              ?'<span style="color:#aaa">—</span>'
              :`<span style="color:${d.fcfYield>=0.05?'#28a745':d.fcfYield>=0.02?'#ffa940':'#dc3545'};font-weight:bold">${fmt(d.fcfYield*100)}%</span>
-               <span style="color:#888;font-size:11px">（FCF/市值 = P/FCF ${fmt(1/d.fcfYield,1)}x）
+               <span style="color:#888;font-size:13px">（FCF/市值 = P/FCF ${fmt(1/d.fcfYield,1)}x）
                ${d.fcfYield>=0.05?' · 高收益':d.fcfYield>=0.02?' · 正常':' · 偏低'}</span>`}
       </div>
       <div>• <b>EV/EBITDA（企业价值倍数）：</b>
@@ -2005,7 +2005,7 @@ function renderResult(ticker,d,vCons,vBase,vOpt,fcf,g,r,tg,years,isCustomFCF,gC,
              const valColor=med?(d.evEbitda<med*0.8?'#28a745':d.evEbitda<med?'#52c41a':d.evEbitda<med*1.2?'#ffa940':'#dc3545'):'#096dd9';
              const verdict=med?(d.evEbitda<med*0.8?'明显低于中位（低估信号）':d.evEbitda<med?'低于行业中位':d.evEbitda<med*1.2?'接近行业中位':'高于行业中位（溢价）'):'';
              return `<span style="color:${valColor};font-weight:bold">${fmt(d.evEbitda,1)}x</span>`
-               +`<span style="color:#888;font-size:11px"> EV=${d.ev<=0?'—':d.ev>=1e9?(d.ev/1e9).toFixed(1)+'B':(d.ev/1e6).toFixed(0)+'M'}`
+               +`<span style="color:#888;font-size:13px"> EV=${d.ev<=0?'—':d.ev>=1e9?(d.ev/1e9).toFixed(1)+'B':(d.ev/1e6).toFixed(0)+'M'}`
                +`${med?' · 行业中位~'+med+'x · '+verdict:''}</span>`;
            })()}
       </div>
@@ -2019,7 +2019,7 @@ function renderResult(ticker,d,vCons,vBase,vOpt,fcf,g,r,tg,years,isCustomFCF,gC,
                  :diff>0?`高于折现率r ${fmt(diff,1)}ppts（r偏保守）`
                  :`低于折现率r ${fmt(-diff,1)}ppts（r偏激进）`;
                return `<span style="color:${wColor};font-weight:bold">${fmt(w.wacc*100,2)}%</span>
-                 <span style="color:#888;font-size:11px">
+                 <span style="color:#888;font-size:13px">
                  （β=${fmt(w.beta,2)}${w.betaFromAPI?' API直取':' 行业默认'}，ke=${fmt(w.ke*100,1)}%，
                  E权重${fmt(w.eWt*100,0)}%+D权重${fmt(w.dWt*100,0)}%，rf=${fmt(RF_CURRENT*100,2)}%）
                  · ${diffTip}</span>`;
@@ -2029,7 +2029,7 @@ function renderResult(ticker,d,vCons,vBase,vOpt,fcf,g,r,tg,years,isCustomFCF,gC,
            ${isNaN(d.roe)
              ?'<span style="color:#aaa">—（数据不足）</span>'
              :`<span style="color:${d.roe>=0.20?'#28a745':d.roe>=0.10?'#ffa940':'#dc3545'};font-weight:bold">${fmt(d.roe*100)}%</span>
-               <span style="color:#888;font-size:11px">
+               <span style="color:#888;font-size:13px">
                ${d.roe>1?' · ⚠️ 超过100%，因大规模回购致负股权，数值仅供参考':
                  d.roe>=0.20?' · 优秀（>20%）':d.roe>=0.10?' · 良好（>10%）':d.roe>=0?' · 偏低（<10%）':' · 负值（亏损/负股权）'}</span>`}
       </div>
@@ -2045,25 +2045,25 @@ function renderResult(ticker,d,vCons,vBase,vOpt,fcf,g,r,tg,years,isCustomFCF,gC,
                    :peDiff>0?` · 当前PE高于历史中位数${fmt(peDiff,0)}%`
                    :` · 当前PE低于历史中位数${fmt(-peDiff,0)}%，便宜于历史常态`;
                  return `<span style="color:${peColor};font-weight:bold">${fmt(d.histPE,1)}x</span>
-                   <span style="color:#888;font-size:11px">（${d.histPEYears}个季度TTM真实回溯PE中位数，当前PE=${!isNaN(d.pe)?fmt(d.pe,1)+'x':'—'}，中位数抗极端值干扰）${peTip}</span>`;
+                   <span style="color:#888;font-size:13px">（${d.histPEYears}个季度TTM真实回溯PE中位数，当前PE=${!isNaN(d.pe)?fmt(d.pe,1)+'x':'—'}，中位数抗极端值干扰）${peTip}</span>`;
                })()}
       </div>
       ${(!isNaN(d.pe)||!isNaN(d.forwardPE)||!isNaN(d.histPE))?`
       <div style="margin-top:6px;padding:8px 12px;background:#fafafa;border-radius:6px;border:1px solid #1e2d47">
-        <div style="font-size:14px;font-weight:bold;color:#444;margin-bottom:5px">📐 三种PE估值对比：</div>
+        <div style="font-size:16px;font-weight:bold;color:#444;margin-bottom:5px">📐 三种PE估值对比：</div>
         <div style="display:flex;gap:18px;flex-wrap:wrap">
           <div>
-            <div style="font-size:11px;color:#aaa">PE(TTM，过去12个月实际盈利)</div>
-            <span style="font-weight:bold;font-size:15px;color:#555">${isNaN(d.pe)?'—':fmt(d.pe,1)+'x'}</span>
+            <div style="font-size:13px;color:#aaa">PE(TTM，过去12个月实际盈利)</div>
+            <span style="font-weight:bold;font-size:17px;color:#555">${isNaN(d.pe)?'—':fmt(d.pe,1)+'x'}</span>
           </div>
           <div>
-            <div style="font-size:11px;color:#aaa">Forward PE（分析师预期未来盈利）</div>
-            <span style="font-weight:bold;font-size:15px;color:${!isNaN(d.forwardPE)&&!isNaN(d.pe)&&d.forwardPE<d.pe?'#28a745':'#555'}">${isNaN(d.forwardPE)?'—':fmt(d.forwardPE,1)+'x'}</span>
-            ${(!isNaN(d.forwardPE)&&!isNaN(d.pe))?`<span style="color:#888;font-size:10px">${d.forwardPE<d.pe?' 低于TTM，市场预期盈利增长':' 高于TTM，市场预期盈利下滑'}</span>`:''}
+            <div style="font-size:13px;color:#aaa">Forward PE（分析师预期未来盈利）</div>
+            <span style="font-weight:bold;font-size:17px;color:${!isNaN(d.forwardPE)&&!isNaN(d.pe)&&d.forwardPE<d.pe?'#28a745':'#555'}">${isNaN(d.forwardPE)?'—':fmt(d.forwardPE,1)+'x'}</span>
+            ${(!isNaN(d.forwardPE)&&!isNaN(d.pe))?`<span style="color:#888;font-size:12px">${d.forwardPE<d.pe?' 低于TTM，市场预期盈利增长':' 高于TTM，市场预期盈利下滑'}</span>`:''}
           </div>
           <div>
-            <div style="font-size:11px;color:#aaa">10年历史中位数（真实回溯）</div>
-            <span style="font-weight:bold;font-size:15px;color:#0078ff">${isNaN(d.histPE)?'—':fmt(d.histPE,1)+'x'}</span>
+            <div style="font-size:13px;color:#aaa">10年历史中位数（真实回溯）</div>
+            <span style="font-weight:bold;font-size:17px;color:#0078ff">${isNaN(d.histPE)?'—':fmt(d.histPE,1)+'x'}</span>
           </div>
         </div>
       </div>`:''}
@@ -2071,13 +2071,13 @@ function renderResult(ticker,d,vCons,vBase,vOpt,fcf,g,r,tg,years,isCustomFCF,gC,
     <div class="data-matrix">
       <b>⚙️ DCF精算参数</b>
       <div>增长率 g = ${pct(g)} &nbsp;|&nbsp; 折现率 r = ${pct(r)} &nbsp;|&nbsp; 永续增长 l = ${pct(tg)} &nbsp;|&nbsp; 年限 = ${years} 年</div>
-      <div style="font-size:11px;color:#888;margin-top:4px">
+      <div style="font-size:13px;color:#888;margin-top:4px">
         保守情景：g=${pct(gC)} r=${pct(rC)} l=${pct(tgC)}
         &nbsp;&nbsp;乐观情景：g=${pct(gO)} r=${pct(rO)} l=${pct(tgO)}
       </div>
     </div>
     <p><b>每股内在价值DCF值（基准）：</b>
-       <span style="color:#0078ff;font-weight:bold;font-size:16px">$${fmt(vBase)}</span></p>
+       <span style="color:#0078ff;font-weight:bold;font-size:18px">$${fmt(vBase)}</span></p>
     <p><b>安全边际区间：</b>
        $${fmt(vCons)} <span style="color:#888">（保守）</span>
        ~ $${fmt(vOpt)} <span style="color:#888">（乐观）</span></p>
@@ -2141,13 +2141,13 @@ function renderResult(ticker,d,vCons,vBase,vOpt,fcf,g,r,tg,years,isCustomFCF,gC,
 
         <!-- 市场隐含增速 -->
         <div style="margin-top:6px;padding:8px 12px;background:#f0f5ff;border-radius:6px;border:1px solid #1e3a5f">
-          <div style="font-size:12px;color:#555;margin-bottom:4px">
+          <div style="font-size:14px;color:#555;margin-bottom:4px">
             🔍 <b>市场隐含FCF增速</b>
-            <span style="color:#888;font-size:11px">（以当前市价 $${fmt(d.price)} 反推，r=${pct(r)}，${years}年）</span>
+            <span style="color:#888;font-size:13px">（以当前市价 $${fmt(d.price)} 反推，r=${pct(r)}，${years}年）</span>
           </div>
           <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
-            <span style="color:${gImplColor};font-weight:bold;font-size:22px">${fmt(gImplPct,1)}%/年</span>
-            <span style="font-size:12px;color:#888">
+            <span style="color:${gImplColor};font-weight:bold;font-size:25px">${fmt(gImplPct,1)}%/年</span>
+            <span style="font-size:14px;color:#888">
               你的假设 g = <b>${pct(g)}</b>
               ${Math.abs(gDiff)<0.5
                 ?'<span style="color:#28a745"> · 与市场预期一致 ✅</span>'
@@ -2156,7 +2156,7 @@ function renderResult(ticker,d,vCons,vBase,vOpt,fcf,g,r,tg,years,isCustomFCF,gC,
                   :`<span style="color:#28a745"> · 你比市场更乐观（你的假设高${fmt(-gDiff,1)}ppts）</span>`}
             </span>
           </div>
-          <div style="margin-top:4px;font-size:11px;color:#888">
+          <div style="margin-top:4px;font-size:13px;color:#888">
             💡 核心问题：你相信这家公司能在未来${years}年维持 <b>${fmt(gImplPct,1)}%</b> 的FCF年增速吗？
           </div>
         </div>
@@ -2165,7 +2165,7 @@ function renderResult(ticker,d,vCons,vBase,vOpt,fcf,g,r,tg,years,isCustomFCF,gC,
         <div style="margin-top:6px">
           • <b>${years}年平均远期P/FCF：</b>
             <span style="color:${pfcfColor};font-weight:bold">${fmt(avgFwdPFCF,1)}x</span>
-            <span style="color:#888;font-size:11px">（当前${fmt(1/d.fcfYield,1)}x → ${years}年均值${fmt(avgFwdPFCF,1)}x，g=${pct(g)}）
+            <span style="color:#888;font-size:13px">（当前${(!isNaN(d.fcfYield)&&d.fcfYield>0)?fmt(1/d.fcfYield,1)+'x':'—'} → ${years}年均值${fmt(avgFwdPFCF,1)}x，g=${pct(g)}）
             ${avgFwdPFCF<=15?' · 便宜（≤15x）':avgFwdPFCF<=30?' · 合理（15-30x）':' · 偏贵（>30x）'}</span>
         </div>
 
@@ -2175,21 +2175,21 @@ function renderResult(ticker,d,vCons,vBase,vOpt,fcf,g,r,tg,years,isCustomFCF,gC,
           <div style="margin-top:5px;padding:8px 12px;background:#fafafa;border-radius:6px;border:1px solid #1e2d47">
             <div style="display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start">
               <div style="flex:1;min-width:180px">
-                <div style="font-size:11px;color:#888;margin-bottom:3px">📉 情景A · 估值回归</div>
-                <div style="font-size:11px;color:#aaa;margin-bottom:4px">股价收敛至DCF基准 $${fmt(vBase)}</div>
-                <span style="color:${aColor};font-weight:bold;font-size:17px">${annA>=0?'+':''}${fmt(annA,1)}%/年</span>
-                ${dy>0.005?`<div style="margin-top:3px;font-size:11px">
+                <div style="font-size:13px;color:#888;margin-bottom:3px">📉 情景A · 估值回归</div>
+                <div style="font-size:13px;color:#aaa;margin-bottom:4px">股价收敛至DCF基准 $${fmt(vBase)}</div>
+                <span style="color:${aColor};font-weight:bold;font-size:19px">${annA>=0?'+':''}${fmt(annA,1)}%/年</span>
+                ${dy>0.005?`<div style="margin-top:3px;font-size:13px">
                   含股息再投资：<span style="color:${annA_total>=0?'#28a745':'#dc3545'};font-weight:bold">${annA_total>=0?'+':''}${fmt(annA_total,1)}%/年</span>
                   <span style="color:#aaa">（+${fmt(divBoost,1)}ppts，股息率${fmt(dy*100,1)}%）</span>
                 </div>`:''}
               </div>
               <div style="flex:1;min-width:180px">
-                <div style="font-size:11px;color:#888;margin-bottom:3px">📈 情景B · 估值维持</div>
-                <div style="font-size:11px;color:#aaa;margin-bottom:4px">P/FCF不变，FCF增速=股价增速</div>
-                <span style="color:${bColor};font-weight:bold;font-size:17px">+${fmt(annB,1)}%/年</span>
+                <div style="font-size:13px;color:#888;margin-bottom:3px">📈 情景B · 估值维持</div>
+                <div style="font-size:13px;color:#aaa;margin-bottom:4px">P/FCF不变，FCF增速=股价增速</div>
+                <span style="color:${bColor};font-weight:bold;font-size:19px">+${fmt(annB,1)}%/年</span>
               </div>
             </div>
-            <div style="margin-top:8px;padding-top:6px;border-top:1px solid #1e2d47;font-size:11px;color:${gapColor}">
+            <div style="margin-top:8px;padding-top:6px;border-top:1px solid #1e2d47;font-size:13px;color:${gapColor}">
               ⚡ 溢价拖累差距 <b>${fmt(gap,1)} ppts</b>
               ${gap>=10?' — 买入价格对回报影响极大':gap>=5?' — 估值溢价有一定拖累':' — 当前估值合理，溢价影响小'}
             </div>
@@ -2203,17 +2203,17 @@ function renderResult(ticker,d,vCons,vBase,vOpt,fcf,g,r,tg,years,isCustomFCF,gC,
           <div style="margin-top:5px;padding:8px 12px;background:#fafafa;border-radius:6px;border:1px solid #1e2d47">
             <div style="display:flex;gap:20px;flex-wrap:wrap;align-items:center">
               <div>
-                <div style="font-size:11px;color:#888;margin-bottom:2px">单阶段（g=${pct(g)} 贯穿${years}年）</div>
-                <span style="font-weight:bold;color:#0078ff;font-size:15px">$${fmt(vBase)}</span>
+                <div style="font-size:13px;color:#888;margin-bottom:2px">单阶段（g=${pct(g)} 贯穿${years}年）</div>
+                <span style="font-weight:bold;color:#0078ff;font-size:17px">$${fmt(vBase)}</span>
               </div>
-              <div style="font-size:18px;color:#ccc">→</div>
+              <div style="font-size:20px;color:#ccc">→</div>
               <div>
-                <div style="font-size:11px;color:#888;margin-bottom:2px">两阶段（前${Math.floor(years/2)}年g=${pct(g)}，后${years-Math.floor(years/2)}年线性衰减→l=${pct(tg)}）</div>
-                <span style="font-weight:bold;color:${v2stage>=d.price?'#28a745':'#ffa940'};font-size:15px">$${fmt(v2stage)}</span>
-                <span style="color:#888;font-size:11px"> (${v2diff>=0?'+':''}${fmt(v2pct,1)}%)</span>
+                <div style="font-size:13px;color:#888;margin-bottom:2px">两阶段（前${Math.floor(years/2)}年g=${pct(g)}，后${years-Math.floor(years/2)}年线性衰减→l=${pct(tg)}）</div>
+                <span style="font-weight:bold;color:${v2stage>=d.price?'#28a745':'#ffa940'};font-size:17px">$${fmt(v2stage)}</span>
+                <span style="color:#888;font-size:13px"> (${v2diff>=0?'+':''}${fmt(v2pct,1)}%)</span>
               </div>
             </div>
-            <div style="margin-top:5px;font-size:11px;color:#888">
+            <div style="margin-top:5px;font-size:13px;color:#888">
               💡 两阶段模型假设增速在后半段自然衰减，对高增速公司
               <b style="color:${Math.abs(v2pct)>20?'#dc3545':'#ffa940'}">估值下调 ${fmt(Math.abs(v2pct),1)}%</b>，
               更接近真实增长曲线。${Math.abs(v2pct)>25?'建议将两阶段估值作为安全边际上限。':''}
@@ -2224,7 +2224,7 @@ function renderResult(ticker,d,vCons,vBase,vOpt,fcf,g,r,tg,years,isCustomFCF,gC,
     })()}
     ${renderSensitivityMatrix(fcf,d.shares,g,r,tg,d.netCash,years,d.price)}
     ${PARAMS[ticker]&&PARAMS[ticker].ddmNote
-      ?`<div style="margin-top:6px;padding:8px 12px;background:#fff7e6;border-left:3px solid #ffa940;border-radius:4px;font-size:12px;color:#874d00">
+      ?`<div style="margin-top:6px;padding:8px 12px;background:#fff7e6;border-left:3px solid #ffa940;border-radius:4px;font-size:14px;color:#874d00">
           💡 <b>DDM提示：</b>${PARAMS[ticker].ddmNote}
         </div>`
       :''}
@@ -2327,57 +2327,62 @@ async function runMulti(){
   loadDiv.style.color="#0078ff";
 
   const labels=[],dcfVals=[],prices=[],errors=[];
-  for(let i=0;i<tickers.length;i++){
-    const t=tickers[i];
-    loadDiv.textContent=`⏳ 处理 ${t}（${i+1}/${tickers.length}）…`;
-    try{
-      const mkt=detectMarket(t);
-      if(mkt!=='US'){
-        // A股/港股：走东方财富，DCF netCash=0
-        const ts=normalizeTushare(t);
-        const q=await fetchEastmoneyQuote(ts);
-        const _preset=PARAMS[ts.code]||PARAMS[ts.code.replace(/^0+/,'')]||null;
-        const g=_preset?_preset.g:0.08, r=_preset?_preset.r:0.09,
-              tg=_preset?_preset.gt:0.02, yrs=_preset?_preset.years:10;
-        const eps=(q.pe>0&&q.price>0)?q.price/q.pe:NaN;
-        const fcf=(!isNaN(eps)&&eps>0&&q.totalShare>0)
-          ?eps*q.totalShare*0.75
-          :(q.pe>0&&q.totalMv>0?q.totalMv/q.pe*0.75
-          :(!isNaN(q.netProfit)&&q.netProfit>0?q.netProfit*0.75:NaN));
-        if(isNaN(fcf)||fcf<=0){errors.push(`${t}: FCF无效（A/HK）`);continue;}
-        const v=dcfPerShare(fcf,q.totalShare,g,r,tg,0,yrs);
-        if(!isNaN(v)&&v>0){labels.push(t);dcfVals.push(parseFloat(v.toFixed(2)));prices.push(q.price);}
-        else errors.push(`${t}: DCF结果无效`);
-      }else{
-        const d=await fetchData(t,false);
-        const v=dcfPerShare(d.fcf,d.shares,d.autoG,d.autoR,d.autoGt,d.netCash,d.autoYrs);
-        if(!isNaN(v)&&v>0){labels.push(t);dcfVals.push(parseFloat(v.toFixed(2)));prices.push(d.price);}
-        else errors.push(`${t}: FCF无效或参数异常`);
-      }
-    }catch(e){ errors.push(`${t}: ${e.message}`); }
-  }
+  // 与文件里其它异步处理函数保持一致，用 try/finally 兜底恢复按钮状态——
+  // 之前这里裸调用完就 disabled=false，图表渲染等后续代码一旦抛错就会让按钮永久卡在禁用态。
+  try{
+    for(let i=0;i<tickers.length;i++){
+      const t=tickers[i];
+      loadDiv.textContent=`⏳ 处理 ${t}（${i+1}/${tickers.length}）…`;
+      try{
+        const mkt=detectMarket(t);
+        if(mkt!=='US'){
+          // A股/港股：走东方财富，DCF netCash=0
+          const ts=normalizeTushare(t);
+          const q=await fetchEastmoneyQuote(ts);
+          const _preset=PARAMS[ts.code]||PARAMS[ts.code.replace(/^0+/,'')]||null;
+          const g=_preset?_preset.g:0.08, r=_preset?_preset.r:0.09,
+                tg=_preset?_preset.gt:0.02, yrs=_preset?_preset.years:10;
+          const eps=(q.pe>0&&q.price>0)?q.price/q.pe:NaN;
+          const fcf=(!isNaN(eps)&&eps>0&&q.totalShare>0)
+            ?eps*q.totalShare*0.75
+            :(q.pe>0&&q.totalMv>0?q.totalMv/q.pe*0.75
+            :(!isNaN(q.netProfit)&&q.netProfit>0?q.netProfit*0.75:NaN));
+          if(isNaN(fcf)||fcf<=0){errors.push(`${t}: FCF无效（A/HK）`);continue;}
+          const v=dcfPerShare(fcf,q.totalShare,g,r,tg,0,yrs);
+          if(!isNaN(v)&&v>0){labels.push(t);dcfVals.push(parseFloat(v.toFixed(2)));prices.push(q.price);}
+          else errors.push(`${t}: DCF结果无效`);
+        }else{
+          const d=await fetchData(t,false);
+          const v=dcfPerShare(d.fcf,d.shares,d.autoG,d.autoR,d.autoGt,d.netCash,d.autoYrs);
+          if(!isNaN(v)&&v>0){labels.push(t);dcfVals.push(parseFloat(v.toFixed(2)));prices.push(d.price);}
+          else errors.push(`${t}: FCF无效或参数异常`);
+        }
+      }catch(e){ errors.push(`${t}: ${e.message}`); }
+    }
 
-  btn.disabled=false;
-  loadDiv.style.display=errors.length?"block":"none";
-  if(errors.length){
-    loadDiv.style.color="#dc3545";
-    loadDiv.textContent=`⚠️ 以下标的失败（已跳过）：${errors.map(e=>e.split(":")[0]).join(", ")}`;
-  }
-  if(!labels.length) return alert("❌ 全部标的失败：\n"+errors.join("\n"));
+    loadDiv.style.display=errors.length?"block":"none";
+    if(errors.length){
+      loadDiv.style.color="#dc3545";
+      loadDiv.textContent=`⚠️ 以下标的失败（已跳过）：${errors.map(e=>e.split(":")[0]).join(", ")}`;
+    }
+    if(!labels.length) return alert("❌ 全部标的失败：\n"+errors.join("\n"));
 
-  const ctx=document.getElementById("multi-chart").getContext("2d");
-  if(multiChart) multiChart.destroy();
-  multiChart=new Chart(ctx,{
-    type:"bar",
-    data:{
-      labels,
-      datasets:[
-        {label:"DCF基准估值 ($)",data:dcfVals,backgroundColor:"#0078ff"},
-        {label:"实时股价 ($)",   data:prices, backgroundColor:"#ff5252"}
-      ]
-    },
-    options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:false}}}
-  });
+    const ctx=document.getElementById("multi-chart").getContext("2d");
+    if(multiChart) multiChart.destroy();
+    multiChart=new Chart(ctx,{
+      type:"bar",
+      data:{
+        labels,
+        datasets:[
+          {label:"DCF基准估值 ($)",data:dcfVals,backgroundColor:"#0078ff"},
+          {label:"实时股价 ($)",   data:prices, backgroundColor:"#ff5252"}
+        ]
+      },
+      options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:false}}}
+    });
+  } finally {
+    btn.disabled=false;
+  }
 }
 
 // ═══════════════════════════════════════════════════════
@@ -2389,9 +2394,12 @@ function saveSummaryRow(ticker, d, vCons, vBase, vOpt, fcf, g){
   try{
     const all = JSON.parse(localStorage.getItem(SUMMARY_KEY)||"{}");
     const pos = positionLabel(d.price, vCons, vBase, vOpt);
-    const pctLabel = d.price < vBase
-      ? `▲ 低估${fmt((vBase/d.price-1)*100)}%`
-      : `▼ 高估${fmt((d.price/vBase-1)*100)}%`;
+    // 统一以"现价"为基准计算涨跌幅（此前高估分支误用vBase作分母，与低估分支口径不一致，
+    // 导致表中不同标的的百分比无法直接比较涨跌幅度）
+    const upsidePct = (vBase / d.price - 1) * 100;
+    const pctLabel = upsidePct >= 0
+      ? `▲ 低估${fmt(upsidePct)}%`
+      : `▼ 高估${fmt(-upsidePct)}%`;
     all[ticker] = {
       ticker, name: d.compName,
       fcfYield: d.fcfYield, roe: d.roe, g,
@@ -2418,10 +2426,10 @@ function renderSummaryTable(){
     </td></tr>`;
     return;
   }
-  // 按DCF状态排序：低估 → 高估幅度从小到大
+  // 按DCF状态排序：低估 → 高估幅度从小到大（统一以现价为基准，与显示的百分比口径一致）
   rows.sort((a,b)=>{
-    const aVal = a.price<a.vBase ? -(a.vBase/a.price-1) : (a.price/a.vBase-1);
-    const bVal = b.price<b.vBase ? -(b.vBase/b.price-1) : (b.price/b.vBase-1);
+    const aVal = 1 - a.vBase/a.price;
+    const bVal = 1 - b.vBase/b.price;
     return aVal - bVal;
   });
   const roeFmt = roe => {
@@ -2439,7 +2447,7 @@ function renderSummaryTable(){
   tbody.innerHTML = rows.map((r,i)=>`
     <tr style="background:${i%2===0?'#0d1525':'#131929'};text-align:center">
       <td style="padding:6px 10px;border:1px solid #1e2d47;text-align:left;font-weight:bold">
-        ${esc(r.ticker)}<span style="font-weight:normal;color:#64748b;font-size:11px"> ${esc(r.name||'')}</span>
+        ${esc(r.ticker)}<span style="font-weight:normal;color:#64748b;font-size:13px"> ${esc(r.name||'')}</span>
       </td>
       <td style="padding:6px 10px;border:1px solid #1e2d47">${yieldFmt(r.fcfYield)}</td>
       <td style="padding:6px 10px;border:1px solid #1e2d47;color:#94a3b8">${isNaN(r.fcfYield)||!r.fcfYield?'—':fmt(1/r.fcfYield,1)+'x'}</td>
@@ -2451,7 +2459,7 @@ function renderSummaryTable(){
         ${isNaN(r.g)||r.g===undefined
           ?'<span style="color:#aaa">—</span>'
           :`<span style="color:${r.g>=0.05?'#28a745':r.g>=0?'#ffa940':'#dc3545'};font-weight:bold">${r.g>=0?'+':''}${fmt(r.g*100,1)}%/年</span>
-            <span style="color:#aaa;font-size:10px">（≈g，P/FCF不变）</span>`}
+            <span style="color:#aaa;font-size:12px">（≈g，P/FCF不变）</span>`}
       </td>
     </tr>`).join('');
 }
@@ -2461,10 +2469,38 @@ function renderSummaryTable(){
 // ═══════════════════════════════════════════════════════
 const TRADE_KEY = "dcf_trades_v1";
 
-function getTrades(){ try{ return JSON.parse(localStorage.getItem(TRADE_KEY)||"[]"); }catch(_){ return []; } }
+// 交易记录数据结构：{id, ticker, buyDate, buyPrice, buyQty, buyReason, note, sells:[{date,price,qty,reason,fee}, ...]}
+// 一笔买入可对应多笔卖出（分批卖出），sells 数组记录每一笔卖出事件，避免用户通过"重新填表"卖出剩余仓位导致成本被重复计入。
+function genTradeId(){ return Date.now().toString(36) + '_' + Math.random().toString(36).slice(2,9); }
+
+function getTrades(){
+  let list;
+  try{ list = JSON.parse(localStorage.getItem(TRADE_KEY)||"[]"); }catch(_){ return []; }
+  if(!Array.isArray(list)) return [];
+  // 兼容旧数据结构（单笔 sellDate/sellPrice/sellQty 平铺字段）→ 迁移为 sells 数组
+  let migrated = false;
+  list = list.map(t=>{
+    if(t.sells) return t;
+    migrated = true;
+    const sells = [];
+    if(t.sellDate && t.sellPrice>0 && (t.sellQty||0)>0){
+      sells.push({ date:t.sellDate, price:t.sellPrice, qty:t.sellQty, reason:t.sellReason||'', fee:t.fee||0 });
+    }
+    return { id:t.id!=null?String(t.id):genTradeId(), ticker:t.ticker, buyDate:t.buyDate,
+             buyPrice:t.buyPrice, buyQty:t.buyQty, buyReason:t.buyReason||'', note:t.note||'', sells };
+  });
+  if(migrated){ try{ localStorage.setItem(TRADE_KEY, JSON.stringify(list)); }catch(_){} }
+  return list;
+}
 function saveTrades(t){
   try{ localStorage.setItem(TRADE_KEY, JSON.stringify(t)); }
   catch(e){ if(e.name==='QuotaExceededError') alert('⚠️ 本地存储已满，交易记录未能保存，建议清空缓存后重试'); }
+}
+
+function tradeSoldQty(t){ return (t.sells||[]).reduce((s,x)=>s+(x.qty||0),0); }
+function tradeRemainQty(t){ return Math.max(0, t.buyQty - tradeSoldQty(t)); }
+function tradeRealizedPnl(t){
+  return (t.sells||[]).reduce((sum,s)=> sum + (s.price*s.qty - t.buyPrice*s.qty - (s.fee||0)), 0);
 }
 
 function addTrade(){
@@ -2505,12 +2541,18 @@ function addTrade(){
     return;
   }
   const sellQty = isNaN(sellQtyParsed) ? 0 : sellQtyParsed;
-  const remainQty = Math.max(0, buyQty - sellQty);
+  if(sellQty > buyQty){
+    alert("卖出数量不能超过买入数量");
+    return;
+  }
+
+  const sells = [];
+  if(sellDate && sellPrice>0 && sellQty>0){
+    sells.push({ date:sellDate, price:sellPrice, qty:sellQty, reason:sellReason, fee });
+  }
 
   const trades = getTrades();
-  trades.push({ id:Date.now(), ticker, buyDate, buyPrice, buyQty,
-                buyReason, sellDate, sellReason, sellQty, remainQty,
-                sellPrice, fee, note });
+  trades.push({ id:genTradeId(), ticker, buyDate, buyPrice, buyQty, buyReason, note, sells });
   saveTrades(trades);
   renderTrades();
 
@@ -2520,9 +2562,55 @@ function addTrade(){
     .forEach(id=>{ document.getElementById(id).value=""; });
 }
 
+// 对已有持仓追加一笔卖出（支持多次分批卖出，避免重新填表导致成本重复计入）
+function sellTrade(id){
+  const trades = getTrades();
+  const t = trades.find(x=>String(x.id)===String(id));
+  if(!t){ alert("记录不存在"); return; }
+  const remain = tradeRemainQty(t);
+  if(remain<=0){ alert("该笔持仓已全部卖出"); return; }
+
+  const dateStr = prompt(`卖出日期（YYYY-MM-DD），剩余可卖 ${remain.toLocaleString()} 股：`, new Date().toISOString().slice(0,10));
+  if(dateStr===null || !dateStr.trim()) return;
+  const priceStr = prompt("卖出价格 ($)：");
+  if(priceStr===null) return;
+  const price = parseFloat(priceStr);
+  if(isNaN(price) || price<=0){ alert("卖出价格无效"); return; }
+  const qtyStr = prompt(`卖出数量（留空=全部剩余 ${remain.toLocaleString()}）：`);
+  if(qtyStr===null) return;
+  const qty = qtyStr.trim() ? parseFloat(qtyStr) : remain;
+  if(isNaN(qty) || qty<=0){ alert("卖出数量无效"); return; }
+  if(qty > remain){ alert(`卖出数量不能超过剩余持仓 ${remain.toLocaleString()} 股`); return; }
+  const reason = (prompt("卖出原因（可选）：")||"").trim();
+  const feeStr = prompt("手续费 ($，可选，默认0)：");
+  const fee = feeStr && !isNaN(parseFloat(feeStr)) ? parseFloat(feeStr) : 0;
+
+  t.sells = t.sells||[];
+  t.sells.push({ date:dateStr.trim(), price, qty, reason, fee });
+  saveTrades(trades);
+  renderTrades();
+}
+
+// 查看/删除某笔持仓下的卖出明细（当一笔买入被分批卖出多次时）
+function viewSells(id){
+  const t = getTrades().find(x=>String(x.id)===String(id));
+  if(!t || !(t.sells&&t.sells.length)){ alert("暂无卖出记录"); return; }
+  const lines = t.sells.map((s,idx)=>`${idx+1}. ${s.date} 卖出${s.qty.toLocaleString()}股 @$${fmt(s.price)}${s.fee?` 手续费$${fmt(s.fee)}`:''}${s.reason?` 「${s.reason}」`:''}`);
+  const del = prompt(`${t.ticker} 卖出明细：\n${lines.join('\n')}\n\n输入编号可删除该笔卖出记录（留空/取消不操作）：`);
+  if(!del || !del.trim()) return;
+  const idx = parseInt(del,10)-1;
+  if(isNaN(idx) || idx<0 || idx>=t.sells.length){ alert("编号无效"); return; }
+  if(!confirm(`确认删除第 ${idx+1} 笔卖出记录？`)) return;
+  const trades = getTrades();
+  const tt = trades.find(x=>String(x.id)===String(id));
+  tt.sells.splice(idx,1);
+  saveTrades(trades);
+  renderTrades();
+}
+
 function deleteTrade(id){
   if(!confirm("确认删除这条记录？")) return;
-  saveTrades(getTrades().filter(t=>t.id!==id));
+  saveTrades(getTrades().filter(t=>String(t.id)!==String(id)));
   renderTrades();
 }
 
@@ -2545,17 +2633,19 @@ function renderTrades(){
 
   tbody.innerHTML = trades.map((t,i)=>{
     const buyTotal = t.buyPrice * t.buyQty;
-    const sellQty  = t.sellQty||0;
-    const remainQty= t.remainQty!==undefined ? t.remainQty : Math.max(0, t.buyQty - sellQty);
-    const isClosed = t.sellDate && t.sellPrice>0 && remainQty===0;
-    const isPartial= t.sellDate && t.sellPrice>0 && remainQty>0;
+    const sells    = t.sells||[];
+    const sellQty  = tradeSoldQty(t);
+    const remainQty= tradeRemainQty(t);
+    const hasSell  = sells.length>0;
+    const isClosed = hasSell && remainQty===0;
+    const isPartial= hasSell && remainQty>0;
     let pnl=NaN, pnlPct=NaN;
-    if(t.sellDate&&t.sellPrice>0&&sellQty>0){
-      const feeRatio = t.buyQty > 0 ? sellQty / t.buyQty : 1;
-      pnl = t.sellPrice*sellQty - t.buyPrice*sellQty - (t.fee||0)*feeRatio;
-      pnlPct = (t.buyPrice>0&&sellQty>0) ? pnl/(t.buyPrice*sellQty)*100 : NaN;
-      totalPnl+=pnl;
-      closedInvest += t.buyPrice * sellQty;
+    if(hasSell){
+      pnl = tradeRealizedPnl(t);
+      const costOfSold = t.buyPrice * sellQty;
+      pnlPct = costOfSold>0 ? pnl/costOfSold*100 : NaN;
+      totalPnl += pnl;
+      closedInvest += costOfSold;
     }
     // 计数：已完全平仓 vs 持仓中（含部分平仓）
     if(isClosed) closedCount++; else openCount++;
@@ -2563,40 +2653,51 @@ function renderTrades(){
 
     const dcfRow = summaryData[t.ticker];
     const dcfTag = dcfRow
-      ? `<span style="font-size:10px;color:#0078ff">DCF:$${fmt(dcfRow.vBase)}</span>`
+      ? `<span style="font-size:12px;color:#0078ff">DCF:$${fmt(dcfRow.vBase)}</span>`
       : '';
 
     const pnlColor = isNaN(pnl)?'#888':pnl>=0?'#28a745':'#dc3545';
     const statusBadge = isClosed
-      ? `<span style="background:#041628;color:#60a5fa;padding:1px 6px;border-radius:3px;font-size:11px;border:1px solid #1e3a5f">已平仓</span>`
+      ? `<span style="background:#041628;color:#60a5fa;padding:1px 6px;border-radius:3px;font-size:13px;border:1px solid #1e3a5f">已平仓</span>`
       : isPartial
-      ? `<span style="background:#1a0a1e;color:#e879f9;padding:1px 6px;border-radius:3px;font-size:11px;border:1px solid #4a1d5e">部分持仓</span>`
-      : `<span style="background:#1a1000;color:#fbbf24;padding:1px 6px;border-radius:3px;font-size:11px;border:1px solid #78350f">持仓中</span>`;
+      ? `<span style="background:#1a0a1e;color:#e879f9;padding:1px 6px;border-radius:3px;font-size:13px;border:1px solid #4a1d5e">部分持仓</span>`
+      : `<span style="background:#1a1000;color:#fbbf24;padding:1px 6px;border-radius:3px;font-size:13px;border:1px solid #78350f">持仓中</span>`;
+
+    // 多笔卖出时聚合展示（日期/原因/均价），并提供"明细"入口查看/删除单笔
+    const sellDateDisp   = hasSell ? esc(sells.map(s=>s.date).join('; ')) : '—';
+    const sellReasonDisp = hasSell ? esc(sells.map(s=>s.reason).filter(Boolean).join('; ')||'—') : '—';
+    const avgSellPrice   = hasSell && sellQty>0 ? sells.reduce((s,x)=>s+x.price*x.qty,0)/sellQty : NaN;
+    const sellPriceDisp  = !isNaN(avgSellPrice) ? '$'+fmt(avgSellPrice)+(sells.length>1?' (均)':'') : '—';
+    const totalFee       = sells.reduce((s,x)=>s+(x.fee||0),0);
 
     return `<tr style="background:${i%2===0?'#0d1525':'#131929'}">
       <td style="padding:6px 8px;border:1px solid #1e2d47;text-align:center;color:#64748b">${i+1}</td>
       <td style="padding:6px 8px;border:1px solid #1e2d47;font-weight:bold">${esc(t.ticker)} ${dcfTag}</td>
       <td style="padding:6px 8px;border:1px solid #1e2d47;text-align:center">${esc(t.buyDate)}</td>
-      <td style="padding:6px 8px;border:1px solid #1e2d47;color:#94a3b8;font-size:11px">${esc(t.buyReason||'—')}</td>
+      <td style="padding:6px 8px;border:1px solid #1e2d47;color:#94a3b8;font-size:13px">${esc(t.buyReason||'—')}</td>
       <td style="padding:6px 8px;border:1px solid #1e2d47;text-align:right">$${fmt(t.buyPrice)}</td>
       <td style="padding:6px 8px;border:1px solid #1e2d47;text-align:right">${t.buyQty.toLocaleString()}</td>
       <td style="padding:6px 8px;border:1px solid #1e2d47;text-align:right">$${fmt(buyTotal)}</td>
-      <td style="padding:6px 8px;border:1px solid #1e2d47;text-align:center">${esc(t.sellDate||'—')}</td>
-      <td style="padding:6px 8px;border:1px solid #1e2d47;color:#94a3b8;font-size:11px">${esc(t.sellReason||'—')}</td>
-      <td style="padding:6px 8px;border:1px solid #1e2d47;text-align:right">${sellQty>0?sellQty.toLocaleString():'—'}</td>
+      <td style="padding:6px 8px;border:1px solid #1e2d47;text-align:center">${sellDateDisp}</td>
+      <td style="padding:6px 8px;border:1px solid #1e2d47;color:#94a3b8;font-size:13px">${sellReasonDisp}</td>
+      <td style="padding:6px 8px;border:1px solid #1e2d47;text-align:right">${sellQty>0?sellQty.toLocaleString()+(sells.length>1?` (${sells.length}笔)`:''):'—'}</td>
       <td style="padding:6px 8px;border:1px solid #1e2d47;text-align:right;font-weight:bold;color:${remainQty>0?'#fdba74':'#64748b'}">
-        ${t.sellDate?remainQty.toLocaleString():'—'}</td>
-      <td style="padding:6px 8px;border:1px solid #1e2d47;text-align:right">${t.sellPrice>0?'$'+fmt(t.sellPrice):'—'}</td>
-      <td style="padding:6px 8px;border:1px solid #1e2d47;text-align:right">${t.fee>0?'$'+fmt(t.fee):'—'}</td>
+        ${hasSell?remainQty.toLocaleString():'—'}</td>
+      <td style="padding:6px 8px;border:1px solid #1e2d47;text-align:right">${sellPriceDisp}</td>
+      <td style="padding:6px 8px;border:1px solid #1e2d47;text-align:right">${totalFee>0?'$'+fmt(totalFee):'—'}</td>
       <td style="padding:6px 8px;border:1px solid #1e2d47;text-align:right;font-weight:bold;color:${pnlColor}">
         ${isNaN(pnl)?'—':(pnl>=0?'+':'')+`$${fmt(pnl)}`}</td>
       <td style="padding:6px 8px;border:1px solid #1e2d47;text-align:right;font-weight:bold;color:${pnlColor}">
         ${isNaN(pnlPct)?'—':(pnlPct>=0?'+':'')+fmt(pnlPct)+'%'}</td>
       <td style="padding:6px 8px;border:1px solid #1e2d47;text-align:center">${statusBadge}</td>
-      <td style="padding:6px 8px;border:1px solid #1e2d47;color:#64748b;font-size:11px">${esc(t.note||'—')}</td>
-      <td style="padding:6px 8px;border:1px solid #1e2d47;text-align:center">
-        <button onclick="deleteTrade(${t.id})"
-          style="background:#ff4d4f;color:#fff;border:none;border-radius:4px;padding:2px 8px;cursor:pointer;font-size:11px">删除</button>
+      <td style="padding:6px 8px;border:1px solid #1e2d47;color:#64748b;font-size:13px">${esc(t.note||'—')}</td>
+      <td style="padding:6px 8px;border:1px solid #1e2d47;text-align:center;min-width:64px">
+        ${remainQty>0?`<button onclick="sellTrade('${t.id}')"
+          style="background:#0e7490;color:#fff;border:none;border-radius:4px;padding:2px 8px;cursor:pointer;font-size:13px;display:block;width:100%;margin-bottom:4px">卖出</button>`:''}
+        ${sells.length>1?`<button onclick="viewSells('${t.id}')"
+          style="background:#334155;color:#fff;border:none;border-radius:4px;padding:2px 8px;cursor:pointer;font-size:13px;display:block;width:100%;margin-bottom:4px">明细(${sells.length})</button>`:''}
+        <button onclick="deleteTrade('${t.id}')"
+          style="background:#ff4d4f;color:#fff;border:none;border-radius:4px;padding:2px 8px;cursor:pointer;font-size:13px;display:block;width:100%">删除</button>
       </td>
     </tr>`;
   }).join('');
@@ -2621,24 +2722,36 @@ function clearTrades(){
   renderTrades();
 }
 
+// CSV 字段转义：含逗号/双引号/换行时用双引号包裹，内部双引号按 CSV 规范转义为两个双引号
+function csvField(v){
+  const s = String(v==null?'':v);
+  return /["\n,]/.test(s) ? '"' + s.replace(/"/g,'""') + '"' : s;
+}
+
 function exportTrades(){
   const trades = getTrades();
   if(!trades.length){ alert("暂无交易记录可导出。"); return; }
-  const header = "序号,代码,买入日期,买入原因,买入价格,买入数量,买入总额,卖出日期,卖出原因,卖出数量,剩余数量,卖出价格,手续费,盈亏金额,盈亏%,状态,备注";
+  const header = "序号,代码,买入日期,买入原因,买入价格,买入数量,买入总额,卖出日期,卖出原因,卖出数量,剩余数量,卖出均价,手续费,盈亏金额,盈亏%,状态,备注";
   const rows = trades.map((t,i)=>{
-    const buyTotal=t.buyPrice*t.buyQty;
-    const sellQty=t.sellQty||0;
-    const remainQty=t.remainQty!==undefined?t.remainQty:Math.max(0,t.buyQty-sellQty);
-    const isClosed=t.sellDate&&t.sellPrice>0&&remainQty===0;
-    const isPartial=t.sellDate&&t.sellPrice>0&&remainQty>0;
-    const feeRatioExp = t.buyQty > 0 ? sellQty / t.buyQty : 1;
-    const pnl=t.sellDate&&t.sellPrice>0&&sellQty>0?t.sellPrice*sellQty-t.buyPrice*sellQty-(t.fee||0)*feeRatioExp:NaN;
-    const pnlPct=isNaN(pnl)?'':((pnl/(t.buyPrice*sellQty))*100).toFixed(2)+'%';
-    const status=isClosed?'已平仓':isPartial?'部分持仓':'持仓中';
-    return [i+1,t.ticker,t.buyDate,`"${t.buyReason||''}"`,t.buyPrice,t.buyQty,buyTotal.toFixed(2),
-      t.sellDate||'',`"${t.sellReason||''}"`,sellQty||'',remainQty!==undefined&&t.sellDate?remainQty:'',
-      t.sellPrice||'',t.fee||0,
-      isNaN(pnl)?'':pnl.toFixed(2),pnlPct,status,`"${t.note||''}"`].join(',');
+    const buyTotal  = t.buyPrice*t.buyQty;
+    const sells     = t.sells||[];
+    const hasSell   = sells.length>0;
+    const sellQty   = tradeSoldQty(t);
+    const remainQty = tradeRemainQty(t);
+    const isClosed  = hasSell && remainQty===0;
+    const isPartial = hasSell && remainQty>0;
+    const pnl       = hasSell ? tradeRealizedPnl(t) : NaN;
+    const costOfSold= t.buyPrice*sellQty;
+    const pnlPct    = (hasSell && costOfSold>0) ? (pnl/costOfSold*100).toFixed(2)+'%' : '';
+    const status    = isClosed?'已平仓':isPartial?'部分持仓':'持仓中';
+    const avgSellPrice = hasSell && sellQty>0 ? sells.reduce((s,x)=>s+x.price*x.qty,0)/sellQty : NaN;
+    const totalFee  = sells.reduce((s,x)=>s+(x.fee||0),0);
+    return [i+1, t.ticker, t.buyDate, t.buyReason||'', t.buyPrice, t.buyQty, buyTotal.toFixed(2),
+      sells.map(s=>s.date).join('; '), sells.map(s=>s.reason).filter(Boolean).join('; '),
+      sellQty||'', hasSell?remainQty:'',
+      isNaN(avgSellPrice)?'':avgSellPrice.toFixed(2), totalFee||0,
+      isNaN(pnl)?'':pnl.toFixed(2), pnlPct, status, t.note||''
+    ].map(csvField).join(',');
   });
   const csv='\uFEFF'+header+'\n'+rows.join('\n'); // BOM for Excel
   const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
@@ -2871,11 +2984,19 @@ function backtest(data, signals, commission = 0, options = {}) {
         // 5笔后启用半凯利
         const kTotal = kWins + kLosses;
         if (kellyMode && kTotal >= 5) {
-          const w = kWins / kTotal;
-          const avgW = kWins > 0 ? kWinSum / kWins : 0.05;
-          const avgL = kLosses > 0 ? kLossSum / kLosses : 0.05;
-          const R = avgL > 0 ? avgW / avgL : 1;
-          kellyFrac = Math.max(0.05, Math.min(0.80, (w - (1 - w) / R) / 2));
+          if (kWins === 0) {
+            // 尚无盈利样本，没有真实优势数据可用——直接给仓位下限，不用虚构胜率/亏损率兜底掩盖"数据不足"
+            kellyFrac = 0.05;
+          } else if (kLosses === 0) {
+            // 尚无亏损样本，赔率R无法估计——保守取中值，不外推到仓位上限
+            kellyFrac = 0.50;
+          } else {
+            const w = kWins / kTotal;
+            const avgW = kWinSum / kWins;
+            const avgL = kLossSum / kLosses;
+            const R = avgW / avgL;
+            kellyFrac = Math.max(0.05, Math.min(0.80, (w - (1 - w) / R) / 2));
+          }
         }
         cash = cash + proceeds;
         shares = 0;
@@ -3018,20 +3139,20 @@ function renderBtResults(results, bnhReturn, bnhAnn, bnhSharpe, commission, btOp
         ${isNaN(r.annReturn)?'—':(r.annReturn>=0?'+':'')+( r.annReturn*100).toFixed(1)+'%/年'}</td>
       <td style="padding:7px 10px;border:1px solid #1e2d47;font-weight:bold;color:${ddColor}">
         -${(r.maxDD*100).toFixed(2)}%
-        ${r.maxDDPeriod?`<div style="font-size:10px;color:#aaa;font-weight:normal">${r.maxDDPeriod}</div>`:''}
+        ${r.maxDDPeriod?`<div style="font-size:12px;color:#aaa;font-weight:normal">${r.maxDDPeriod}</div>`:''}
       </td>
       <td style="padding:7px 10px;border:1px solid #1e2d47;font-weight:bold;color:${shrColor}">
         ${isNaN(r.sharpe)?'—':r.sharpe.toFixed(2)}
-        <div style="font-size:10px;color:#aaa;font-weight:normal">${isNaN(r.sharpe)?'':(r.sharpe>=1?'优秀':r.sharpe>=0.5?'一般':'偏低')}</div>
+        <div style="font-size:12px;color:#aaa;font-weight:normal">${isNaN(r.sharpe)?'':(r.sharpe>=1?'优秀':r.sharpe>=0.5?'一般':'偏低')}</div>
       </td>
       <td style="padding:7px 10px;border:1px solid #1e2d47;font-weight:bold;color:${calColor}">
         ${isNaN(r.calmar)?'—':r.calmar.toFixed(2)}
-        <div style="font-size:10px;color:#aaa;font-weight:normal">${isNaN(r.calmar)?'':(r.calmar>=1?'优秀':r.calmar>=0.5?'一般':'偏低')}</div>
+        <div style="font-size:12px;color:#aaa;font-weight:normal">${isNaN(r.calmar)?'':(r.calmar>=1?'优秀':r.calmar>=0.5?'一般':'偏低')}</div>
       </td>
       <td style="padding:7px 10px;border:1px solid #1e2d47;font-weight:bold;color:${wrColor}">
         ${isNaN(r.winRate) ? '—' : (r.winRate*100).toFixed(1)+'%'}</td>
       <td style="padding:7px 10px;border:1px solid #1e2d47">${buyCnt} 次</td>
-      <td style="padding:7px 10px;border:1px solid #1e2d47;font-size:11px;color:#888">
+      <td style="padding:7px 10px;border:1px solid #1e2d47;font-size:13px;color:#888">
         ${r.trades.slice(-3).map(t => `${t.buyDate.slice(5)}买@${cur}${t.buyPrice.toFixed(2)} → ${t.sellDate.slice(5)}卖@${cur}${t.sellPrice.toFixed(2)} (${t.netRet>=0?'+':''}${(t.netRet*100).toFixed(1)}%净)`).join('<br>')}
         ${r.trades.length > 3 ? `<br>…共${r.trades.length}笔` : ''}
       </td>
@@ -3052,17 +3173,17 @@ function renderBtResults(results, bnhReturn, bnhAnn, bnhSharpe, commission, btOp
 
   // 凯利公式汇总（各策略末期Kelly比例）
   const kellyLine = kellyOn
-    ? '<br><span style="font-size:11px;color:#722ed1">📐 凯利仓控已启用 · 末期半凯利仓位：'
+    ? '<br><span style="font-size:13px;color:#722ed1">📐 凯利仓控已启用 · 末期半凯利仓位：'
       + Object.entries(results).map(([k,r]) => {
           const n = {ma2050:'MA20/50',rsi:'RSI',macd:'MACD',mom:'动量',boll:'布林带'}[k];
           return `${n} ${isNaN(r.kellyFrac)?'—':(r.kellyFrac*100).toFixed(0)+'%'}`;
         }).join(' / ') + '</span>'
     : '';
   const vixLine = (vixPosOn && !isNaN(vixVal) && vixVal > 0)
-    ? `<br><span style="font-size:11px;color:#13c2c2">🎯 VIX=${vixVal.toFixed(0)} → 仓位 × ${(vixMult*100).toFixed(0)}% 已全局应用</span>`
+    ? `<br><span style="font-size:13px;color:#13c2c2">🎯 VIX=${vixVal.toFixed(0)} → 仓位 × ${(vixMult*100).toFixed(0)}% 已全局应用</span>`
     : '';
   const volLine = volOn
-    ? '<br><span style="font-size:11px;color:#28a745">✅ 量价确认已启用：买入须成交量 ≥ 1.2× 20日均量</span>'
+    ? '<br><span style="font-size:13px;color:#28a745">✅ 量价确认已启用：买入须成交量 ≥ 1.2× 20日均量</span>'
     : '';
 
   document.getElementById('bt-bnh-row').innerHTML =
@@ -3070,7 +3191,7 @@ function renderBtResults(results, bnhReturn, bnhAnn, bnhSharpe, commission, btOp
     总收益 <span style="color:${bnhColor};font-weight:bold">${bnhReturn>=0?'+':''}${(bnhReturn*100).toFixed(2)}%</span>
     &nbsp;|&nbsp; 年化 <span style="color:${bnhAnnC};font-weight:bold">${isNaN(bnhAnn)?'—':(bnhAnn>=0?'+':'')+( bnhAnn*100).toFixed(1)+'%'}</span>
     &nbsp;|&nbsp; 夏普 <span style="color:${bnhShrC};font-weight:bold">${isNaN(bnhSharpe)?'—':bnhSharpe.toFixed(2)}</span>
-    &nbsp;<span style="color:#888;font-size:11px">· 首尾各扣手续费${commPct}% · T+1收盘执行</span>
+    &nbsp;<span style="color:#888;font-size:13px">· 首尾各扣手续费${commPct}% · T+1收盘执行</span>
     ${kellyLine}${vixLine}${volLine}`;
 }
 
@@ -3208,8 +3329,9 @@ async function runBacktestCache() {
 
 function detectMarket(ticker) {
   const t = ticker.replace(/\s/g,'').toUpperCase();
-  if (/^(SH|SZ)?\d{6}$/.test(t)) return 'A';
-  if (/^(HK)?\d{4,5}(\.HK)?$/i.test(t)) return 'HK';
+  if (/^(SH|SZ|BJ)?\d{6}$/.test(t)) return 'A';
+  // 港股代码官方无固定位数（如"1"=长和、"700"=腾讯），允许1-5位数字，避免未补零输入被误判为美股
+  if (/^(HK)?\d{1,5}(\.HK)?$/i.test(t)) return 'HK';
   return 'US';
 }
 
@@ -3221,12 +3343,14 @@ function normalizeTushare(ticker) {
     return { code, currency:'HK$', marketName:'港股', market, secid:'116.'+code };
   }
   if (market === 'A') {
-    const c = t.replace(/^(SH|SZ)/,'');
+    const c = t.replace(/^(SH|SZ|BJ)/,'');
     const isShanghai = /^(6|9|5[0-8])/.test(c);
+    // 北交所代码段（43/83/87/92开头），东方财富行情接口沿用与深市相同的市场编号"0"（如 0.430047），仅展示名称需单独区分
+    const isBeijing  = /^(4|8|92)/.test(c);
     return {
       code: c,
       currency: '¥',
-      marketName: isShanghai ? '上交所(SH)' : '深交所(SZ)',
+      marketName: isBeijing ? '北交所(BJ)' : isShanghai ? '上交所(SH)' : '深交所(SZ)',
       market,
       secid: (isShanghai ? '1.' : '0.') + c
     };
@@ -3362,7 +3486,7 @@ async function runSingleTS(ts, preloadedQuote = null, cacheKey = null) {
       ${preloadedQuote
         ? '🚀 缓存命中（30天内数据）· 本次消耗 <b>0</b> 次调用 · <span style="font-weight:normal;color:#888">如需最新数据请点击"🔄 强制刷新"</span>'
         : `🌐 东方财富实时数据 · 行情日期：${tradeDate} · 消耗 <b>0</b> 次调用（免费接口）`}
-      · <span style="font-weight:normal;color:#888;font-size:11px">注：A/HK为简化DCF，FCF由净利润估算，未扣减净负债</span>
+      · <span style="font-weight:normal;color:#888;font-size:13px">注：A/HK为简化DCF，FCF由净利润估算，未扣减净负债</span>
     </div>
     <p>
       <b>市场：</b><span style="color:#389e0d;font-weight:bold">${ts.marketName}</span>
@@ -3377,19 +3501,19 @@ async function runSingleTS(ts, preloadedQuote = null, cacheKey = null) {
            <span style="color:${uFCF?'#ff4d4f':'#ffa940'}">[${uFCF?'用户手动输入':fcfSource}]</span></div>
       <div>• <b>总市值：</b>${ts.currency}${fmt(totalMv)}</div>
       <div>• <b>总股本：</b>${fmt(totalShare/1e8,2)} 亿股</div>
-      <div style="margin-top:6px;padding:6px 10px;background:#fff7e6;border-radius:4px;font-size:11px;color:#874d00">
+      <div style="margin-top:6px;padding:6px 10px;background:#fff7e6;border-radius:4px;font-size:13px;color:#874d00">
         ⚠️ 简化说明：未获取资产负债表，净现金项为0；如需精确估值请在"自由现金流FCF"框手动填入真实FCF（${ts.currency}总量）
       </div>
     </div>
     <div class="data-matrix">
       <b>⚙️ DCF精算参数</b>
       <div>增长率 g = ${(g*100).toFixed(1)}% &nbsp;|&nbsp; 折现率 r = ${(r*100).toFixed(1)}% &nbsp;|&nbsp; 永续增长 l = ${(tg*100).toFixed(1)}% &nbsp;|&nbsp; 年限 = ${yrs} 年
-           <span style="color:${_preset?'#389e0d':'#aaa'};font-size:11px">
+           <span style="color:${_preset?'#389e0d':'#aaa'};font-size:13px">
              ${_preset?`✅ 已命中内置参数（${_preset.name}）`:'默认参数：g=8% r=9% l=2%，可在上方覆盖'}</span>
       </div>
     </div>
     <p><b>每股内在价值DCF值（基准）：</b>
-       <span style="color:#389e0d;font-weight:bold;font-size:16px">${ts.currency}${fmt(vBase)}</span></p>
+       <span style="color:#389e0d;font-weight:bold;font-size:18px">${ts.currency}${fmt(vBase)}</span></p>
     <p><b>安全边际区间：</b>
        ${ts.currency}${fmt(vCons)} <span style="color:#888">（保守）</span>
        ~ ${ts.currency}${fmt(vOpt)} <span style="color:#888">（乐观）</span></p>
@@ -3715,7 +3839,7 @@ async function runTimingScore() {
       btn.disabled = false;
       return;
     }
-    out.innerHTML = `<div style="color:#389e0d;font-size:13px;font-weight:bold">⏳ 正在获取 ${esc(ticker)} 行情数据…</div>`;
+    out.innerHTML = `<div style="color:#389e0d;font-size:15px;font-weight:bold">⏳ 正在获取 ${esc(ticker)} 行情数据…</div>`;
     try {
       const market = detectMarket(ticker);
       if (market !== 'US') {
@@ -3737,10 +3861,14 @@ async function runTimingScore() {
       return;
     }
   }
+  // 此刻 _tsData/_tsTicker 必定对应当前 ticker（刚写入，或本就匹配）——立即快照到局部变量，
+  // 避免下面还有一堆 await（宏观数据/基准指数/国债收益率），期间如果用户又触发了 runBacktest
+  // 切换到别的标的，会把这两个全局变量覆盖掉，导致本次择时评分算出别的股票的数据。
+  const tsSnapData = _tsData, tsSnapTicker = _tsTicker;
 
   const tsMarket = detectMarket(ticker);
   const isUSStock = tsMarket === 'US';
-  out.innerHTML = `<div style="color:#389e0d;font-size:13px;font-weight:bold">⏳ 正在获取${isUSStock ? '宏观数据（VIX + 国债收益率）' : '基准指数数据（上证/沪深300）'}…</div>`;
+  out.innerHTML = `<div style="color:#389e0d;font-size:15px;font-weight:bold">⏳ 正在获取${isUSStock ? '宏观数据（VIX + 国债收益率）' : '基准指数数据（上证/沪深300）'}…</div>`;
 
   try {
     let mktData = null;       // 宏观基准：美股=SPY，A/港股=上证指数
@@ -3841,10 +3969,15 @@ async function runTimingScore() {
             const j = await res.json();
             const raw = j?.data?.f43;
             if (raw && raw !== '-' && raw !== null) {
-              // 东方财富国债收益率单位：直接为百分比（如2.30），无需除100
-              y10 = parseFloat(raw);
-              if (y10 > 20) y10 = y10 / 100; // 若返回基点形式则转换
-              try { localStorage.setItem(cnYieldKey, JSON.stringify({ ts: Date.now(), v: y10 })); } catch(_) {}
+              // 东方财富该字段单位不固定：可能直接是百分比（如2.30）也可能放大100倍（如230）。
+              // 用"国债收益率合理区间(0-20%)"校验代替单一启发式：先按百分比解读，超出区间再尝试/100；
+              // 两种解读都不合理就放弃本次取值（不写入缓存、不覆盖 y10），避免把明显错误的数字带入宏观过滤层。
+              let v = parseFloat(raw);
+              if (!(v > 0 && v < 20)) v = v / 100;
+              if (v > 0 && v < 20) {
+                y10 = v;
+                try { localStorage.setItem(cnYieldKey, JSON.stringify({ ts: Date.now(), v: y10 })); } catch(_) {}
+              }
             }
           }
         }
@@ -3852,12 +3985,12 @@ async function runTimingScore() {
     }
 
     const macro    = tsComputeMacro(mktData, vixLevel, y10, y2, isUSStock, mktName);
-    const score    = tsComputeScore(_tsData, benchmarkData, benchmarkName);
-    const triggers = tsComputeTriggers(_tsData);
-    const lastP    = _tsData[_tsData.length - 1].close;
+    const score    = tsComputeScore(tsSnapData, benchmarkData, benchmarkName);
+    const triggers = tsComputeTriggers(tsSnapData);
+    const lastP    = tsSnapData[tsSnapData.length - 1].close;
     const tsCurrSym = tsMarket === 'A' ? '¥' : tsMarket === 'HK' ? 'HK$' : '$';
 
-    out.innerHTML = tsRenderHTML(_tsTicker, macro, score, triggers, lastP, _tsData[_tsData.length-1].date, tsCurrSym);
+    out.innerHTML = tsRenderHTML(tsSnapTicker, macro, score, triggers, lastP, tsSnapData[tsSnapData.length-1].date, tsCurrSym);
   } catch(e) {
     out.innerHTML = `<div style="color:#dc3545;padding:10px">❌ 错误：${e.message}</div>`;
   } finally {
@@ -3891,7 +4024,7 @@ function tsRenderHTML(ticker, macro, score, triggers, lastP, lastDate, currSym =
 
   // ── 决策仪表盘（一目了然：三色灯 + 仓位 + 止损）──
   const scoreDots = Array.from({length:10},(_,i)=>
-    `<span style="color:${i<Math.round(total)?scoreColor:'#e0e0e0'};font-size:15px">●</span>`).join('');
+    `<span style="color:${i<Math.round(total)?scoreColor:'#e0e0e0'};font-size:17px">●</span>`).join('');
   const posLimit = Math.round(macro.posLimit * 100);
   const stopLoss8  = fmt(lastP * 0.92);
   const stopLoss10 = fmt(lastP * 0.90);
@@ -3903,54 +4036,54 @@ function tsRenderHTML(ticker, macro, score, triggers, lastP, lastDate, currSym =
   const actionBody  = action.split('：').slice(1).join('：');
 
   const summaryHTML = `
-  <div style="font-size:11px;color:#888;background:#fffbe6;border:1px solid #78350f;border-radius:6px;padding:6px 12px;margin-bottom:10px">
+  <div style="font-size:13px;color:#888;background:#fffbe6;border:1px solid #78350f;border-radius:6px;padding:6px 12px;margin-bottom:10px">
     ⏱️ 本评分适用于<b>中线持仓（3–12个月）</b>，短线交易者请自行调整RSI方向判断
   </div>
   <div style="background:linear-gradient(135deg,${abg} 0%,#0d1525 100%);border:2px solid ${abc};border-radius:14px;padding:20px 22px;margin-bottom:16px;box-shadow:0 3px 14px rgba(0,0,0,0.08)">
 
-    <div style="font-size:11px;color:#aaa;margin-bottom:10px">
+    <div style="font-size:13px;color:#aaa;margin-bottom:10px">
       📅 ${new Date().toLocaleDateString('zh-CN')} &nbsp;·&nbsp; 基于 ${lastDate} 收盘价 &nbsp;<b style="color:#e2e8f0">${currSym}${fmt(lastP)}</b></div>
 
     <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start">
 
       <!-- 左：主结论 -->
       <div style="flex:2;min-width:200px">
-        <div style="font-size:11px;font-weight:600;color:#94a3b8;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">
+        <div style="font-size:13px;font-weight:600;color:#94a3b8;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">
           ${esc(ticker)} · 综合决策</div>
-        <div style="font-size:26px;font-weight:900;color:${abc};line-height:1.2;margin-bottom:8px">
+        <div style="font-size:29px;font-weight:900;color:${abc};line-height:1.2;margin-bottom:8px">
           ${actionTitle}</div>
-        <div style="font-size:13px;color:#94a3b8;line-height:1.7;padding:8px 12px;background:#0d1525;border-radius:7px;border-left:3px solid ${abc}">
+        <div style="font-size:15px;color:#94a3b8;line-height:1.7;padding:8px 12px;background:#0d1525;border-radius:7px;border-left:3px solid ${abc}">
           ${actionBody}</div>
       </div>
 
       <!-- 右：评分圆盘 -->
       <div style="min-width:130px;text-align:center;background:#0d1525;border-radius:10px;padding:14px 18px;border:1px solid ${abc}30;flex-shrink:0">
-        <div style="font-size:10px;color:#aaa;margin-bottom:4px;letter-spacing:1px">综合评分</div>
-        <div style="font-size:44px;font-weight:900;color:${scoreColor};line-height:1">${total.toFixed(1)}</div>
-        <div style="font-size:12px;color:#ccc;margin-bottom:6px">/ 10</div>
+        <div style="font-size:12px;color:#aaa;margin-bottom:4px;letter-spacing:1px">综合评分</div>
+        <div style="font-size:48px;font-weight:900;color:${scoreColor};line-height:1">${total.toFixed(1)}</div>
+        <div style="font-size:14px;color:#ccc;margin-bottom:6px">/ 10</div>
         <div>${scoreDots}</div>
-        <div style="font-size:10px;color:#bbb;margin-top:6px;line-height:1.4">阈值7.0/5.5为经验设定<br>非回测验证，仅供参考</div>
+        <div style="font-size:12px;color:#bbb;margin-top:6px;line-height:1.4">阈值7.0/5.5为经验设定<br>非回测验证，仅供参考</div>
       </div>
     </div>
 
     <!-- 底部4格关键数字 -->
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
       <div style="flex:1;min-width:90px;padding:10px 12px;background:#0d1525;border-radius:8px;border:1px solid ${abc}40;text-align:center">
-        <div style="font-size:10px;color:#aaa;margin-bottom:3px">建议仓位上限</div>
-        <div style="font-size:22px;font-weight:900;color:#60a5fa">${posLimit}%</div>
+        <div style="font-size:12px;color:#aaa;margin-bottom:3px">建议仓位上限</div>
+        <div style="font-size:25px;font-weight:900;color:#60a5fa">${posLimit}%</div>
       </div>
       <div style="flex:1;min-width:90px;padding:10px 12px;background:#2d0a0a;border-radius:8px;border:1px solid #7f1d1d;text-align:center">
-        <div style="font-size:10px;color:#aaa;margin-bottom:3px">硬止损 (−8%)</div>
-        <div style="font-size:20px;font-weight:900;color:#dc3545">${currSym}${stopLoss8}</div>
-        <div style="font-size:10px;color:#aaa">极限 ${currSym}${stopLoss10}(−10%)</div>
+        <div style="font-size:12px;color:#aaa;margin-bottom:3px">硬止损 (−8%)</div>
+        <div style="font-size:22px;font-weight:900;color:#dc3545">${currSym}${stopLoss8}</div>
+        <div style="font-size:12px;color:#aaa">极限 ${currSym}${stopLoss10}(−10%)</div>
       </div>
       <div style="flex:1;min-width:90px;padding:10px 12px;background:#0d1525;border-radius:8px;border:1px solid ${okC[macro.macroColor]}40;text-align:center">
-        <div style="font-size:10px;color:#aaa;margin-bottom:3px">宏观环境</div>
-        <div style="font-size:16px;font-weight:bold;color:${okC[macro.macroColor]}">${okI[macro.macroColor]} ${macroLabel}</div>
+        <div style="font-size:12px;color:#aaa;margin-bottom:3px">宏观环境</div>
+        <div style="font-size:18px;font-weight:bold;color:${okC[macro.macroColor]}">${okI[macro.macroColor]} ${macroLabel}</div>
       </div>
       <div style="flex:1;min-width:90px;padding:10px 12px;background:${anyTrigger?'#052e16':'#0d1525'};border-radius:8px;border:1px solid ${anyTrigger?'#166534':'#1e2d47'};text-align:center">
-        <div style="font-size:10px;color:#aaa;margin-bottom:3px">入场触发信号</div>
-        <div style="font-size:13px;font-weight:bold;color:${anyTrigger?'#86efac':'#64748b'};line-height:1.4">${trigLabel}</div>
+        <div style="font-size:12px;color:#aaa;margin-bottom:3px">入场触发信号</div>
+        <div style="font-size:15px;font-weight:bold;color:${anyTrigger?'#86efac':'#64748b'};line-height:1.4">${trigLabel}</div>
       </div>
     </div>
 
@@ -3959,10 +4092,10 @@ function tsRenderHTML(ticker, macro, score, triggers, lastP, lastDate, currSym =
   // 宏观层
   const macroHTML = `
     <details open style="margin-bottom:10px">
-      <summary style="font-weight:bold;font-size:13px;cursor:pointer;padding:5px 0;color:#444;user-select:none">
-        第一层 · 宏观环境过滤 <span style="color:${okC[macro.macroColor]};margin-left:6px">${okI[macro.macroColor]}</span><span style="font-size:11px;color:#aaa;font-weight:normal;margin-left:8px">月度信号 · 变化缓慢</span></summary>
+      <summary style="font-weight:bold;font-size:15px;cursor:pointer;padding:5px 0;color:#444;user-select:none">
+        第一层 · 宏观环境过滤 <span style="color:${okC[macro.macroColor]};margin-left:6px">${okI[macro.macroColor]}</span><span style="font-size:13px;color:#aaa;font-weight:normal;margin-left:8px">月度信号 · 变化缓慢</span></summary>
       <div style="overflow-x:auto;margin-top:6px">
-      <table style="width:100%;border-collapse:collapse;font-size:12px">
+      <table style="width:100%;border-collapse:collapse;font-size:14px">
         <thead><tr style="background:#101828">
           <th style="padding:5px 10px;border:1px solid #1e2d47;white-space:nowrap;color:#94a3b8">指标</th>
           <th style="padding:5px 10px;border:1px solid #1e2d47;color:#94a3b8">当前数值</th>
@@ -3974,7 +4107,7 @@ function tsRenderHTML(ticker, macro, score, triggers, lastP, lastDate, currSym =
             <td style="padding:5px 10px;border:1px solid #1e2d47;white-space:nowrap;font-weight:bold;color:#e2e8f0">${i.name}</td>
             <td style="padding:5px 10px;border:1px solid #1e2d47;font-family:monospace;color:#94a3b8">${i.val}</td>
             <td style="padding:5px 10px;border:1px solid #1e2d47;text-align:center;color:${okC[i.ok]};font-weight:bold">${okI[i.ok]}</td>
-            <td style="padding:5px 10px;border:1px solid #1e2d47;font-size:11px;color:#64748b">${i.note}</td>
+            <td style="padding:5px 10px;border:1px solid #1e2d47;font-size:13px;color:#64748b">${i.note}</td>
           </tr>`).join('')}
         </tbody>
       </table></div>
@@ -3991,10 +4124,10 @@ function tsRenderHTML(ticker, macro, score, triggers, lastP, lastDate, currSym =
   };
   const scoreHTML = `
     <details open style="margin-bottom:10px">
-      <summary style="font-weight:bold;font-size:13px;cursor:pointer;padding:5px 0;color:#444;user-select:none">
-        第二层 · 个股综合打分 <span style="color:${scoreColor};margin-left:6px;font-size:15px">${total.toFixed(1)}/10</span></summary>
+      <summary style="font-weight:bold;font-size:15px;cursor:pointer;padding:5px 0;color:#444;user-select:none">
+        第二层 · 个股综合打分 <span style="color:${scoreColor};margin-left:6px;font-size:17px">${total.toFixed(1)}/10</span></summary>
       <div style="overflow-x:auto;margin-top:6px">
-      <table style="width:100%;border-collapse:collapse;font-size:12px">
+      <table style="width:100%;border-collapse:collapse;font-size:14px">
         <thead><tr style="background:#101828">
           <th style="padding:5px 10px;border:1px solid #1e2d47;color:#94a3b8">指标</th>
           <th style="padding:5px 10px;border:1px solid #1e2d47;color:#94a3b8">数值</th>
@@ -4009,10 +4142,10 @@ function tsRenderHTML(ticker, macro, score, triggers, lastP, lastDate, currSym =
           </tr>
           ${sec.rows.map(r=>`
           <tr>
-            <td style="padding:4px 10px 4px 20px;border:1px solid #1e2d47;font-size:11px;color:#94a3b8">${r.label}</td>
-            <td style="padding:4px 10px;border:1px solid #1e2d47;font-size:11px;color:#e2e8f0">${r.val||''}</td>
+            <td style="padding:4px 10px 4px 20px;border:1px solid #1e2d47;font-size:13px;color:#94a3b8">${r.label}</td>
+            <td style="padding:4px 10px;border:1px solid #1e2d47;font-size:13px;color:#e2e8f0">${r.val||''}</td>
             <td style="padding:4px 10px;border:1px solid #1e2d47;text-align:right">${sbar(r.score,r.max)}</td>
-            <td style="padding:4px 10px;border:1px solid #1e2d47;font-size:11px;color:#64748b">${r.note||''}</td>
+            <td style="padding:4px 10px;border:1px solid #1e2d47;font-size:13px;color:#64748b">${r.note||''}</td>
           </tr>`).join('')}`).join('')}
         </tbody>
       </table></div>
@@ -4021,16 +4154,16 @@ function tsRenderHTML(ticker, macro, score, triggers, lastP, lastDate, currSym =
   // 入场触发层
   const trigHTML = `
     <details open style="margin-bottom:10px">
-      <summary style="font-weight:bold;font-size:13px;cursor:pointer;padding:5px 0;color:#444;user-select:none">
+      <summary style="font-weight:bold;font-size:15px;cursor:pointer;padding:5px 0;color:#444;user-select:none">
         第三层 · 入场触发信号（满足其一方可买入）
-        <span style="margin-left:6px">${anyTrigger ? '<span style="color:#389e0d">✅ 已触发</span>' : '<span style="color:#aaa">⏳ 未触发</span>'}</span><span style="font-size:11px;color:#aaa;font-weight:normal;margin-left:8px">日线信号 · 需当日确认</span></summary>
+        <span style="margin-left:6px">${anyTrigger ? '<span style="color:#389e0d">✅ 已触发</span>' : '<span style="color:#aaa">⏳ 未触发</span>'}</span><span style="font-size:13px;color:#aaa;font-weight:normal;margin-left:8px">日线信号 · 需当日确认</span></summary>
       <div style="margin-top:8px">${triggers.map(t=>`
         <div style="margin-bottom:7px;padding:8px 12px;border-radius:5px;
           background:${t.ok?'#052e16':'#0d1525'};border:1px solid ${t.ok?'#166534':'#1e2d47'}">
           <span style="font-weight:bold;color:${t.ok?'#4ade80':'#64748b'};margin-right:8px">${t.name}</span>
-          <span style="font-size:12px;color:${t.ok?'#86efac':'#94a3b8'}">${t.desc}</span>
+          <span style="font-size:14px;color:${t.ok?'#86efac':'#94a3b8'}">${t.desc}</span>
         </div>`).join('')}
-        <div style="font-size:11px;color:#aaa;margin-top:2px">
+        <div style="font-size:13px;color:#aaa;margin-top:2px">
           💡 评分再高，三个信号都未触发就不买——等信号是避免追高的关键</div>
       </div>
     </details>`;
@@ -4038,9 +4171,9 @@ function tsRenderHTML(ticker, macro, score, triggers, lastP, lastDate, currSym =
   // 离场规则
   const exitHTML = `
     <details open>
-      <summary style="font-weight:bold;font-size:13px;cursor:pointer;padding:5px 0;color:#444;user-select:none">
+      <summary style="font-weight:bold;font-size:15px;cursor:pointer;padding:5px 0;color:#444;user-select:none">
         离场规则（同样重要，买入前就要确定）</summary>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;font-size:12px">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;font-size:14px">
         <div style="flex:1;min-width:170px;padding:8px 12px;background:#2d0a0a;border-radius:5px;border:1px solid #7f1d1d">
           🛑 <b>硬止损</b><br>
           买入价 × 92% = <b style="color:#dc3545">${currSym}${fmt(lastP*0.92)}</b>（−8%）<br>
@@ -4056,7 +4189,7 @@ function tsRenderHTML(ticker, macro, score, triggers, lastP, lastDate, currSym =
 
   return `
     ${summaryHTML}${macroHTML}${scoreHTML}${trigHTML}${exitHTML}
-    <div style="font-size:11px;color:#aaa;margin-top:12px;padding:8px 12px;background:#fafafa;border-radius:4px">
+    <div style="font-size:13px;color:#aaa;margin-top:12px;padding:8px 12px;background:#fafafa;border-radius:4px">
       ⚠️ 以上三层评分仅供量化参考，不构成任何投资建议。胜率高 ≠ 必赚，请结合基本面分析与个人风控执行。</div>`;
 }
 
@@ -4067,11 +4200,11 @@ async function runScoreBacktest() {
   const btn = document.getElementById('score-bt-btn');
   const out = document.getElementById('score-bt-output');
   btn.disabled = true;
-  out.innerHTML = '<div style="color:#389e0d;font-size:13px">⏳ 正在拉取历史月线数据…</div>';
+  out.innerHTML = '<div style="color:#389e0d;font-size:15px">⏳ 正在拉取历史月线数据…</div>';
 
   try {
     // 1. SPY 月线（已有缓存概率高）
-    out.innerHTML = '<div style="color:#389e0d;font-size:13px">⏳ 获取 SPY 月线…</div>';
+    out.innerHTML = '<div style="color:#389e0d;font-size:15px">⏳ 获取 SPY 月线…</div>';
     const spyMonthly = await fetchRotMonthly('SPY', false);
     if (!spyMonthly || spyMonthly.length < 20) throw new Error('SPY 月线数据不足');
 
@@ -4083,7 +4216,7 @@ async function runScoreBacktest() {
     const records = [];
 
     for (const ticker of tickers) {
-      out.innerHTML = `<div style="color:#389e0d;font-size:13px">⏳ 处理 ${ticker}…（${records.length} 个样本已收集）</div>`;
+      out.innerHTML = `<div style="color:#389e0d;font-size:15px">⏳ 处理 ${ticker}…（${records.length} 个样本已收集）</div>`;
       let monthly;
       try { monthly = await fetchRotMonthly(ticker, false); } catch(_) { continue; }
       if (!monthly || monthly.length < 20) continue;
@@ -4157,7 +4290,7 @@ async function runScoreBacktest() {
     out.innerHTML = renderScoreBtHTML(results, records.length, tickers.length);
 
   } catch(e) {
-    out.innerHTML = `<div style="color:#dc3545;font-size:13px">❌ 回测失败：${e.message}</div>`;
+    out.innerHTML = `<div style="color:#dc3545;font-size:15px">❌ 回测失败：${e.message}</div>`;
   } finally {
     btn.disabled = false;
   }
@@ -4182,29 +4315,36 @@ function renderScoreBtHTML(results, total, tickerCount) {
     verdict = `<div style="color:#aaa;margin-top:8px">样本量偏少（需各档≥5个），结论仅供参考</div>`;
   }
 
-  const rows = results.map(r => `
+  // 单档样本数 < 5 时，均值/中位数/胜率统计噪声很大，不应与充分样本档同等醒目地展示——
+  // 用降低不透明度弱化视觉权重，而不是把颜色强制改灰：否则会连正/负收益的红绿区分都被抹掉，
+  // 只能靠读数字前的+/-符号判断涨跌，可读性反而变差。
+  const rows = results.map(r => {
+    const low = r.n < 5;
+    const dim = low ? 'opacity:0.55' : '';
+    return `
     <tr>
-      <td style="padding:6px 10px;border:1px solid #1e2d47;font-weight:bold">${r.label}</td>
-      <td style="padding:6px 10px;border:1px solid #1e2d47;text-align:center">${r.n}</td>
-      <td style="padding:6px 10px;border:1px solid #1e2d47;text-align:center;color:${col(r.avg)};font-weight:bold">${pct(r.avg)}</td>
-      <td style="padding:6px 10px;border:1px solid #1e2d47;text-align:center;color:${col(r.med)}">${pct(r.med)}</td>
-      <td style="padding:6px 10px;border:1px solid #1e2d47;text-align:center">${isNaN(r.win)?'—':(r.win*100).toFixed(0)+'%'}</td>
-    </tr>`).join('');
+      <td style="padding:6px 10px;border:1px solid #1e2d47;font-weight:bold">${r.label}${low?' <span style="color:#fa8c16;font-size:11px;font-weight:normal">(样本不足)</span>':''}</td>
+      <td style="padding:6px 10px;border:1px solid #1e2d47;text-align:center;${dim}">${r.n}</td>
+      <td style="padding:6px 10px;border:1px solid #1e2d47;text-align:center;color:${col(r.avg)};font-weight:bold;${dim}">${pct(r.avg)}</td>
+      <td style="padding:6px 10px;border:1px solid #1e2d47;text-align:center;color:${col(r.med)};${dim}">${pct(r.med)}</td>
+      <td style="padding:6px 10px;border:1px solid #1e2d47;text-align:center;${dim}">${isNaN(r.win)?'—':(r.win*100).toFixed(0)+'%'}</td>
+    </tr>`;
+  }).join('');
 
   const sampleNote = total === 0
-    ? `<div style="color:#dc3545;font-size:12px;margin-bottom:8px">⚠️ 暂无样本。请先在 <b>① 单只股票智能估值</b> 中查询目标股票后重试。</div>`
-    : `<div style="font-size:11px;color:${total < 30 ? '#fa8c16' : '#888'};margin-bottom:8px">
+    ? `<div style="color:#dc3545;font-size:14px;margin-bottom:8px">⚠️ 暂无样本。请先在 <b>① 单只股票智能估值</b> 中查询目标股票后重试。</div>`
+    : `<div style="font-size:13px;color:${total < 30 ? '#fa8c16' : '#888'};margin-bottom:8px">
         ${total < 30
           ? `⚠️ 样本偏少（${total}个），结论仅供参考，建议在①区查询更多标的使样本≥30个。`
           : `样本量${total >= 100 ? '充足' : '适中'}（${total}个），查询更多标的可进一步提升可信度。`}
        </div>`;
 
   return `
-    <div style="font-size:13px;font-weight:bold;margin-bottom:4px">
+    <div style="font-size:15px;font-weight:bold;margin-bottom:4px">
       评分阈值历史验证（共 ${total} 个月度样本，6个月持有期）
     </div>
     ${sampleNote}
-    <table style="width:100%;border-collapse:collapse;font-size:13px">
+    <table style="width:100%;border-collapse:collapse;font-size:15px">
       <thead><tr style="background:#101828;text-align:center">
         <th style="padding:6px 10px;border:1px solid #1e2d47;text-align:left;color:#94a3b8">评分区间</th>
         <th style="padding:6px 10px;border:1px solid #1e2d47;color:#94a3b8">样本数</th>
@@ -4215,7 +4355,7 @@ function renderScoreBtHTML(results, total, tickerCount) {
       <tbody>${rows}</tbody>
     </table>
     ${verdict}
-    <div style="font-size:11px;color:#aaa;margin-top:8px;line-height:1.6">
+    <div style="font-size:13px;color:#aaa;margin-top:8px;line-height:1.6">
       说明：仅含动量+相对强度维度（月线可计算）；RSI/均线趋势因需日线数据未纳入。<br>
       评分已缩放：原始5.5分满分 → 等比映射至10分制后与阈值对比。
     </div>`;
@@ -4390,9 +4530,9 @@ function buildRotationHTML({ s1Valid, s1Returns, s2Signal, vixLevel, gemRec, spy
   }).join('');
   const s1Html = `
     <div style="margin-bottom:10px;padding:12px;background:#e6fffb;border-left:4px solid #13c2c2;border-radius:6px">
-      <div style="font-weight:bold;font-size:14px;margin-bottom:4px">策略一 · 动量效应（月末轮动）</div>
-      <p style="font-size:12px;color:#555;margin:0 0 8px">比较 SPY/TLT/GLD/DBC 过去12个月收益（跳过最近1月），排名第一者本月持有，月末再轮动。</p>
-      <table style="width:100%;border-collapse:collapse;font-size:13px">
+      <div style="font-weight:bold;font-size:16px;margin-bottom:4px">策略一 · 动量效应（月末轮动）</div>
+      <p style="font-size:14px;color:#555;margin:0 0 8px">比较 SPY/TLT/GLD/DBC 过去12个月收益（跳过最近1月），排名第一者本月持有，月末再轮动。</p>
+      <table style="width:100%;border-collapse:collapse;font-size:15px">
         <thead><tr style="background:#0a2030;text-align:left">
           <th style="padding:5px 10px;border:1px solid #1e2d47;color:#94a3b8">资产</th>
           <th style="padding:5px 10px;border:1px solid #1e2d47;color:#94a3b8">12M收益（跳过最近1月）</th>
@@ -4400,9 +4540,9 @@ function buildRotationHTML({ s1Valid, s1Returns, s2Signal, vixLevel, gemRec, spy
         </tr></thead>
         <tbody>${s1Rows}</tbody>
       </table>
-      <div style="margin-top:8px;font-size:13px">
+      <div style="margin-top:8px;font-size:15px">
         ${s1Winner
-          ? `📌 本月建议：<b style="color:#13c2c2;font-size:15px">买入 ${assetName[s1Winner.t] || s1Winner.t}</b>（12M收益 ${rotPct(s1Winner.r)}，排名第一）`
+          ? `📌 本月建议：<b style="color:#13c2c2;font-size:17px">买入 ${assetName[s1Winner.t] || s1Winner.t}</b>（12M收益 ${rotPct(s1Winner.r)}，排名第一）`
           : `<span style="color:#aaa">数据不足，无法给出建议</span>`}
       </div>
     </div>`;
@@ -4410,27 +4550,35 @@ function buildRotationHTML({ s1Valid, s1Returns, s2Signal, vixLevel, gemRec, spy
   // ── 策略二 ──
   let s2Inner;
   if (!s2Signal) {
-    s2Inner = `<div style="color:#aaa;font-size:12px;padding:4px">
+    s2Inner = `<div style="color:#aaa;font-size:14px;padding:4px">
       SPY日线数据不足（需≥200条），请点击"🔄 运行轮动分析"拉取数据。</div>`;
   } else {
+    // VIX 仓位系数：与回测模块（backtest()）同一套公式，15-30 线性缩放，<15 时仓位下限20%，>=30 满仓
+    // 之前这里只有一段描述性文字（"可分批建仓/谨慎追高"），并未真正给出仓位数字，本月建议里也未引用——
+    // 现在把系数计算出来并直接写进"本月建议"，让文案与实际给出的仓位建议一致。
+    // 仓位建议只在"持仓SPY"分支有意义（跌破200MA时已切换AGG/现金，不存在"分批建仓SPY"这回事）
+    const vixPosFrac = isNaN(vixLevel) ? NaN : Math.max(0.20, Math.min(1.0, 1 - (vixLevel - 15) / 25));
+    const vixPosPct  = isNaN(vixPosFrac) ? null : Math.round(vixPosFrac * 100);
+    const posSuffixIfHolding = (s2Signal.above && vixPosPct!==null) ? `，建议仓位 ${vixPosPct}%` : '';
     const vixNote = isNaN(vixLevel)
       ? '<span style="color:#aaa">（VIX暂不可用）</span>'
       : vixLevel > 30
-        ? `<b>VIX ${vixLevel.toFixed(1)} &gt; 30</b> → <span style="color:#28a745;font-weight:bold">市场恐慌，可分批建仓</span>`
+        ? `<b>VIX ${vixLevel.toFixed(1)} &gt; 30</b> → <span style="color:#28a745;font-weight:bold">市场恐慌${s2Signal.above?'，可分批建仓':''}${posSuffixIfHolding}</span>`
         : vixLevel < 15
-          ? `<b>VIX ${vixLevel.toFixed(1)} &lt; 15</b> → <span style="color:#ffa940;font-weight:bold">市场过热，谨慎追高</span>`
-          : `VIX <b>${vixLevel.toFixed(1)}</b>（正常区间 15–30）`;
+          ? `<b>VIX ${vixLevel.toFixed(1)} &lt; 15</b> → <span style="color:#ffa940;font-weight:bold">市场过热${s2Signal.above?'，谨慎追高':''}${posSuffixIfHolding}</span>`
+          : `VIX <b>${vixLevel.toFixed(1)}</b>（正常区间 15–30）${posSuffixIfHolding}`;
+    const vixPosSuffix = (s2Signal.above && vixPosPct!==null) ? ` · 建议仓位 <b>${vixPosPct}%</b>` : '';
     s2Inner = `
-      <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:13px;margin-bottom:8px">
-        <span>SPY收盘 <b style="font-size:15px">$${fmt(s2Signal.price)}</b>（${s2Signal.date}）</span>
-        <span>200日均线 <b style="font-size:15px">$${fmt(s2Signal.ma200)}</b></span>
-        <span style="color:${s2Signal.above ? '#28a745' : '#dc3545'};font-weight:bold;font-size:15px">
+      <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:15px;margin-bottom:8px">
+        <span>SPY收盘 <b style="font-size:17px">$${fmt(s2Signal.price)}</b>（${s2Signal.date}）</span>
+        <span>200日均线 <b style="font-size:17px">$${fmt(s2Signal.ma200)}</b></span>
+        <span style="color:${s2Signal.above ? '#28a745' : '#dc3545'};font-weight:bold;font-size:17px">
           ${s2Signal.above ? '▲ 收盘 > 200MA' : '▼ 收盘 < 200MA'}</span>
       </div>
-      <div style="font-size:13px;margin-bottom:8px">${vixNote}</div>
-      <div style="padding:8px 12px;background:${s2Signal.above ? '#f6ffed' : '#fff7e6'};border-radius:4px;font-size:13px">
+      <div style="font-size:15px;margin-bottom:8px">${vixNote}</div>
+      <div style="padding:8px 12px;background:${s2Signal.above ? '#f6ffed' : '#fff7e6'};border-radius:4px;font-size:15px">
         📌 本月建议：${s2Signal.above
-          ? '<b style="color:#28a745">正常持仓 SPY</b>（月末收盘 > 200日均线）'
+          ? `<b style="color:#28a745">持仓 SPY</b>（月末收盘 > 200日均线）${vixPosSuffix}`
           : s2Signal.s2Refuge === 'AGG'
             ? `<b style="color:#ffa940">切换 AGG 债券</b>（跌破200MA，AGG 12M ${rotPct(s2Signal.aggRet)} > 0，债券正收益）`
             : '<b style="color:#ffa940">切换现金</b>（跌破200MA，AGG 12M 收益为负，债券不适合避险）'}
@@ -4438,8 +4586,8 @@ function buildRotationHTML({ s1Valid, s1Returns, s2Signal, vixLevel, gemRec, spy
   }
   const s2Html = `
     <div style="margin-bottom:10px;padding:12px;background:#fff7e6;border-left:4px solid #fa8c16;border-radius:6px">
-      <div style="font-weight:bold;font-size:14px;margin-bottom:4px">策略二 · 趋势跟随（SPY 200日均线）</div>
-      <p style="font-size:12px;color:#555;margin:0 0 8px">月末收盘 &gt; 200MA → 持有SPY；跌破200MA → AGG 12M正收益则切AGG，否则持现金。VIX &gt; 30分批建仓，&lt; 15谨慎。</p>
+      <div style="font-weight:bold;font-size:16px;margin-bottom:4px">策略二 · 趋势跟随（SPY 200日均线）</div>
+      <p style="font-size:14px;color:#555;margin:0 0 8px">月末收盘 &gt; 200MA → 持有SPY，仓位按VIX 15-30区间线性缩放（&lt;15时下限20%，&gt;30满仓分批建入）；跌破200MA → AGG 12M正收益则切AGG，否则持现金。</p>
       ${s2Inner}
     </div>`;
 
@@ -4447,32 +4595,32 @@ function buildRotationHTML({ s1Valid, s1Returns, s2Signal, vixLevel, gemRec, spy
   const gemColors = { SPY: '#0078ff', ACWI: '#722ed1', AGG: '#13c2c2' };
   const s3Html = `
     <div style="margin-bottom:10px;padding:12px;background:#f9f0ff;border-left:4px solid #722ed1;border-radius:6px">
-      <div style="font-weight:bold;font-size:14px;margin-bottom:4px">策略三 · GEM 全球股票动量</div>
-      <p style="font-size:12px;color:#555;margin:0 0 8px">
+      <div style="font-weight:bold;font-size:16px;margin-bottom:4px">策略三 · GEM 全球股票动量</div>
+      <p style="font-size:14px;color:#555;margin:0 0 8px">
         若SPY 12M收益 &gt; 4.0%（现金利率）→ 比较SPY vs ACWI，买入更强者；否则 → 买入AGG债券避险。
       </p>
-      <div style="font-size:13px;display:flex;gap:16px;flex-wrap:wrap;margin-bottom:8px">
+      <div style="font-size:15px;display:flex;gap:16px;flex-wrap:wrap;margin-bottom:8px">
         <span>SPY 12M: <b style="color:${rotColor(spyRet)}">${rotPct(spyRet)}</b></span>
         <span>ACWI 12M: <b style="color:${rotColor(acwiRet)}">${rotPct(acwiRet)}</b></span>
         <span>现金利率门槛: <b>4.0%</b></span>
       </div>
-      <div style="padding:8px 12px;background:#fafafa;border-radius:4px;font-size:13px">
-        📌 本月建议：<b style="color:${gemColors[gemRec.ticker] || '#333'};font-size:15px">买入 ${assetName[gemRec.ticker] || gemRec.ticker}</b>
-        <span style="color:#888;font-size:12px;margin-left:8px">${gemRec.reason}</span>
+      <div style="padding:8px 12px;background:#fafafa;border-radius:4px;font-size:15px">
+        📌 本月建议：<b style="color:${gemColors[gemRec.ticker] || '#333'};font-size:17px">买入 ${assetName[gemRec.ticker] || gemRec.ticker}</b>
+        <span style="color:#888;font-size:14px;margin-left:8px">${gemRec.reason}</span>
       </div>
     </div>`;
 
   // ── 策略四 ──
   let s4Inner;
   if (!s4Rows.length) {
-    s4Inner = `<div style="color:#aaa;font-size:12px;padding:6px">
+    s4Inner = `<div style="color:#aaa;font-size:14px;padding:6px">
       暂无符合条件的内置标的（PE(TTM) &lt; 40x 且近6月动量 &gt; 5%）。<br>
       · 需先在 <b>①区</b> 查询对应标的（生成缓存）<br>
       · 动量数据在运行本模块后自动积累，首次运行后次月起可正常显示
     </div>`;
   } else {
     s4Inner = `
-      <table style="width:100%;border-collapse:collapse;font-size:13px">
+      <table style="width:100%;border-collapse:collapse;font-size:15px">
         <thead><tr style="background:#fff9f0;text-align:center">
           <th style="padding:5px 10px;border:1px solid #1e2d47;text-align:left">标的</th>
           <th style="padding:5px 10px;border:1px solid #1e2d47">PE(TTM)</th>
@@ -4482,7 +4630,7 @@ function buildRotationHTML({ s1Valid, s1Returns, s2Signal, vixLevel, gemRec, spy
         <tbody>${s4Rows.map((r, i) => `
           <tr style="background:${i % 2 ? '#fafafa' : '#fff'}">
             <td style="padding:5px 10px;border:1px solid #1e2d47;font-weight:bold">${r.ticker}
-              <span style="color:#888;font-weight:normal;font-size:11px"> ${esc(r.name||'')}</span></td>
+              <span style="color:#888;font-weight:normal;font-size:13px"> ${esc(r.name||'')}</span></td>
             <td style="padding:5px 10px;border:1px solid #1e2d47;text-align:center;color:#28a745;font-weight:bold">${fmt(r.pe, 1)}x</td>
             <td style="padding:5px 10px;border:1px solid #1e2d47;text-align:center;color:#28a745;font-weight:bold">${rotPct(r.mom6m)}</td>
             <td style="padding:5px 10px;border:1px solid #1e2d47;text-align:right">$${fmt(r.price)}</td>
@@ -4492,17 +4640,17 @@ function buildRotationHTML({ s1Valid, s1Returns, s2Signal, vixLevel, gemRec, spy
   }
   const s4Html = `
     <div style="margin-bottom:10px;padding:12px;background:#fff9f0;border-left:4px solid #fa541c;border-radius:6px">
-      <div style="font-weight:bold;font-size:14px;margin-bottom:4px">策略四 · 价值 + 动量</div>
-      <p style="font-size:12px;color:#555;margin:0 0 8px">
+      <div style="font-weight:bold;font-size:16px;margin-bottom:4px">策略四 · 价值 + 动量</div>
+      <p style="font-size:14px;color:#555;margin:0 0 8px">
         从内置标的中筛选 PE(TTM) &lt; 40x 且近6个月动量 &gt; 5% 的股票（需先在①区查询过对应标的）供参考。
       </p>
       ${s4Inner}
     </div>`;
 
   return `
-    <div style="font-size:12px;color:#aaa;margin-bottom:10px">📅 分析时间：${now}（建议每月末运行一次）</div>
+    <div style="font-size:14px;color:#aaa;margin-bottom:10px">📅 分析时间：${now}（建议每月末运行一次）</div>
     ${s1Html}${s2Html}${s3Html}${s4Html}
-    <div style="font-size:11px;color:#aaa;margin-top:4px;padding:8px 12px;background:#fafafa;border-radius:4px;border:1px solid #1e2d47">
+    <div style="font-size:13px;color:#aaa;margin-top:4px;padding:8px 12px;background:#fafafa;border-radius:4px;border:1px solid #1e2d47">
       ⚠️ 以上轮动建议仅供量化参考，不构成任何投资建议。实际操作请结合基本面分析与个人风险承受能力。
     </div>`;
 }
@@ -4646,9 +4794,15 @@ initRF(); // 后台静默加载10年期美债无风险利率
         });
       }
 
-      // 计算年化收益率
-      const annA = (vBase > 0 && d.price > 0)
+      // 计算年化收益率（与详情面板"情景A"口径保持一致：股息率>0.5%时叠加股息再投资，
+      // 否则英雄卡与展开详情会显示两个不同的"情景A"数字，造成用户困惑）
+      const annAPriceOnly = (vBase > 0 && d.price > 0)
         ? (Math.pow(vBase / d.price, 1 / years) - 1) * 100 : NaN;
+      const heroDy = d.divYield || 0;
+      const annAIncludesDiv = heroDy > 0.005 && vBase > 0 && d.price > 0;
+      const annA = annAIncludesDiv
+        ? (Math.pow((vBase / d.price) * Math.pow(1 + heroDy, years), 1 / years) - 1) * 100
+        : annAPriceOnly;
       const annB = g * 100;
 
       // 构造指标数值
@@ -4664,7 +4818,7 @@ initRF(); // 后台静默加载10年期美债无风险利率
         fwdPE       : (!isNaN(d.forwardPE) && d.forwardPE > 0) ? d.forwardPE.toFixed(1) + 'x' : '—',
         histPE      : (!isNaN(d.histPE)) ? d.histPE.toFixed(1) + 'x' : '—',
         evEbitda    : (!isNaN(d.evEbitda) && d.evEbitda > 0) ? d.evEbitda.toFixed(1) + 'x' : '—',
-        annA, annB
+        annA, annB, annAIncludesDiv
       };
 
       const pos = typeof positionLabel === 'function'
